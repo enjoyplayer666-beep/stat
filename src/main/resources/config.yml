@@ -1,0 +1,43 @@
+# Плейсхолдеры в строках: {player} {privilege} {rank} {clan} {rating}
+# {class} {winrate} {playtime} {status}
+# Также работают плейсхолдеры PlaceholderAPI (например %luckperms_prefix%).
+# Цвета: &a, &l ... и hex вида &#RRGGBB
+
+lines:
+  - '&5&m                                   '
+  - '&fНикнейм: &b{player}'
+  - '&fПривилегия: {privilege}'
+  - '&fРанг: {rank}'
+  - '&fКлан: {clan}'
+  - '&fБоевой рейтинг: &a{rating}'
+  - '&fЗнак классности: {class}'
+  - '&fПроцент побед на пвп: &d{winrate}'
+  - '&fНаиграно: &b{playtime} часов'
+  - '&fСтатус: {status}'
+  - '&5&m                                   '
+
+# Значения по умолчанию, если админ ничего не выдал игроку
+defaults:
+  privilege: '%luckperms_prefix%'
+  rank: '&7Нет'
+  clan: '&7Нет'
+  rating: '0'
+  class: '&7Нет'
+  winrate: '0%'
+
+status:
+  online: '&aОнлайн'
+  offline: '&cОффлайн'
+
+messages:
+  usage: '&cИспользование: /stat <ник игрока>'
+  not-found: '&cИгрок &f{player} &cне найден.'
+  no-permission: '&cНет прав.'
+  admin-usage:
+    - '&e/statadmin set <ник> <privilege|rank|clan|rating|class|winrate> <значение>'
+    - '&e/statadmin reset <ник>'
+    - '&e/statadmin reload'
+  set-ok: '&aУ игрока &f{player} &aполе &f{field} &aтеперь: &r{value}'
+  reset-ok: '&aСтатистика игрока &f{player} &aсброшена.'
+  reload-ok: '&aКонфиг и данные перезагружены.'
+  bad-field: '&cНеизвестное поле. Доступно: privilege, rank, clan, rating, class, winrate'

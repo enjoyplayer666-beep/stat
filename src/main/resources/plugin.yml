@@ -1,0 +1,17 @@
+name: StatPlugin
+version: 1.0
+main: ru.stat.StatPlugin
+api-version: '1.21'
+softdepend: [PlaceholderAPI]
+commands:
+  stat:
+    description: Статистика игрока
+    usage: /stat <ник>
+  statadmin:
+    description: Управление статистикой
+    usage: /statadmin <set|reset|reload>
+permissions:
+  stat.use:
+    default: true
+  stat.admin:
+    default: op
