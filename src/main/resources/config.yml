@@ -5,7 +5,7 @@
 # Цвета: &a, &l ... и hex вида &#RRGGBB
 
 # не трогать: по нему плагин обновляет старый config.yml
-config-version: 6
+config-version: 7
 
 lines:
   - '&#7B6FE0╭- - - - - - - - - - - - - - - - - - - - - - - -╮'
@@ -50,12 +50,15 @@ combat:
   # БР за убийство игрока: случайно от min до max
   rating-min: 10
   rating-max: 30
-  # каждые N настоящих убийств процент побед растёт на случайные min-max %
-  winrate-every-kills: 100
-  winrate-bonus-min: 10
-  winrate-bonus-max: 20
-  # сколько % побед отнимает смерть от игрока
-  winrate-death-penalty: 0.5
+  # Процент побед: при первом убийстве сразу 100%, выше 100% не бывает.
+  # Каждые winrate-every-kills убийств: +winrate-kill-bonus %.
+  # Каждые winrate-every-deaths смертей от игроков: -(winrate-death-penalty-min..max) %.
+  winrate-first-kill: 100
+  winrate-every-kills: 10
+  winrate-kill-bonus: 1
+  winrate-every-deaths: 10
+  winrate-death-penalty-min: 2
+  winrate-death-penalty-max: 3
   # повторное убийство того же игрока тем же убийцей раньше этого времени ничего не даёт (защита от фарма); 0 - выкл
   anti-farm-seconds: 300
 
@@ -125,9 +128,7 @@ messages:
   reload-ok: '&aКонфиг и данные перезагружены.'
   bad-field: '&cНеизвестное поле. Доступно: privilege, rating, winrate, kills, deaths, booster'
   bad-number: '&cЗначение должно быть числом.'
-  kill: '&a+{rating} боевого рейтинга &7(убит &f{victim}&7)'
   booster: '&6Сработал бустер &ex{booster}&6! &f+{kills} &6убийств к рангу'
-  winrate-up: '&dПроцент побед на пвп вырос на &f{bonus}%&d!'
   rank-up: '&aНовый ранг: {rank}&a! Смотри умения: &f/rank info'
   rank-on: '&aРанг снова показывается в чате.'
   rank-off: '&7Ранг больше не показывается в чате.'

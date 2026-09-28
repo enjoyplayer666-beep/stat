@@ -35,11 +35,17 @@ public class CombatListener implements Listener {
         FileConfiguration cfg = plugin.getConfig();
         ThreadLocalRandom rnd = ThreadLocalRandom.current();
 
-        // ---- убитый: смерть и минус к проценту побед ----
+        // ---- убитый: смерть, каждые N смертей минус пара процентов побед ----
         String v = victim.getName();
-        plugin.set(v, "deaths", plugin.integer(v, "deaths") + 1);
-        double penalty = cfg.getDouble("combat.winrate-death-penalty", 0.5);
-        plugin.set(v, "winrate", round(Math.max(0, plugin.number(v, "winrate") - penalty)));
+        int deaths = plugin.integer(v, "deaths") + 1;
+        plugin.set(v, "deaths", deaths);
+        int everyDeaths = Math.max(1, cfg.getInt("combat.winrate-every-deaths", 10));
+        if (deaths % everyDeaths == 0) {
+            double pMin = cfg.getDouble("combat.winrate-death-penalty-min", 2);
+            double pMax = Math.max(pMin, cfg.getDouble("combat.winrate-death-penalty-max", 3));
+            double penalty = pMin == pMax ? pMin : rnd.nextDouble(pMin, pMax);
+            plugin.set(v, "winrate", round(Math.max(0, plugin.number(v, "winrate") - penalty)));
+        }
 
         // ---- защита от фарма ----
         long cooldown = cfg.getLong("combat.anti-farm-seconds", 300) * 1000L;
@@ -72,21 +78,16 @@ public class CombatListener implements Listener {
         }
         plugin.set(k, "kills", plugin.integer(k, "kills") + credited);
 
-        // ---- процент побед: каждые N настоящих убийств ----
+        // ---- процент побед: первое убийство - сразу 100%, дальше каждые N убийств + бонус ----
         int real = plugin.integer(k, "real-kills") + 1;
         plugin.set(k, "real-kills", real);
-        int every = Math.max(1, cfg.getInt("combat.winrate-every-kills", 100));
-        if (real % every == 0) {
-            int bMin = cfg.getInt("combat.winrate-bonus-min", 10);
-            int bMax = Math.max(bMin, cfg.getInt("combat.winrate-bonus-max", 20));
-            int bonus = rnd.nextInt(bMin, bMax + 1);
-            plugin.set(k, "winrate", round(Math.min(100, plugin.number(k, "winrate") + bonus)));
-            killer.sendMessage(plugin.color(plugin.msg("winrate-up").replace("{bonus}", String.valueOf(bonus))));
+        double winrate = plugin.number(k, "winrate");
+        if (real == 1) {
+            winrate = cfg.getDouble("combat.winrate-first-kill", 100);
+        } else if (real % Math.max(1, cfg.getInt("combat.winrate-every-kills", 10)) == 0) {
+            winrate += cfg.getDouble("combat.winrate-kill-bonus", 1);
         }
-
-        killer.sendMessage(plugin.color(plugin.msg("kill")
-                .replace("{rating}", String.valueOf(rating))
-                .replace("{victim}", v)));
+        plugin.set(k, "winrate", round(Math.min(100, winrate)));
 
         Ranks.Rank after = plugin.rank(k);
         if (after.index() > before.index()) {

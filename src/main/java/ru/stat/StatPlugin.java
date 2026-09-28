@@ -107,6 +107,13 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
             for (String k : skills.getKeys(false)) cfg.set("skills." + k, skills.get(k));
         }
         cfg.set("chat-rank", d.getString("chat-rank"));
+        cfg.set("combat", null);
+        ConfigurationSection combat = d.getConfigurationSection("combat");
+        if (combat != null) {
+            for (String k : combat.getKeys(false)) cfg.set("combat." + k, combat.get(k));
+        }
+        cfg.set("messages.kill", null);
+        cfg.set("messages.winrate-up", null);
         for (String old : new String[]{"privilege", "rank", "rating", "class", "winrate"}) cfg.set("defaults." + old, null);
         cfg.set("status.last-seen", d.getString("status.last-seen"));
         cfg.set("status.last-seen-today", null);
