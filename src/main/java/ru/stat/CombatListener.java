@@ -107,18 +107,15 @@ public class CombatListener implements Listener {
         if (attacker == null || attacker.equals(victim)) return;
 
         ThreadLocalRandom rnd = ThreadLocalRandom.current();
-        Ranks ranks = plugin.ranks();
         double damage = event.getDamage();
 
-        Ranks.Rank a = plugin.rank(attacker.getName());
-        int atk = ranks.skill(a, cfg.getInt("skills.attack-max", 100));
-        int atkChance = ranks.skill(a, cfg.getInt("skills.attack-chance-max", 33));
-        if (atk > 0 && rnd.nextDouble(100) < atkChance) damage *= 1 + atk / 100.0;
+        int atk = plugin.rank(attacker.getName()).attack();
+        if (atk > 0 && rnd.nextDouble(100) < cfg.getDouble("skills.attack-chance", 33)) damage *= 1 + atk / 100.0;
 
-        Ranks.Rank d = plugin.rank(victim.getName());
-        int def = ranks.skill(d, cfg.getInt("skills.defense-max", 50));
-        int defChance = ranks.skill(d, cfg.getInt("skills.defense-chance-max", 33));
-        if (def > 0 && rnd.nextDouble(100) < defChance) damage *= Math.max(0, 1 - def / 100.0);
+        int def = plugin.rank(victim.getName()).defense();
+        if (def > 0 && rnd.nextDouble(100) < cfg.getDouble("skills.defense-chance", 33)) {
+            damage *= Math.max(0, 1 - def / 100.0);
+        }
 
         event.setDamage(damage);
     }

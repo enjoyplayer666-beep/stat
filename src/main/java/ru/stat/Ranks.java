@@ -10,10 +10,15 @@ import java.util.Map;
 /** Ранги (по убийствам) и знаки классности (по боевому рейтингу) из config.yml. */
 public class Ranks {
 
-    public record Rank(int index, String name, String icon, String color, int kills) {
-        /** "&#..☠ Лич" - иконка и название цветом ранга. */
+    /**
+     * @param color  первый цвет градиента (#RRGGBB или &-код), им же красится иконка
+     * @param color2 второй цвет градиента, null - без градиента
+     */
+    public record Rank(int index, String name, String icon, String color, String color2, int kills,
+                       int attack, int defense) {
+        /** Иконка и название с градиентом, в &#RRGGBB-кодах. */
         public String display() {
-            return color + icon + " " + name;
+            return code(color) + icon + " " + gradient(name, color, color2);
         }
     }
 
@@ -27,14 +32,16 @@ public class Ranks {
         ranks.clear();
         List<Rank> tmp = new ArrayList<>();
         for (Map<?, ?> m : cfg.getMapList("ranks")) {
-            tmp.add(new Rank(0, str(m, "name", "?"), str(m, "icon", ""), str(m, "color", "&f"), num(m, "kills")));
+            tmp.add(new Rank(0, str(m, "name", "?"), str(m, "icon", ""), str(m, "color", "&f"),
+                    m.get("color2") == null ? null : String.valueOf(m.get("color2")),
+                    num(m, "kills"), num(m, "attack"), num(m, "defense")));
         }
         tmp.sort(Comparator.comparingInt(Rank::kills));
         for (int i = 0; i < tmp.size(); i++) {
             Rank r = tmp.get(i);
-            ranks.add(new Rank(i, r.name(), r.icon(), r.color(), r.kills()));
+            ranks.add(new Rank(i, r.name(), r.icon(), r.color(), r.color2(), r.kills(), r.attack(), r.defense()));
         }
-        if (ranks.isEmpty()) ranks.add(new Rank(0, "Неофит", "☘", "&7", 0));
+        if (ranks.isEmpty()) ranks.add(new Rank(0, "Неофит", "☘", "&7", null, 0, 0, 0));
 
         classes.clear();
         for (Map<?, ?> m : cfg.getMapList("classes")) {
@@ -60,18 +67,44 @@ public class Ranks {
         return rank.index() + 1 < ranks.size() ? ranks.get(rank.index() + 1) : null;
     }
 
-    /** Значение умения для ранга: от 0 на первом ранге до max на последнем. */
-    public int skill(Rank rank, int max) {
-        if (ranks.size() <= 1) return max;
-        return Math.round((float) max * rank.index() / (ranks.size() - 1));
-    }
-
     public String classFor(int rating) {
         String result = classes.isEmpty() ? "&7[Нет отличительных отметок]" : classes.get(0).display();
         for (ClassMark c : classes) {
             if (rating >= c.rating()) result = c.display();
         }
         return result;
+    }
+
+    /** "#RRGGBB" -> "&#RRGGBB", "&c" остаётся как есть. */
+    static String code(String color) {
+        return color.startsWith("#") ? "&" + color : color;
+    }
+
+    /** Текст с плавным переходом цвета по буквам. Без второго цвета - просто первым цветом. */
+    static String gradient(String text, String from, String to) {
+        int[] a = rgb(from);
+        int[] b = rgb(to);
+        if (a == null || b == null || text.length() < 2) return code(from) + text;
+        StringBuilder sb = new StringBuilder();
+        int n = text.length() - 1;
+        for (int i = 0; i < text.length(); i++) {
+            char ch = text.charAt(i);
+            if (ch == ' ') {
+                sb.append(ch);
+                continue;
+            }
+            int r = Math.round(a[0] + (b[0] - a[0]) * (float) i / n);
+            int g = Math.round(a[1] + (b[1] - a[1]) * (float) i / n);
+            int bl = Math.round(a[2] + (b[2] - a[2]) * (float) i / n);
+            sb.append(String.format("&#%02X%02X%02X", r, g, bl)).append(ch);
+        }
+        return sb.toString();
+    }
+
+    private static int[] rgb(String color) {
+        if (color == null || !color.matches("#[0-9a-fA-F]{6}")) return null;
+        int v = Integer.parseInt(color.substring(1), 16);
+        return new int[]{(v >> 16) & 0xFF, (v >> 8) & 0xFF, v & 0xFF};
     }
 
     private static String str(Map<?, ?> m, String key, String def) {

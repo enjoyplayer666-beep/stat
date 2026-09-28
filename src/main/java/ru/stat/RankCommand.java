@@ -75,10 +75,10 @@ public class RankCommand implements CommandExecutor, TabCompleter {
         Ranks.Rank next = ranks.next(rank);
         int kills = plugin.integer(shown, "kills");
         var cfg = plugin.getConfig();
-        int atk = ranks.skill(rank, cfg.getInt("skills.attack-max", 100));
-        int atkChance = ranks.skill(rank, cfg.getInt("skills.attack-chance-max", 33));
-        int def = ranks.skill(rank, cfg.getInt("skills.defense-max", 50));
-        int defChance = ranks.skill(rank, cfg.getInt("skills.defense-chance-max", 33));
+        int atk = rank.attack();
+        int def = rank.defense();
+        int atkChance = atk > 0 ? cfg.getInt("skills.attack-chance", 33) : 0;
+        int defChance = def > 0 ? cfg.getInt("skills.defense-chance", 33) : 0;
 
         send(sender, B + "╭" + DASHES + DASHES + "╮");
         send(sender, LINE + "&fНикнейм: &b" + shown);
@@ -87,10 +87,11 @@ public class RankCommand implements CommandExecutor, TabCompleter {
         send(sender, LINE + "&fУбито игроков: &c" + kills);
         send(sender, LINE + "&fПрогресс: " + (next == null
                 ? "&aМаксимальный ранг!"
-                : "&fОсталось &c" + (next.kills() - kills) + " &fубийств"));
+                : "&fОсталось &c" + (next.kills() - kills) + " &f"
+                        + StatPlugin.plural(next.kills() - kills, "убийство", "убийства", "убийств")));
         send(sender, LINE + "&fУмения:");
-        send(sender, LINE + "&c[Атака] &c+" + atk + "% &fурона &7(Шанс: " + atkChance + "%)");
-        send(sender, LINE + "&a[Защита] &e-" + def + "% &fурона &7(Шанс: " + defChance + "%)");
+        send(sender, LINE + "&7[&#3CCFC0Атака&7] &c+" + atk + "% &fурона &7(Шанс: " + atkChance + "%)");
+        send(sender, LINE + "&7[&aЗащита&7] &e-" + def + "% &fурона &7(Шанс: " + defChance + "%)");
         send(sender, B + "╰" + DASHES + DASHES + "╯");
     }
 

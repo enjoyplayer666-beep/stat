@@ -93,6 +93,13 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
             for (String k : priv.getKeys(false)) cfg.set("privileges." + k, priv.getString(k));
         }
         cfg.set("defaults.clan", d.getString("defaults.clan"));
+        cfg.set("ranks", d.getMapList("ranks"));
+        cfg.set("skills", null);
+        ConfigurationSection skills = d.getConfigurationSection("skills");
+        if (skills != null) {
+            for (String k : skills.getKeys(false)) cfg.set("skills." + k, skills.get(k));
+        }
+        cfg.set("chat-rank", d.getString("chat-rank"));
         for (String old : new String[]{"privilege", "rank", "rating", "class", "winrate"}) cfg.set("defaults." + old, null);
         cfg.set("status.last-seen", d.getString("status.last-seen"));
         cfg.set("status.last-seen-today", null);
@@ -219,8 +226,7 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
             return;
         }
         Ranks.Rank r = rank(player.getName());
-        String text = getConfig().getString("chat-rank", "{color}{icon} {name} ")
-                .replace("{color}", r.color()).replace("{icon}", r.icon()).replace("{name}", r.name());
+        String text = getConfig().getString("chat-rank", "{rank} ").replace("{rank}", r.display());
         StatApi.set(player.getUniqueId(), color(text));
     }
 
