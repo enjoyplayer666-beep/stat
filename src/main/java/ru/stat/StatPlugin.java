@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -63,6 +64,7 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
         for (Player p : Bukkit.getOnlinePlayers()) touch(p);
         // данные сохраняются раз в минуту, если что-то поменялось
         getServer().getScheduler().runTaskTimer(this, () -> {
+            for (Player p : Bukkit.getOnlinePlayers()) refreshPrivilege(p);
             if (dirty) saveData();
         }, 1200L, 1200L);
     }
@@ -73,20 +75,32 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
         StatApi.clear();
     }
 
-    /** Старый config.yml (без config-version): новая рамка /stat, остальное берётся из плагина. */
+    /**
+     * Обновление старого config.yml (saveDefaultConfig не трогает уже существующий файл):
+     * рамка /stat, знаки классности и привилегии берутся из плагина один раз, по config-version.
+     */
     private void migrateConfig() {
         FileConfiguration cfg = getConfig();
-        if (cfg.contains("config-version", true)) return;
-        if (cfg.getDefaults() != null) {
-            cfg.set("lines", cfg.getDefaults().getStringList("lines"));
-            cfg.set("defaults.clan", cfg.getDefaults().getString("defaults.clan"));
+        int version = cfg.contains("config-version", true) ? cfg.getInt("config-version") : 1;
+        int latest = cfg.getDefaults() == null ? version : cfg.getDefaults().getInt("config-version", version);
+        if (version >= latest || cfg.getDefaults() == null) return;
+        var d = cfg.getDefaults();
+        cfg.set("lines", d.getStringList("lines"));
+        cfg.set("classes", d.getMapList("classes"));
+        cfg.set("privileges", null);
+        ConfigurationSection priv = d.getConfigurationSection("privileges");
+        if (priv != null) {
+            for (String k : priv.getKeys(false)) cfg.set("privileges." + k, priv.getString(k));
         }
-        for (String old : new String[]{"rank", "rating", "class", "winrate"}) cfg.set("defaults." + old, null);
+        cfg.set("defaults.clan", d.getString("defaults.clan"));
+        for (String old : new String[]{"privilege", "rank", "rating", "class", "winrate"}) cfg.set("defaults." + old, null);
+        cfg.set("status.last-seen", d.getString("status.last-seen"));
+        cfg.set("status.last-seen-today", null);
         cfg.set("messages.admin-usage", null);
         cfg.set("messages.bad-field", null);
-        cfg.set("config-version", 2);
+        cfg.set("config-version", latest);
         saveConfig();
-        getLogger().info("config.yml обновлён: ранги, боевой рейтинг и знаки классности.");
+        getLogger().info("config.yml обновлён до версии " + latest + ".");
     }
 
     // ---------------- данные ----------------
@@ -156,7 +170,47 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
     void touch(Player player) {
         set(player.getName(), "name", player.getName());
         set(player.getName(), "uuid", player.getUniqueId().toString());
+        refreshPrivilege(player);
         refreshChatRank(player);
+    }
+
+    /** Запоминает группу для строки "Привилегия" (первая из privileges, которая есть у игрока). */
+    void refreshPrivilege(Player player) {
+        String found = null;
+        ConfigurationSection s = getConfig().getConfigurationSection("privileges");
+        if (s != null) {
+            for (String group : s.getKeys(false)) {
+                if (!group.equalsIgnoreCase("default") && player.hasPermission("group." + group)) {
+                    found = group;
+                    break;
+                }
+            }
+        }
+        if (!Objects.equals(found, string(player.getName(), "privilege-group"))) {
+            set(player.getName(), "privilege-group", found);
+        }
+        // обычный префикс LuckPerms - для всех остальных групп (⌜Luxe⌟ и т.п.)
+        String prefix = null;
+        if (getServer().getPluginManager().getPlugin("LuckPerms") != null) {
+            try {
+                prefix = LuckPermsPrefix.get(player);
+            } catch (Throwable ignored) {
+            }
+        }
+        if (!Objects.equals(prefix, string(player.getName(), "privilege-prefix"))) {
+            set(player.getName(), "privilege-prefix", prefix);
+        }
+    }
+
+    /** Привилегия для /stat: выданная вручную -> по группе из privileges -> префикс LuckPerms -> default. */
+    String privilege(String name) {
+        String manual = string(name, "privilege");
+        if (manual != null) return manual;
+        String group = string(name, "privilege-group");
+        String byGroup = group == null ? null : getConfig().getString("privileges." + group);
+        if (byGroup != null) return byGroup;
+        String prefix = string(name, "privilege-prefix");
+        return prefix != null ? prefix : getConfig().getString("privileges.default", "&f⌜&3Игрок&f⌟");
     }
 
     void refreshChatRank(Player player) {
@@ -276,6 +330,24 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
         return op;
     }
 
+    /** "5 минут", "3 ч.", "2 дн." */
+    static String ago(long millis) {
+        long minutes = Math.max(1, millis / 60_000L);
+        if (minutes < 60) return minutes + " " + plural(minutes, "минуту", "минуты", "минут");
+        long hours = minutes / 60;
+        if (hours < 24) return hours + " ч.";
+        return hours / 24 + " дн.";
+    }
+
+    /** Склонение: 1 час, 2 часа, 5 часов. */
+    static String plural(long n, String one, String few, String many) {
+        long m100 = n % 100, m10 = n % 10;
+        if (m100 >= 11 && m100 <= 14) return many;
+        if (m10 == 1) return one;
+        if (m10 >= 2 && m10 <= 4) return few;
+        return many;
+    }
+
     static String percent(double v) {
         return (v == Math.floor(v) ? String.valueOf((long) v) : String.format(Locale.ROOT, "%.1f", v)) + "%";
     }
@@ -321,14 +393,10 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
         long hours = ticks / 20 / 3600;
         String status = getConfig().getString(op.isOnline() ? "status.online" : "status.offline", "");
         if (!op.isOnline() && op.getLastSeen() > 0) {
-            long days = (System.currentTimeMillis() - op.getLastSeen()) / 86_400_000L;
-            status += days <= 0
-                    ? getConfig().getString("status.last-seen-today", "")
-                    : getConfig().getString("status.last-seen", "").replace("{days}", String.valueOf(days));
+            status += getConfig().getString("status.last-seen", "")
+                    .replace("{time}", ago(System.currentTimeMillis() - op.getLastSeen()));
         }
-
-        String privilege = string(shown, "privilege");
-        if (privilege == null) privilege = getConfig().getString("defaults.privilege", "");
+        String privilege = privilege(shown);
         String clan = clan(op.getUniqueId());
         if (clan == null) clan = getConfig().getString("defaults.clan", "&7—");
         int rating = integer(shown, "rating");
@@ -346,6 +414,7 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
                     .replace("{deaths}", String.valueOf(integer(shown, "deaths")))
                     .replace("{booster}", "x" + booster(shown))
                     .replace("{playtime}", String.valueOf(hours))
+                    .replace("{hours}", plural(hours, "час", "часа", "часов"))
                     .replace("{status}", status);
             sender.sendMessage(color(papi(op, out)));
         }
