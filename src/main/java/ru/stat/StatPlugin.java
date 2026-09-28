@@ -62,6 +62,13 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
         getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new CombatListener(this), this);
         for (Player p : Bukkit.getOnlinePlayers()) touch(p);
+        if (getServer().getPluginManager().getPlugin("LuckPerms") != null) {
+            try {
+                LuckPermsPrefix.listen(this);
+            } catch (Throwable e) {
+                getLogger().warning("Не удалось подписаться на LuckPerms: " + e.getMessage());
+            }
+        }
         // данные сохраняются раз в минуту, если что-то поменялось
         getServer().getScheduler().runTaskTimer(this, () -> {
             for (Player p : Bukkit.getOnlinePlayers()) refreshPrivilege(p);
@@ -390,6 +397,7 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
             return;
         }
         String shown = op.getName() != null ? op.getName() : name;
+        if (op instanceof Player online) refreshPrivilege(online); // группу могли только что сменить
 
         long ticks = 0;
         try {
@@ -472,7 +480,9 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
                 }
                 String value = String.join(" ", Arrays.copyOfRange(args, 3, args.length));
                 Object stored = value;
-                if (!f.equals("privilege")) {
+                if (f.equals("privilege") && (value.equalsIgnoreCase("reset") || value.equalsIgnoreCase("auto"))) {
+                    stored = null; // снова по группе LuckPerms
+                } else if (!f.equals("privilege")) {
                     try {
                         double d = Double.parseDouble(value.replace("%", "").replace(',', '.').trim());
                         if (f.equals("winrate")) stored = Math.max(0, Math.min(100, d));
@@ -490,7 +500,7 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
                 sender.sendMessage(color(msg("set-ok")
                         .replace("{player}", args[1])
                         .replace("{field}", f)
-                        .replace("{value}", String.valueOf(stored))));
+                        .replace("{value}", stored == null ? "авто (по группе)" : String.valueOf(stored))));
             }
             default -> usage(sender);
         }

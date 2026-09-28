@@ -5,7 +5,7 @@
 # Цвета: &a, &l ... и hex вида &#RRGGBB
 
 # не трогать: по нему плагин обновляет старый config.yml
-config-version: 5
+config-version: 6
 
 lines:
   - '&#7B6FE0╭- - - - - - - - - - - - - - - - - - - - - - - -╮'
@@ -28,12 +28,12 @@ defaults:
 # берётся первая группа, которая есть у игрока. Остальным - их обычный префикс из LuckPerms,
 # default - если префикса нет.
 # Запоминается, когда игрок в сети, поэтому у оффлайн-игроков тоже показывается.
-# Вручную: /statadmin set <ник> privilege <текст> (перекрывает это).
+# Вручную: /statadmin set <ник> privilege <текст> (перекрывает это), вернуть авто: privilege reset.
 privileges:
-  admin: '&8&l[&#FF0000&lᴀᴅᴍɪɴ&8&l] [&#FE7105&lᴅ&#FF0000&ls&a&l✔&8&l]'
-  curator: '&f⌜&#FF2E55&l&oᴄᴜʀᴀᴛᴏʀ&f⌟ &f⌜&#55FF55&l&osᴘ✔&f⌟'
-  moderator: '&8&l[&#D4123A&lᴍᴏᴅᴇʀᴀᴛᴏʀ&8&l] [&#DDD12E&lᴅs&a&l✔&8&l]'
-  mediajr: '&f⌜&#C38BFF&l&oᴍ&#BA85FF&l&oᴇ&#B17FFF&l&oᴅ&#A879FF&l&oɪ&#9F73FF&l&oᴀ&#966DFF&l&o &#8D67FF&l&oᴊ&#8461FF&l&oʀ&#7B5BFF&l&o.&f⌟'
+  admin: '&7[&#D40000&lᴀᴅᴍɪɴ&7] [&#FFC477&lᴅs&a&l✔&7]'
+  curator: '&f⌜&#E5305F&l&oᴄᴜʀᴀᴛᴏʀ&f⌟ &f⌜&#95FFD7&l&osᴘ&#33F5A8&l&o✔&f⌟'
+  moderator: '&7[&#D4123A&lᴍᴏᴅᴇʀᴀᴛᴏʀ&7] [&#E8D83A&lᴅs&a&l✔&7]'
+  mediajr: '&f⌜&#88799C&l&oM&#8A71AF&l&oe&#8D69C2&l&od&#9061D4&l&oi&#9259E7&l&oa&#9061D4&l&o &#8D69C2&l&oJ&#8A71AF&l&or&#88799C&l&o.&f⌟'
   default: '&f⌜&3Игрок&f⌟'
 
 status:
@@ -105,12 +105,12 @@ chat-rank: '{rank} '
 # ---------------------------------------------------------------------
 classes:
   - {rating: 0, display: '&f[Нет отличительных отметок]'}
-  - {rating: 1, display: '&#C6FF8C«&#B3F883М&#9FF27Bа&#8CEB72с&#79E569т&#66DE60е&#52D858р&#3FD14F»'}
-  - {rating: 100000, display: '&#8CFFFF&l«&#84F5FF&lE&#7CEBFF&lX&#74E2FF&lC&#6CD8FF&lL&#64CEFF&lU&#5BC4FF&lS&#53BAFF&lI&#4BB1FF&lV&#43A7FF&lE&#3B9DFF&l»'}
-  - {rating: 250000, display: '&#FF9A1F虎&#FFE94D&lT&#FFCF3E&lI&#FFB42E&lG&#FF9A1F&lR&#FF9A1F虎'}
-  - {rating: 500000, display: '&#FF2E4D&l✘&#FF7AA8&l&oL&#FF709D&l&oE&#FF6791&l&oG&#FF5E86&l&oE&#FF547A&l&oN&#FF4A6F&l&oD&#FF4164&l&oA&#FF3858&l&oR&#FF2E4D&l&oY&#FF2E4D&l✘'}
-  - {rating: 1000000, display: '&#FF3B3B⇗&#FFF06B&oI&#FFE761&om&#FFDE57&om&#FFD54D&oo&#FFCD42&or&#FFC438&ot&#FFBB2E&oa&#FFB224&ol&#FF3B3B⇗'}
-  - {rating: 2000000, display: '&#FFD24D&o↟&#FF5A5A&oN&#FF525A&oe&#FF495A&op&#FF415A&oh&#FF385A&oi&#FF305A&ol&#FF275A&oi&#FF1F5A&om&#FFD24D&o↟'}
+  - {rating: 1, display: '&a«Мастер»'}
+  - {rating: 100000, display: '&b«EXCLUSIVE»'}
+  - {rating: 250000, display: '&0«&6虎&bTIGR&6虎&0»'}
+  - {rating: 500000, display: '&c✘&3&oLEGENDARY&c✘'}
+  - {rating: 1000000, display: '&4➶&e&oImmortal&4➶'}
+  - {rating: 2000000, display: '&e↟&c&oNephilim&e↟'}
 
 messages:
   usage: '&cИспользование: /stat <ник игрока>'
