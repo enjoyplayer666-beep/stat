@@ -167,6 +167,10 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
         dirty = true;
     }
 
+    boolean isTrue(String name, String field) {
+        return data.getBoolean("players." + key(name) + "." + field);
+    }
+
     String string(String name, String field) {
         return data.getString("players." + key(name) + "." + field);
     }
@@ -368,8 +372,9 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
         return many;
     }
 
+    /** Проценты всегда целые: 90%. */
     static String percent(double v) {
-        return (v == Math.floor(v) ? String.valueOf((long) v) : String.format(Locale.ROOT, "%.1f", v)) + "%";
+        return Math.round(v) + "%";
     }
 
     // ---------------- команды ----------------
@@ -492,7 +497,7 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
                 } else if (!f.equals("privilege")) {
                     try {
                         double d = Double.parseDouble(value.replace("%", "").replace(',', '.').trim());
-                        if (f.equals("winrate")) stored = Math.max(0, Math.min(100, d));
+                        if (f.equals("winrate")) stored = (int) Math.max(0, Math.min(100, Math.round(d)));
                         else if (f.equals("booster")) stored = Math.max(1, Math.min(getConfig().getInt("booster.max", 15), (int) d));
                         else stored = Math.max(0, (int) d);
                     } catch (NumberFormatException e) {
@@ -501,6 +506,7 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
                     }
                 }
                 set(args[1], f, stored);
+                if (f.equals("winrate")) set(args[1], "winrate-started", true); // выданный процент не сбросится на 100
                 saveData();
                 Player online = Bukkit.getPlayerExact(args[1]);
                 if (online != null) refreshChatRank(online);

@@ -5,7 +5,7 @@
 # Цвета: &a, &l ... и hex вида &#RRGGBB
 
 # не трогать: по нему плагин обновляет старый config.yml
-config-version: 7
+config-version: 8
 
 lines:
   - '&#7B6FE0╭- - - - - - - - - - - - - - - - - - - - - - - -╮'
@@ -32,6 +32,7 @@ defaults:
 privileges:
   admin: '&7[&#D40000&lᴀᴅᴍɪɴ&7] [&#FFC477&lᴅs&a&l✔&7]'
   curator: '&f⌜&#E5305F&l&oᴄᴜʀᴀᴛᴏʀ&f⌟ &f⌜&#95FFD7&l&osᴘ&#33F5A8&l&o✔&f⌟'
+  manager: '&f⌜&#7AF0E6&lᴍᴀɴᴀɢᴇʀ&f⌟ &f⌜&#E0606F&lᴅs&a&l✔&f⌟'
   moderator: '&7[&#D4123A&lᴍᴏᴅᴇʀᴀᴛᴏʀ&7] [&#E8D83A&lᴅs&a&l✔&7]'
   mediajr: '&f⌜&#88799C&l&oM&#8A71AF&l&oe&#8D69C2&l&od&#9061D4&l&oi&#9259E7&l&oa&#9061D4&l&o &#8D69C2&l&oJ&#8A71AF&l&or&#88799C&l&o.&f⌟'
   default: '&f⌜&3Игрок&f⌟'
@@ -59,6 +60,7 @@ combat:
   winrate-every-deaths: 10
   winrate-death-penalty-min: 2
   winrate-death-penalty-max: 3
+  # проценты всегда целые: 90%, без 90.5%
   # повторное убийство того же игрока тем же убийцей раньше этого времени ничего не даёт (защита от фарма); 0 - выкл
   anti-farm-seconds: 300
 

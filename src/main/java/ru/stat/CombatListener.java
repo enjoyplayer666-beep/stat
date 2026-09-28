@@ -41,10 +41,10 @@ public class CombatListener implements Listener {
         plugin.set(v, "deaths", deaths);
         int everyDeaths = Math.max(1, cfg.getInt("combat.winrate-every-deaths", 10));
         if (deaths % everyDeaths == 0) {
-            double pMin = cfg.getDouble("combat.winrate-death-penalty-min", 2);
-            double pMax = Math.max(pMin, cfg.getDouble("combat.winrate-death-penalty-max", 3));
-            double penalty = pMin == pMax ? pMin : rnd.nextDouble(pMin, pMax);
-            plugin.set(v, "winrate", round(Math.max(0, plugin.number(v, "winrate") - penalty)));
+            int pMin = cfg.getInt("combat.winrate-death-penalty-min", 2);
+            int pMax = Math.max(pMin, cfg.getInt("combat.winrate-death-penalty-max", 3));
+            int penalty = rnd.nextInt(pMin, pMax + 1);
+            plugin.set(v, "winrate", Math.max(0, plugin.integer(v, "winrate") - penalty));
         }
 
         // ---- защита от фарма ----
@@ -81,13 +81,15 @@ public class CombatListener implements Listener {
         // ---- процент побед: первое убийство - сразу 100%, дальше каждые N убийств + бонус ----
         int real = plugin.integer(k, "real-kills") + 1;
         plugin.set(k, "real-kills", real);
-        double winrate = plugin.number(k, "winrate");
-        if (real == 1) {
-            winrate = cfg.getDouble("combat.winrate-first-kill", 100);
+        int winrate = plugin.integer(k, "winrate");
+        if (!plugin.isTrue(k, "winrate-started")) {
+            // первое убийство по новым правилам (в том числе у тех, кто убивал на старой версии)
+            winrate = cfg.getInt("combat.winrate-first-kill", 100);
+            plugin.set(k, "winrate-started", true);
         } else if (real % Math.max(1, cfg.getInt("combat.winrate-every-kills", 10)) == 0) {
-            winrate += cfg.getDouble("combat.winrate-kill-bonus", 1);
+            winrate += cfg.getInt("combat.winrate-kill-bonus", 1);
         }
-        plugin.set(k, "winrate", round(Math.min(100, winrate)));
+        plugin.set(k, "winrate", Math.max(0, Math.min(100, winrate)));
 
         Ranks.Rank after = plugin.rank(k);
         if (after.index() > before.index()) {
@@ -119,9 +121,5 @@ public class CombatListener implements Listener {
         }
 
         event.setDamage(damage);
-    }
-
-    private static double round(double v) {
-        return Math.round(v * 10) / 10.0;
     }
 }
