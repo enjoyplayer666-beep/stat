@@ -13,6 +13,9 @@ commands:
   statadmin:
     description: Управление статистикой
     usage: /statadmin <set|reset|reload>
+  booster:
+    description: Выдать бустер к убийствам ранга
+    usage: /booster give <ник> <x1-x15>
   rank:
     description: Ранги
     usage: /rank <info|list|top|on|off>
@@ -21,4 +24,6 @@ permissions:
   stat.use:
     default: true
   stat.admin:
+    default: op
+  stat.booster.give:
     default: op

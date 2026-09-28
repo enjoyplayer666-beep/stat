@@ -56,6 +56,9 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
         getCommand("mystat").setExecutor(this);
         getCommand("statadmin").setExecutor(this);
         getCommand("statadmin").setTabCompleter(this);
+        BoosterCommand boosterCommand = new BoosterCommand(this);
+        getCommand("booster").setExecutor(boosterCommand);
+        getCommand("booster").setTabCompleter(boosterCommand);
         RankCommand rankCommand = new RankCommand(this);
         getCommand("rank").setExecutor(rankCommand);
         getCommand("rank").setTabCompleter(rankCommand);
