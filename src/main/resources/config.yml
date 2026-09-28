@@ -1,43 +1,126 @@
-# Плейсхолдеры в строках: {player} {privilege} {rank} {clan} {rating}
-# {class} {winrate} {playtime} {status}
+# Плейсхолдеры в строках /stat: {player} {privilege} {rank} {clan} {rating}
+# {class} {winrate} {playtime} {status} {kills} {deaths} {booster}
 # Также работают плейсхолдеры PlaceholderAPI (например %luckperms_prefix%).
 # Цвета: &a, &l ... и hex вида &#RRGGBB
 
-lines:
-  - '&5&m                                   '
-  - '&fНикнейм: &b{player}'
-  - '&fПривилегия: {privilege}'
-  - '&fРанг: {rank}'
-  - '&fКлан: {clan}'
-  - '&fБоевой рейтинг: &a{rating}'
-  - '&fЗнак классности: {class}'
-  - '&fПроцент побед на пвп: &d{winrate}'
-  - '&fНаиграно: &b{playtime} часов'
-  - '&fСтатус: {status}'
-  - '&5&m                                   '
+# не трогать: по нему плагин обновляет старый config.yml
+config-version: 2
 
-# Значения по умолчанию, если админ ничего не выдал игроку
+lines:
+  - '&#7B6FE0╭- - - - - - - - - - - - - - - - - - - - - - - -╮'
+  - '&#7B6FE0│ &fНикнейм: &b{player}'
+  - '&#7B6FE0│ &fПривилегия: {privilege}'
+  - '&#7B6FE0│ &fРанг: {rank}'
+  - '&#7B6FE0│ &fКлан: {clan}'
+  - '&#7B6FE0│ &fБоевой рейтинг: &a{rating}'
+  - '&#7B6FE0│ &fЗнак классности: {class}'
+  - '&#7B6FE0│ &fПроцент побед на пвп: &d{winrate}'
+  - '&#7B6FE0│ &fНаиграно: &b{playtime} часов'
+  - '&#7B6FE0│ &fСтатус: {status}'
+  - '&#7B6FE0╰- - - - - - - - - - - - - - - - - - - - - - - -╯'
+
+# Значения по умолчанию
 defaults:
   privilege: '%luckperms_prefix%'
-  rank: '&7Нет'
-  clan: '&7Нет'
-  rating: '0'
-  class: '&7Нет'
-  winrate: '0%'
+  clan: '&7—'
 
 status:
   online: '&aОнлайн'
   offline: '&cОффлайн'
+  # добавляется к оффлайну, {days} - сколько дней назад заходил
+  last-seen: ' &7(заходил {days} дн. назад)'
+  last-seen-today: ' &7(заходил сегодня)'
+
+# ---------------------------------------------------------------------
+#  Бой: боевой рейтинг (БР), процент побед, бустер
+# ---------------------------------------------------------------------
+combat:
+  # БР за убийство игрока: случайно от min до max
+  rating-min: 10
+  rating-max: 30
+  # каждые N настоящих убийств процент побед растёт на случайные min-max %
+  winrate-every-kills: 100
+  winrate-bonus-min: 10
+  winrate-bonus-max: 20
+  # сколько % побед отнимает смерть от игрока
+  winrate-death-penalty: 0.5
+  # повторное убийство того же игрока тем же убийцей раньше этого времени ничего не даёт (защита от фарма); 0 - выкл
+  anti-farm-seconds: 300
+
+booster:
+  # шанс (в %), что бустер сработает при убийстве: тогда убийство засчитывается за xN
+  chance: 30
+  # бустер по праву: stat.booster.2 ... stat.booster.15 (берётся наибольший);
+  # выдать вручную: /statadmin set <ник> booster <1-15>
+  max: 15
+
+# ---------------------------------------------------------------------
+#  Ранги - по количеству убийств (с учётом бустера)
+# ---------------------------------------------------------------------
+ranks:
+  - {name: 'Неофит', icon: '☘', color: '&#9E9E9E', kills: 0}
+  - {name: 'Призрак', icon: '☁', color: '&#C8C8C8', kills: 30}
+  - {name: 'Фантом', icon: '✦', color: '&#55AAFF', kills: 150}
+  - {name: 'Вампир', icon: '♆', color: '&#FF5555', kills: 500}
+  - {name: 'Лич', icon: '☠', color: '&#E0E0E0', kills: 1000}
+  - {name: 'Демон', icon: '♗', color: '&#B070D0', kills: 1500}
+  - {name: 'Некромант', icon: '✝', color: '&#55AA88', kills: 2000}
+  - {name: 'Ведьмак', icon: '✾', color: '&#D0A868', kills: 3000}
+  - {name: 'Барон', icon: '♚', color: '&#E09A58', kills: 4000}
+  - {name: 'Архидемон', icon: '♜', color: '&#E07C8C', kills: 5000}
+  - {name: 'Древний', icon: '♇', color: '&#A8B4FF', kills: 6000}
+  - {name: 'Проклятый', icon: '☫', color: '&#FF8A8A', kills: 7000}
+  - {name: 'Тёмный Владыка', icon: '♆', color: '&#C866FF', kills: 8000}
+  - {name: 'Повелитель', icon: '♔', color: '&#A878FF', kills: 15000}
+  - {name: 'Страж Небытия', icon: '☢', color: '&#C8B0FF', kills: 30000}
+  - {name: 'Падший', icon: '♰', color: '&#E8C8A0', kills: 50000}
+  - {name: 'Тень Вечности', icon: '⚜', color: '&#E4C4FF', kills: 80000}
+
+# Умения ранга растут от первого ранга (0) до последнего (значения ниже)
+skills:
+  enabled: true
+  attack-max: 100          # +% урона по игрокам
+  attack-chance-max: 33    # шанс срабатывания атаки, %
+  defense-max: 50          # -% получаемого от игроков урона
+  defense-chance-max: 33   # шанс срабатывания защиты, %
+
+# Ранг в чате DestroyChat (перед кланом). {icon} {name} {color}
+chat-rank: '{color}{icon} {name} '
+
+# ---------------------------------------------------------------------
+#  Знаки классности - по боевому рейтингу (БР), только для красоты:
+#  0 - нет, от 1 - Мастер, 100к - EXCLUSIVE, 250к - TIGR, 500к - LEGENDARY, 1 млн - Immortal, 2 млн - Nephilim
+# ---------------------------------------------------------------------
+classes:
+  - {rating: 0, display: '&7[Нет отличительных отметок]'}
+  - {rating: 1, display: '&#C6FF8C«&#B3F883М&#9FF27Bа&#8CEB72с&#79E569т&#66DE60е&#52D858р&#3FD14F»'}
+  - {rating: 100000, display: '&#8CFFFF&l«&#84F5FF&lE&#7CEBFF&lX&#74E2FF&lC&#6CD8FF&lL&#64CEFF&lU&#5BC4FF&lS&#53BAFF&lI&#4BB1FF&lV&#43A7FF&lE&#3B9DFF&l»'}
+  - {rating: 250000, display: '&#FF9A1F虎&#FFE94D&lT&#FFCF3E&lI&#FFB42E&lG&#FF9A1F&lR&#FF9A1F虎'}
+  - {rating: 500000, display: '&#FF2E4D&l✘&#FF7AA8&l&oL&#FF709D&l&oE&#FF6791&l&oG&#FF5E86&l&oE&#FF547A&l&oN&#FF4A6F&l&oD&#FF4164&l&oA&#FF3858&l&oR&#FF2E4D&l&oY&#FF2E4D&l✘'}
+  - {rating: 1000000, display: '&#FF3B3B⇗&#FFF06B&oI&#FFE761&om&#FFDE57&om&#FFD54D&oo&#FFCD42&or&#FFC438&ot&#FFBB2E&oa&#FFB224&ol&#FF3B3B⇗'}
+  - {rating: 2000000, display: '&#FFD24D&o↟&#FF5A5A&oN&#FF525A&oe&#FF495A&op&#FF415A&oh&#FF385A&oi&#FF305A&ol&#FF275A&oi&#FF1F5A&om&#FFD24D&o↟'}
 
 messages:
   usage: '&cИспользование: /stat <ник игрока>'
   not-found: '&cИгрок &f{player} &cне найден.'
   no-permission: '&cНет прав.'
   admin-usage:
-    - '&e/statadmin set <ник> <privilege|rank|clan|rating|class|winrate> <значение>'
+    - '&e/statadmin set <ник> <privilege|rating|winrate|kills|deaths|booster> <значение>'
     - '&e/statadmin reset <ник>'
     - '&e/statadmin reload'
   set-ok: '&aУ игрока &f{player} &aполе &f{field} &aтеперь: &r{value}'
   reset-ok: '&aСтатистика игрока &f{player} &aсброшена.'
   reload-ok: '&aКонфиг и данные перезагружены.'
-  bad-field: '&cНеизвестное поле. Доступно: privilege, rank, clan, rating, class, winrate'
+  bad-field: '&cНеизвестное поле. Доступно: privilege, rating, winrate, kills, deaths, booster'
+  bad-number: '&cЗначение должно быть числом.'
+  kill: '&a+{rating} боевого рейтинга &7(убит &f{victim}&7)'
+  booster: '&6Сработал бустер &ex{booster}&6! &f+{kills} &6убийств к рангу'
+  winrate-up: '&dПроцент побед на пвп вырос на &f{bonus}%&d!'
+  rank-up: '&aНовый ранг: {rank}&a! Смотри умения: &f/rank info'
+  rank-on: '&aРанг снова показывается в чате.'
+  rank-off: '&7Ранг больше не показывается в чате.'
+  rank-usage:
+    - '&e/rank info [ник] &7- ранг, бустер, умения'
+    - '&e/rank list &7- все ранги'
+    - '&e/rank top [страница] &7- топ по убийствам'
+    - '&e/rank on &7/ &e/rank off &7- показывать ранг в чате'

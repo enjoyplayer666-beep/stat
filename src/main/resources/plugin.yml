@@ -1,15 +1,22 @@
 name: StatPlugin
-version: 1.0
+version: 1.1
 main: ru.stat.StatPlugin
 api-version: '1.21'
-softdepend: [PlaceholderAPI]
+softdepend: [PlaceholderAPI, DestroyChat]
 commands:
   stat:
     description: Статистика игрока
     usage: /stat <ник>
+  mystat:
+    description: Своя статистика
+    usage: /mystat
   statadmin:
     description: Управление статистикой
     usage: /statadmin <set|reset|reload>
+  rank:
+    description: Ранги
+    usage: /rank <info|list|top|on|off>
+    aliases: [ranks, ранг]
 permissions:
   stat.use:
     default: true
