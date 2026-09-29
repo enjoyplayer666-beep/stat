@@ -1,0 +1,15 @@
+obsidian
+slime
+moss
+mossy
+swamp
+jungle
+garlic
+onion
+turnip
+radish
+bulb
+ghost
+golem
+wither
+coal

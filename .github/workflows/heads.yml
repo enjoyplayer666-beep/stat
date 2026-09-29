@@ -1,0 +1,23 @@
+# Разовый поиск голов для шлемов MediaItems: результат (картинки + index.tsv) в ветку heads-out
+name: heads
+on:
+  push:
+    branches: [claude/sharp-brahmagupta-ptif54]
+    paths: ['tools/heads/**']
+permissions:
+  contents: write
+jobs:
+  heads:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pillow
+      - run: cd tools/heads && python find_heads.py
+      - run: |
+          cp -r tools/heads/out /tmp/out
+          git config user.name "github-actions" && git config user.email "actions@github.com"
+          git checkout --orphan heads-out && git rm -rfq . && cp /tmp/out/* .
+          git add . && git commit -qm "heads from ${GITHUB_SHA}" && git push -f origin heads-out
