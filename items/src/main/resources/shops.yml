@@ -60,6 +60,23 @@ shops:
       - {buy: "item:compressed_gold:4", result: "item:firework_3:64"}
       - {buy: "item:firework_3:64", result: "item:compressed_gold:3"}
 
+  # Компрессор (скрин): житель, ресурсы -> сжатые блоки
+  compressor:
+    title: "<white><b>Компрессор"
+    name: "<white><b>Компрессор"
+    npc:
+      type: "VILLAGER"
+      profession: "none"
+      villager-type: "plains"
+    trades:
+      - {buy: "DIRT:64", result: "item:compressed_dirt"}
+      - {buy: "STONE:32", result: "item:compressed_stone"}
+      - {buy: "COAL:48", result: "item:compressed_coal"}
+      - {buy: "IRON_INGOT:32", result: "item:compressed_iron"}
+      - {buy: "DIAMOND:64", result: "item:compressed_diamond"}
+      - {buy: "GUNPOWDER:64", result: "item:compressed_gunpowder"}
+      - {buy: "GOLD_INGOT:48", result: "item:compressed_gold"}
+
   # Декомпрессор (скрин): житель, сжатые блоки -> обратно в ресурсы
   decompressor:
     title: "<white><b>Декомпрессор"
