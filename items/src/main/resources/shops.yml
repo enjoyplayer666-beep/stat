@@ -94,26 +94,24 @@ shops:
       - {buy: "item:diamond_boots", buy2: "item:compressed_diamond:1", result: "item:diamond_boots_2"}
       - {buy: "item:diamond_sword", buy2: "item:compressed_diamond:2", result: "item:diamond_sword_2"}
 
-  # Незерит (по той же схеме, пока без скрина): алмаз [II] + 16 обломков (меч 32) -> [I]; [I] + сжатый незерит -> [II]
+  # Незерит (скрин, блейз): алмаз [II] + 16 пороха (меч 32) -> [I]; [I] + сжатый порох (каска/ботинки 1, куртка/штаны 2, меч 3) -> [II]
   netherite:
-    title: "<gradient:#7A6A8C:#3B2F4A><b>Незеритовый сет"
-    name: "<gradient:#7A6A8C:#3B2F4A><b>Незеритовый сет"
+    title: "<dark_gray><b>Незеритовый сет"
+    name: "<dark_gray><b>Незеритовый сет"
     npc:
-      type: "PIGLIN_BRUTE"
-      equipment:
-        hand: "item:netherite_sword"
+      type: "BLAZE"
     trades:
-      - {buy: "item:diamond_helmet_2", buy2: "NETHERITE_SCRAP:16", result: "item:netherite_helmet"}
-      - {buy: "item:diamond_chestplate_2", buy2: "NETHERITE_SCRAP:16", result: "item:netherite_chestplate"}
-      - {buy: "item:diamond_leggings_2", buy2: "NETHERITE_SCRAP:16", result: "item:netherite_leggings"}
-      - {buy: "item:diamond_boots_2", buy2: "NETHERITE_SCRAP:16", result: "item:netherite_boots"}
-      - {buy: "item:diamond_sword_2", buy2: "NETHERITE_SCRAP:32", result: "item:netherite_sword"}
+      - {buy: "item:diamond_helmet_2", buy2: "GUNPOWDER:16", result: "item:netherite_helmet"}
+      - {buy: "item:diamond_chestplate_2", buy2: "GUNPOWDER:16", result: "item:netherite_chestplate"}
+      - {buy: "item:diamond_leggings_2", buy2: "GUNPOWDER:16", result: "item:netherite_leggings"}
+      - {buy: "item:diamond_boots_2", buy2: "GUNPOWDER:16", result: "item:netherite_boots"}
+      - {buy: "item:diamond_sword_2", buy2: "GUNPOWDER:32", result: "item:netherite_sword"}
       - {buy: "item:separator", buy2: "item:separator", result: "item:separator"}
-      - {buy: "item:netherite_helmet", buy2: "item:compressed_netherite:1", result: "item:netherite_helmet_2"}
-      - {buy: "item:netherite_chestplate", buy2: "item:compressed_netherite:2", result: "item:netherite_chestplate_2"}
-      - {buy: "item:netherite_leggings", buy2: "item:compressed_netherite:2", result: "item:netherite_leggings_2"}
-      - {buy: "item:netherite_boots", buy2: "item:compressed_netherite:1", result: "item:netherite_boots_2"}
-      - {buy: "item:netherite_sword", buy2: "item:compressed_netherite:2", result: "item:netherite_sword_2"}
+      - {buy: "item:netherite_helmet", buy2: "item:compressed_gunpowder:1", result: "item:netherite_helmet_2"}
+      - {buy: "item:netherite_chestplate", buy2: "item:compressed_gunpowder:2", result: "item:netherite_chestplate_2"}
+      - {buy: "item:netherite_leggings", buy2: "item:compressed_gunpowder:2", result: "item:netherite_leggings_2"}
+      - {buy: "item:netherite_boots", buy2: "item:compressed_gunpowder:1", result: "item:netherite_boots_2"}
+      - {buy: "item:netherite_sword", buy2: "item:compressed_gunpowder:3", result: "item:netherite_sword_2"}
 
   # Аметист (скрин): 20 осколков -> кластер, 2 кластера -> сжатый кластер, незерит [II] + сжатый кластер (меч - 2) -> аметист
   amethyst:

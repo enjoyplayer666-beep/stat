@@ -80,7 +80,7 @@ items:
 
   # ---------- Сжатые ресурсы: вещь [I] + сжатый ресурс -> вещь [II] ----------
   compressed_coal:
-    material: COAL_BLOCK
+    material: PURPLE_CONCRETE_POWDER
     name: "<red>Сжатый уголь"
     lore-mode: vanilla
   compressed_iron:
@@ -316,7 +316,7 @@ items:
     model: 10001
     name: "<gold>Незеритовый меч</gold> <dark_gray>[<aqua>I</aqua>]"
     enchants: ["sharpness:7"]
-    attributes: ["attack_damage:9"]
+    attributes: ["attack_damage:8"]
     unbreakable: true
   netherite_helmet_2:
     material: LEATHER_HELMET
@@ -357,9 +357,9 @@ items:
     enchants: ["sharpness:8"]
     attributes: ["attack_damage:9"]
     unbreakable: true
-  compressed_netherite:
-    material: NETHERITE_BLOCK
-    name: "<red>Сжатый незерит"
+  compressed_gunpowder:
+    material: PURPUR_BLOCK
+    name: "<red>Сжатый порох"
     lore-mode: vanilla
 
   # ---------- Аметистовый сет (скрин) ----------
