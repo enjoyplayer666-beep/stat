@@ -13,17 +13,17 @@ menu:
   title: "Выбор категорий"
   category-lore: ["<gray>Нажми, чтобы открыть"]
   color-slot: 48
-  color-icon: "WHITE_WOOL"
+  color-icon: "head:68b8b43dbd285536c71c79acad6ca5677294249a38a837b3e776298112ffc0"
   color-name: "<gold>Сменить цвет"
   remove-slot: 50
-  remove-icon: "LIME_WOOL"
+  remove-icon: "head:81873119ae884b89c086b0cc6eb44cff951a4193509d904062113b5785680c08"
   remove-name: "<red>Снять титул"
   back-icon: "ARROW"
   back-name: "<gray>Назад"
 
 # кейс в каждой категории: случайный ещё закрытый титул этой категории
 case:
-  icon: "CHEST"
+  icon: "head:2544b09d559cebb406b722700f3bd37cb16d28d2f6814b583c64270084bc68b3"
   name: "<gold>Кейс с титулами"
   lore: ["<gray>Нажми, чтобы открыть", "<gray>Выпадет случайный закрытый титул"]
   # цена открытия предметом (item:<id>:кол-во или MATERIAL:кол-во); пусто - бесплатно
@@ -49,7 +49,7 @@ colors:
     cyan:   {slot: 32, icon: "head:e0fb1f13ecb7fbb2fa49cd03d357fa7e278502b78730602aaa10655e4d9490e1",       color: "#00AAAA", name: "Бирюзовый"}
     lime:   {slot: 33, icon: "head:a3e9f4dbadde0f727c5803d75d8bb378fb9fcb4b60d33bec19092a3a2e7b07a9",       color: "#55FF55", name: "Салатовый"}
   custom-slot: 49
-  custom-icon: "PAINTING"
+  custom-icon: "head:adb548e27e16cd015cd5272a343f1f7ac682f99dfde84b42560fdfe7237b6b7d"
   custom-name: "<gradient:#F1DA9C:#9035B0><i>Свой цвет"
   custom-lore:
     - "<gray>Нажми, чтобы ввести свой HEX-код"
