@@ -52,12 +52,14 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
 
     private static final MiniMessage MM = MiniMessage.miniMessage();
 
+    /** Точка генератора. Точки одной группы работают синхронно: общий счётчик. */
     static final class Gen {
-        String name;
+        String name;   // "группа:точка"
+        String group;
+        String point;
         String world;
         int x, y, z;
         Material material;
-        int count;
         UUID itemEntity, textEntity;
         String shown;
         /** угол поворота иконки (как у выпавшего предмета) */
@@ -68,6 +70,9 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
     }
 
     private final Map<String, Gen> gens = new LinkedHashMap<>();
+    /** общий счётчик группы */
+    private final Map<String, Integer> counts = new LinkedHashMap<>();
+    private final Map<String, Material> materials = new LinkedHashMap<>();
     private final Map<UUID, Boost> boosts = new HashMap<>();
     private NamespacedKey genKey;
     private NamespacedKey itemsIdKey;
@@ -112,34 +117,63 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
 
     private void load() {
         gens.clear();
+        counts.clear();
+        materials.clear();
         YamlConfiguration y = YamlConfiguration.loadConfiguration(dataFile);
-        ConfigurationSection sec = y.getConfigurationSection("gens");
-        if (sec == null) return;
-        for (String name : sec.getKeys(false)) {
-            ConfigurationSection s = sec.getConfigurationSection(name);
-            Gen g = new Gen();
-            g.name = name;
-            g.world = s.getString("world");
-            g.x = s.getInt("x");
-            g.y = s.getInt("y");
-            g.z = s.getInt("z");
-            Material m = Material.matchMaterial(s.getString("material", "DIRT"));
-            g.material = m == null ? Material.DIRT : m;
-            g.count = s.getInt("count");
-            gens.put(name, g);
+        ConfigurationSection groups = y.getConfigurationSection("groups");
+        if (groups != null) {
+            for (String group : groups.getKeys(false)) {
+                ConfigurationSection gs = groups.getConfigurationSection(group);
+                Material m = Material.matchMaterial(gs.getString("material", "DIRT"));
+                materials.put(group, m == null ? Material.DIRT : m);
+                counts.put(group, gs.getInt("count"));
+                ConfigurationSection pts = gs.getConfigurationSection("points");
+                if (pts == null) continue;
+                for (String point : pts.getKeys(false)) {
+                    ConfigurationSection s = pts.getConfigurationSection(point);
+                    addPoint(group, point, s.getString("world"), s.getInt("x"), s.getInt("y"), s.getInt("z"));
+                }
+            }
         }
+        // старый формат (одиночные генераторы) -> группа с точкой p1
+        ConfigurationSection old = y.getConfigurationSection("gens");
+        if (old != null) {
+            for (String name : old.getKeys(false)) {
+                ConfigurationSection s = old.getConfigurationSection(name);
+                Material m = Material.matchMaterial(s.getString("material", "DIRT"));
+                materials.putIfAbsent(name, m == null ? Material.DIRT : m);
+                counts.putIfAbsent(name, s.getInt("count"));
+                addPoint(name, "p1", s.getString("world"), s.getInt("x"), s.getInt("y"), s.getInt("z"));
+            }
+        }
+    }
+
+    private Gen addPoint(String group, String point, String world, int x, int y, int z) {
+        Gen g = new Gen();
+        g.group = group;
+        g.point = point;
+        g.name = group + ":" + point;
+        g.world = world;
+        g.x = x;
+        g.y = y;
+        g.z = z;
+        g.material = materials.getOrDefault(group, Material.DIRT);
+        gens.put(g.name, g);
+        return g;
     }
 
     private void save() {
         YamlConfiguration y = new YamlConfiguration();
+        for (var e : materials.entrySet()) {
+            y.set("groups." + e.getKey() + ".material", e.getValue().name());
+            y.set("groups." + e.getKey() + ".count", counts.getOrDefault(e.getKey(), 0));
+        }
         for (Gen g : gens.values()) {
-            String p = "gens." + g.name + ".";
+            String p = "groups." + g.group + ".points." + g.point + ".";
             y.set(p + "world", g.world);
             y.set(p + "x", g.x);
             y.set(p + "y", g.y);
             y.set(p + "z", g.z);
-            y.set(p + "material", g.material.name());
-            y.set(p + "count", g.count);
         }
         try {
             y.save(dataFile);
@@ -159,12 +193,13 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
         if (grow) {
             int max = gc.getInt("generator.max", 512);
             boolean reset = "reset".equalsIgnoreCase(gc.getString("generator.on-full", "reset"));
-            for (Gen g : gens.values()) {
-                if (g.count >= max) {
-                    if (reset) g.count = 0;
+            for (var e : counts.entrySet()) {
+                int c = e.getValue();
+                if (c >= max) {
+                    if (reset) e.setValue(0);
                     continue;
                 }
-                g.count = Math.min(max, g.count + gc.getInt("generator.amount", 1));
+                e.setValue(Math.min(max, c + gc.getInt("generator.amount", 1)));
             }
         }
         if (check) {
@@ -182,15 +217,16 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
             if (p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
             Location l = p.getLocation();
             for (Gen g : gens.values()) {
-                if (g.count <= 0 || !l.getWorld().getName().equals(g.world)) continue;
+                int count = counts.getOrDefault(g.group, 0);
+                if (count <= 0 || !l.getWorld().getName().equals(g.world)) continue;
                 if (Math.abs(l.getBlockX() - g.x) > r || Math.abs(l.getBlockZ() - g.z) > r) continue;
                 double dy = l.getY() - (g.y + 1);
                 if (dy < -0.5 || dy > 2.5) continue;
                 int mult = multiplier(p);
-                int total = g.count * mult;
+                int total = count * mult;
                 int left = give(p, g.material, total);
-                // что не влезло - остаётся в генераторе (в пересчёте без бустера)
-                g.count = mult > 1 ? (left + mult - 1) / mult : left;
+                // что не влезло - остаётся в генераторе (в пересчёте без бустера); счётчик общий для всей группы
+                counts.put(g.group, mult > 1 ? (left + mult - 1) / mult : left);
                 if (total - left > 0) p.playSound(p.getLocation(), org.bukkit.Sound.ENTITY_ITEM_PICKUP, 0.4f, 1.4f);
             }
         }
@@ -220,7 +256,8 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
         var gc = getConfig();
         Entity item = g.itemEntity == null ? null : Bukkit.getEntity(g.itemEntity);
         Entity text = g.textEntity == null ? null : Bukkit.getEntity(g.textEntity);
-        if (g.count <= 0) {
+        int count = counts.getOrDefault(g.group, 0);
+        if (count <= 0) {
             // пусто - блока-иконки нет, надпись тоже убираем
             if (item != null) item.remove();
             if (text != null) text.remove();
@@ -255,7 +292,7 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
             text = d;
         }
         if (g.itemEntity != null && Bukkit.getEntity(g.itemEntity) instanceof ItemDisplay d && someoneNear(g)) spin(d, g);
-        String s = gc.getString("generator.text", "<gray>x<aqua>{count}").replace("{count}", String.valueOf(g.count));
+        String s = gc.getString("generator.text", "<gray>x<aqua>{count}").replace("{count}", String.valueOf(count));
         if (!s.equals(g.shown) && text instanceof TextDisplay td) {
             td.text(mm(s));
             g.shown = s;
@@ -282,8 +319,9 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
     private void spin(ItemDisplay d, Gen g) {
         var gc = getConfig();
         float sc = (float) gc.getDouble("generator.item-scale", 0.35);
-        g.angle += (float) Math.toRadians(gc.getDouble("generator.spin-degrees", 15));
-        if (g.angle > Math.PI * 2) g.angle -= (float) (Math.PI * 2);
+        // угол от общего времени - все точки крутятся одинаково (синхронно)
+        double step = Math.toRadians(gc.getDouble("generator.spin-degrees", 15));
+        g.angle = (float) (((tickCounter / 5) * step) % (Math.PI * 2));
         float bob = (float) (Math.sin(g.angle) * gc.getDouble("generator.bob", 0.06));
         d.setInterpolationDelay(0);
         d.setInterpolationDuration(5);
@@ -376,69 +414,90 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] a) {
         if (a.length == 0) {
-            sender.sendMessage(mm("<gold>/gen create <название> [материал]</gold> <gray>- генератор на блоке под тобой\n"
-                    + "<gold>/gen remove [название]</gold> <gray>- удалить (без названия - ближайший)\n"
+            sender.sendMessage(mm("<gold>/gen create <группа> <точка> [материал]</gold> <gray>- точка генератора на блоке под тобой (dirt p1, dirt p2...)\n"
+                    + "<gold>/gen remove [группа] [точка]</gold> <gray>- удалить точку/группу (без аргументов - ближайшую точку)\n"
                     + "<gold>/gen list</gold>, <gold>/gen reload"));
             return true;
         }
         switch (a[0].toLowerCase(Locale.ROOT)) {
             case "create" -> {
+                // /gen create <группа> <точка> [материал]: точки одной группы работают синхронно (общий счётчик)
                 if (!(sender instanceof Player p)) return true;
-                if (a.length < 2) {
-                    sender.sendMessage(mm("<red>/gen create <название> [материал]"));
+                if (a.length < 3) {
+                    sender.sendMessage(mm("<red>/gen create <группа> <точка> [материал]  <gray>например: /gen create dirt p1"));
                     return true;
                 }
-                String name = a[1].toLowerCase(Locale.ROOT);
-                if (gens.containsKey(name)) {
-                    sender.sendMessage(mm("<red>Генератор '" + name + "' уже есть."));
+                String group = a[1].toLowerCase(Locale.ROOT);
+                String point = a[2].toLowerCase(Locale.ROOT);
+                if (gens.containsKey(group + ":" + point)) {
+                    sender.sendMessage(mm("<red>Точка " + point + " в группе " + group + " уже есть."));
                     return true;
                 }
-                Material m = a.length > 2 ? Material.matchMaterial(a[2]) : Material.DIRT;
+                Material m;
+                if (a.length > 3) m = Material.matchMaterial(a[3]);
+                else if (materials.containsKey(group)) m = materials.get(group);
+                else {
+                    // группа названа по блоку (dirt, stone...) - он и копится, иначе земля
+                    Material byName = Material.matchMaterial(group);
+                    m = byName != null && byName.isItem() ? byName : Material.DIRT;
+                }
                 if (m == null || !m.isItem()) {
-                    sender.sendMessage(mm("<red>Нет такого предмета: " + a[2]));
+                    sender.sendMessage(mm("<red>Нет такого предмета: " + a[3]));
                     return true;
                 }
+                materials.put(group, m);
+                counts.putIfAbsent(group, 0);
                 Block under = p.getLocation().subtract(0, 0.2, 0).getBlock();
-                Gen g = new Gen();
-                g.name = name;
-                g.world = under.getWorld().getName();
-                g.x = under.getX();
-                g.y = under.getY();
-                g.z = under.getZ();
-                g.material = m;
-                gens.put(name, g);
+                Gen g = addPoint(group, point, under.getWorld().getName(), under.getX(), under.getY(), under.getZ());
+                for (Gen x : gens.values()) if (x.group.equals(group)) x.material = m;
                 save();
-                sender.sendMessage(mm("<green>Генератор <white>" + name + "</white> (" + m.name().toLowerCase(Locale.ROOT)
-                        + ") поставлен на блок " + g.x + " " + g.y + " " + g.z + "."));
+                sender.sendMessage(mm("<green>Точка <white>" + point + "</white> группы <white>" + group + "</white> ("
+                        + m.name().toLowerCase(Locale.ROOT) + ") на блоке " + g.x + " " + g.y + " " + g.z + "."));
             }
             case "remove" -> {
-                Gen g = null;
-                if (a.length > 1) g = gens.get(a[1].toLowerCase(Locale.ROOT));
-                else if (sender instanceof Player p) {
-                    double best = 25;
+                // /gen remove <группа> [точка] - без точки удаляется вся группа; без аргументов - ближайшая точка
+                List<Gen> del = new ArrayList<>();
+                if (a.length > 2) {
+                    Gen g = gens.get(a[1].toLowerCase(Locale.ROOT) + ":" + a[2].toLowerCase(Locale.ROOT));
+                    if (g != null) del.add(g);
+                } else if (a.length > 1) {
+                    String group = a[1].toLowerCase(Locale.ROOT);
+                    for (Gen g : gens.values()) if (g.group.equals(group)) del.add(g);
+                } else if (sender instanceof Player p) {
+                    Gen best = null;
+                    double bd = 25;
                     for (Gen x : gens.values()) {
                         if (!x.world.equals(p.getWorld().getName())) continue;
                         double d = p.getLocation().distanceSquared(new Location(p.getWorld(), x.x + 0.5, x.y + 1, x.z + 0.5));
-                        if (d < best) {
-                            best = d;
-                            g = x;
+                        if (d < bd) {
+                            bd = d;
+                            best = x;
                         }
                     }
+                    if (best != null) del.add(best);
                 }
-                if (g == null) {
-                    sender.sendMessage(mm("<red>Генератор не найден (/gen list)."));
+                if (del.isEmpty()) {
+                    sender.sendMessage(mm("<red>Не найдено (/gen list)."));
                     return true;
                 }
-                removeDisplays(g);
-                gens.remove(g.name);
+                for (Gen g : del) {
+                    removeDisplays(g);
+                    gens.remove(g.name);
+                    sender.sendMessage(mm("<green>Удалена точка <white>" + g.point + "</white> группы <white>" + g.group));
+                }
+                // группа без точек больше не нужна
+                materials.keySet().removeIf(gr -> gens.values().stream().noneMatch(g -> g.group.equals(gr)));
+                counts.keySet().retainAll(materials.keySet());
                 save();
-                sender.sendMessage(mm("<green>Генератор <white>" + g.name + "</white> удалён."));
             }
             case "list" -> {
                 if (gens.isEmpty()) sender.sendMessage(mm("<gray>Генераторов нет."));
-                for (Gen g : gens.values()) {
-                    sender.sendMessage(mm("<gray>- <white>" + g.name + "</white> " + g.material.name().toLowerCase(Locale.ROOT)
-                            + " " + g.world + " " + g.x + " " + g.y + " " + g.z + " <aqua>x" + g.count));
+                for (var e : materials.entrySet()) {
+                    sender.sendMessage(mm("<white>" + e.getKey() + "</white> <gray>(" + e.getValue().name().toLowerCase(Locale.ROOT)
+                            + ") <aqua>x" + counts.getOrDefault(e.getKey(), 0)));
+                    for (Gen g : gens.values()) {
+                        if (g.group.equals(e.getKey())) sender.sendMessage(mm("<gray>  - " + g.point + ": " + g.world + " " + g.x + " " + g.y + " " + g.z));
+                    }
                 }
             }
             case "reload" -> {
@@ -455,8 +514,13 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
     public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] a) {
         List<String> out = new ArrayList<>();
         if (a.length == 1) out.addAll(List.of("create", "remove", "list", "reload"));
-        else if (a.length == 2 && a[0].equalsIgnoreCase("remove")) out.addAll(gens.keySet());
-        else if (a.length == 3 && a[0].equalsIgnoreCase("create")) out.addAll(List.of("dirt", "stone", "coal", "iron_ingot", "diamond", "gunpowder", "gold_ingot"));
+        else if (a.length == 2 && (a[0].equalsIgnoreCase("remove") || a[0].equalsIgnoreCase("create"))) {
+            out.addAll(materials.keySet());
+            if (a[0].equalsIgnoreCase("create")) out.addAll(List.of("dirt", "stone", "coal", "iron_ingot", "diamond", "gunpowder", "gold_ingot"));
+        } else if (a.length == 3) {
+            for (Gen g : gens.values()) if (g.group.equals(a[1].toLowerCase(Locale.ROOT))) out.add(g.point);
+            if (a[0].equalsIgnoreCase("create")) out.add("p" + (out.size() + 1));
+        }
         String last = a[a.length - 1].toLowerCase(Locale.ROOT);
         out.removeIf(s -> !s.startsWith(last));
         return out;

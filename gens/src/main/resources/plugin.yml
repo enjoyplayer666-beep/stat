@@ -8,7 +8,7 @@ softdepend: [MediaItems, Multiverse-Core]
 commands:
   gen:
     description: Генераторы
-    usage: /gen <create|remove|list|reload>
+    usage: /gen create <группа> <точка> | remove | list | reload
     permission: mediagens.admin
 permissions:
   mediagens.admin:
