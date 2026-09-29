@@ -18,16 +18,16 @@ items:
   candy:
     material: IRON_INGOT
     model: 147
-    name: "<gold>Конфета DestroyCraft"
+    name: "<gradient:#D1C564:#FDA653>Конфета DestroyCraft"
   accel_component:
     material: IRON_INGOT
     model: 123
-    name: "<gold>Ускорительный компонент"
+    name: "<gradient:#D1C564:#FDA653>Ускорительный компонент"
   # бустеры генераторов (модели boost из пака, string 101-115). Сами генераторы и активация - позже
   booster_x2:
     material: STRING
     model: 101
-    name: "<gold>Бустер <white>x2"
+    name: "<gold>Бустер <gray>x</gray><white>2"
     lore:
       - "<light_purple>Бустер генераторов на <white><u>120 сек</u></white>"
       - ""
@@ -35,7 +35,7 @@ items:
   booster_x2_plus:
     material: STRING
     model: 102
-    name: "<gold>Бустер <white>x2"
+    name: "<gold>Бустер <gray>x</gray><white>2"
     lore:
       - "<light_purple>Бустер генераторов на <white><u>240 сек</u></white>"
       - ""
@@ -43,7 +43,7 @@ items:
   booster_x3:
     material: STRING
     model: 103
-    name: "<gold>Бустер <white>x3"
+    name: "<gold>Бустер <gray>x</gray><white>3"
     lore:
       - "<light_purple>Бустер генераторов на <white><u>90 сек</u></white>"
       - ""
@@ -51,7 +51,7 @@ items:
   booster_x10:
     material: STRING
     model: 108
-    name: "<aqua>Бустер <white>x10"
+    name: "<aqua>Бустер <gray>x</gray><white>10"
     lore:
       - "<light_purple>Бустер генераторов на <white><u>60 сек</u></white>"
       - ""
@@ -279,12 +279,12 @@ items:
     enchants: ["sharpness:6"]
     lore-mode: vanilla
 
-  # ---------- Незеритовый сет ----------
+  # ---------- Незеритовый сет [I] (Защита VI) и [II] (Защита VII) ----------
   netherite_helmet:
     material: LEATHER_HELMET
     model: 10001
     color: "#3B2F4A"
-    name: "<gold><b>Незеритовая каска</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    name: "<gold>Незеритовая каска</gold> <dark_gray>[<aqua>I</aqua>]"
     enchants: ["protection:6"]
     attributes: ["armor:3", "armor_toughness:3"]
     unbreakable: true
@@ -292,7 +292,7 @@ items:
     material: LEATHER_CHESTPLATE
     model: 10001
     color: "#3B2F4A"
-    name: "<gold><b>Незеритовый нагрудник</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    name: "<gold>Незеритовая куртка</gold> <dark_gray>[<aqua>I</aqua>]"
     enchants: ["protection:6"]
     attributes: ["armor:8", "armor_toughness:3"]
     unbreakable: true
@@ -300,7 +300,7 @@ items:
     material: LEATHER_LEGGINGS
     model: 10001
     color: "#3B2F4A"
-    name: "<gold><b>Незеритовые поножи</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    name: "<gold>Незеритовые штаны</gold> <dark_gray>[<aqua>I</aqua>]"
     enchants: ["protection:6"]
     attributes: ["armor:6", "armor_toughness:3"]
     unbreakable: true
@@ -308,63 +308,106 @@ items:
     material: LEATHER_BOOTS
     model: 10001
     color: "#3B2F4A"
-    name: "<gold><b>Незеритовые ботинки</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    name: "<gold>Незеритовые ботинки</gold> <dark_gray>[<aqua>I</aqua>]"
     enchants: ["protection:6"]
     attributes: ["armor:3", "armor_toughness:3"]
     unbreakable: true
   netherite_sword:
     material: DIAMOND_SWORD
     model: 10001
-    name: "<gold><b>Незеритовый меч</b></gold> <dark_gray>[<aqua>I</aqua>]"
-    enchants: ["sharpness:6"]
-    attributes: ["attack_damage:9", "attack_speed:2"]
+    name: "<gold>Незеритовый меч</gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["sharpness:7"]
+    attributes: ["attack_damage:9"]
     unbreakable: true
   netherite_helmet_2:
     material: LEATHER_HELMET
     model: 10001
     color: "#3B2F4A"
-    name: "<gold><b>Незеритовая каска</b></gold> <dark_gray>[<aqua>II</aqua>]"
+    name: "<gold>Незеритовая каска</gold> <dark_gray>[<aqua>II</aqua>]"
     enchants: ["protection:7"]
     attributes: ["armor:3", "armor_toughness:3"]
     unbreakable: true
+  netherite_chestplate_2:
+    material: LEATHER_CHESTPLATE
+    model: 10001
+    color: "#3B2F4A"
+    name: "<gold>Незеритовая куртка</gold> <dark_gray>[<aqua>II</aqua>]"
+    enchants: ["protection:7"]
+    attributes: ["armor:8", "armor_toughness:3"]
+    unbreakable: true
+  netherite_leggings_2:
+    material: LEATHER_LEGGINGS
+    model: 10001
+    color: "#3B2F4A"
+    name: "<gold>Незеритовые штаны</gold> <dark_gray>[<aqua>II</aqua>]"
+    enchants: ["protection:7"]
+    attributes: ["armor:6", "armor_toughness:3"]
+    unbreakable: true
+  netherite_boots_2:
+    material: LEATHER_BOOTS
+    model: 10001
+    color: "#3B2F4A"
+    name: "<gold>Незеритовые ботинки</gold> <dark_gray>[<aqua>II</aqua>]"
+    enchants: ["protection:7"]
+    attributes: ["armor:3", "armor_toughness:3"]
+    unbreakable: true
+  netherite_sword_2:
+    material: DIAMOND_SWORD
+    model: 10001
+    name: "<gold>Незеритовый меч</gold> <dark_gray>[<aqua>II</aqua>]"
+    enchants: ["sharpness:8"]
+    attributes: ["attack_damage:9"]
+    unbreakable: true
+  compressed_netherite:
+    material: NETHERITE_BLOCK
+    name: "<red>Сжатый незерит"
+    lore-mode: vanilla
 
-  # ---------- Аметистовый шлем ... ----------
+  # ---------- Аметистовый сет (скрин) ----------
+  amethyst_cluster:
+    material: AMETHYST_BLOCK
+    name: "<light_purple><b>Аметистовый кластер"
+    lore-mode: vanilla
+  compressed_cluster:
+    material: AMETHYST_BLOCK
+    name: "<light_purple><b>Сжатый кластер"
+    lore-mode: vanilla
   amethyst_helmet:
     material: LEATHER_HELMET
     model: 10002
     color: "#FFFFFF"
-    name: "<light_purple><b>Аметистовый шлем</b></light_purple>"
-    enchants: ["protection:8"]
+    name: "<light_purple><b>Аметистовый шлем"
+    enchants: ["fire_protection:2", "protection:8", "thorns:2"]
     attributes: ["armor:3", "armor_toughness:3"]
     unbreakable: true
   amethyst_chestplate:
     material: LEATHER_CHESTPLATE
     model: 10002
     color: "#FFFFFF"
-    name: "<light_purple><b>Аметистовый нагрудник</b></light_purple>"
-    enchants: ["protection:8"]
+    name: "<light_purple><b>Аметистовая куртка"
+    enchants: ["fire_protection:2", "protection:8", "thorns:2"]
     attributes: ["armor:8", "armor_toughness:3"]
     unbreakable: true
   amethyst_leggings:
     material: LEATHER_LEGGINGS
     model: 10002
     color: "#FFFFFF"
-    name: "<light_purple><b>Аметистовые поножи</b></light_purple>"
-    enchants: ["protection:8"]
+    name: "<light_purple><b>Аметистовые штаны"
+    enchants: ["fire_protection:2", "protection:8", "thorns:2"]
     attributes: ["armor:6", "armor_toughness:3"]
     unbreakable: true
   amethyst_boots:
     material: LEATHER_BOOTS
     model: 10002
     color: "#FFFFFF"
-    name: "<light_purple><b>Аметистовые ботинки</b></light_purple>"
-    enchants: ["protection:8"]
+    name: "<light_purple><b>Аметистовые ботинки"
+    enchants: ["fire_protection:2", "protection:8", "thorns:2"]
     attributes: ["armor:3", "armor_toughness:3"]
     unbreakable: true
   amethyst_sword:
     material: DIAMOND_SWORD
     model: 10002
-    name: "<light_purple><b>Аметистовый меч</b></light_purple>"
+    name: "<light_purple><b>Аметистовый меч"
     enchants: ["fire_aspect:2", "sharpness:9:#FFFFFF"]
     attributes: ["attack_damage:12", "attack_speed:2"]
     unbreakable: true

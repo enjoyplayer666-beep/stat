@@ -154,7 +154,7 @@ final class Items {
             }
             if (!vanilla && !attrLines.isEmpty()) {
                 if (!lore.isEmpty()) lore.add(Component.empty());
-                lore.add(Text.plain(tooltip.getString("slots." + slot, ""), color("header-color", "#AAAAAA")));
+                lore.add(Text.plain(s.getString("slot-header", tooltip.getString("slots." + slot, "")), color("header-color", "#AAAAAA")));
                 lore.addAll(attrLines);
             }
         }

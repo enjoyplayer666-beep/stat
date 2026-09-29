@@ -159,7 +159,8 @@ final class Npcs implements Listener {
     void respawnAll() {
         for (Npc n : npcs.values()) {
             Shops.Shop shop = plugin.shops().get(n.shop);
-            if (shop == null || !n.loc.isChunkLoaded()) continue;
+            // НПС-игроков FancyNpcs не трогаем: их пересоздаёт только /itemnpc remove + create
+            if (shop == null || n.fancy != null || !n.loc.isChunkLoaded()) continue;
             despawn(n);
             spawn(n, shop, null);
         }
@@ -208,7 +209,7 @@ final class Npcs implements Listener {
         creator.performCommand("npc skin " + name + " " + skin);
         creator.performCommand("npc displayname " + name + " " + shop.name());
         creator.performCommand("npc turn_to_player " + name + " true");
-        creator.performCommand("npc action " + name + " ANY_CLICK add console_command itemnpc open {player} " + shop.id());
+        creator.performCommand("npc action " + name + " any_click add console_command itemnpc open {player} " + shop.id());
     }
 
     private void setup(Entity ent, Npc n, Shops.Shop shop) {

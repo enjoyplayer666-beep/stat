@@ -11,13 +11,14 @@
 shops:
 
   # Мистер Пропер: конфеты -> ускорительный компонент -> бустеры генераторов
+  # НПС-игрок (FancyNpcs) в скине жителя в костюме; скин лежит в репозитории, FancyNpcs загрузит его по ссылке
   proper:
     title: "<dark_green>Shopkeeper"
-    name: "<gradient:#E8C45A:#FFA14A>Мистер Пропер"
+    name: "<gradient:#D1C564:#FDA653>Мистер Пропер"
     npc:
-      type: "VILLAGER"
-      profession: "none"
-      villager-type: "plains"
+      type: "PLAYER"
+      skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/mister_proper.png"
+      fallback-type: "VILLAGER"
     trades:
       - {buy: "item:candy:64", result: "item:accel_component"}
       - {buy: "item:accel_component:5", result: "item:booster_x2"}
@@ -93,7 +94,7 @@ shops:
       - {buy: "item:diamond_boots", buy2: "item:compressed_diamond:1", result: "item:diamond_boots_2"}
       - {buy: "item:diamond_sword", buy2: "item:compressed_diamond:2", result: "item:diamond_sword_2"}
 
-  # Незерит: алмазная вещь + 16 обломков (меч - 32)
+  # Незерит (по той же схеме, пока без скрина): алмаз [II] + 16 обломков (меч 32) -> [I]; [I] + сжатый незерит -> [II]
   netherite:
     title: "<gradient:#7A6A8C:#3B2F4A><b>Незеритовый сет"
     name: "<gradient:#7A6A8C:#3B2F4A><b>Незеритовый сет"
@@ -107,22 +108,27 @@ shops:
       - {buy: "item:diamond_leggings_2", buy2: "NETHERITE_SCRAP:16", result: "item:netherite_leggings"}
       - {buy: "item:diamond_boots_2", buy2: "NETHERITE_SCRAP:16", result: "item:netherite_boots"}
       - {buy: "item:diamond_sword_2", buy2: "NETHERITE_SCRAP:32", result: "item:netherite_sword"}
-      - {buy: "item:netherite_helmet", buy2: "NETHERITE_BLOCK", result: "item:netherite_helmet_2"}
+      - {buy: "item:separator", buy2: "item:separator", result: "item:separator"}
+      - {buy: "item:netherite_helmet", buy2: "item:compressed_netherite:1", result: "item:netherite_helmet_2"}
+      - {buy: "item:netherite_chestplate", buy2: "item:compressed_netherite:2", result: "item:netherite_chestplate_2"}
+      - {buy: "item:netherite_leggings", buy2: "item:compressed_netherite:2", result: "item:netherite_leggings_2"}
+      - {buy: "item:netherite_boots", buy2: "item:compressed_netherite:1", result: "item:netherite_boots_2"}
+      - {buy: "item:netherite_sword", buy2: "item:compressed_netherite:2", result: "item:netherite_sword_2"}
 
-  # Аметист: 20 осколков -> блок, незеритовая вещь + блок (меч - 2 блока), эндермен
+  # Аметист (скрин): 20 осколков -> кластер, 2 кластера -> сжатый кластер, незерит [II] + сжатый кластер (меч - 2) -> аметист
   amethyst:
     title: "<light_purple><b>Аметистовый сет"
     name: "<light_purple><b>Аметистовый сет"
     npc:
       type: "ENDERMAN"
     trades:
-      - {buy: "AMETHYST_SHARD:20", result: "AMETHYST_BLOCK"}
-      - {buy: "AMETHYST_CLUSTER:2", result: "AMETHYST_BLOCK"}
-      - {buy: "item:netherite_sword", buy2: "AMETHYST_BLOCK:2", result: "item:amethyst_sword"}
-      - {buy: "item:netherite_helmet", buy2: "AMETHYST_BLOCK", result: "item:amethyst_helmet"}
-      - {buy: "item:netherite_chestplate", buy2: "AMETHYST_BLOCK", result: "item:amethyst_chestplate"}
-      - {buy: "item:netherite_leggings", buy2: "AMETHYST_BLOCK", result: "item:amethyst_leggings"}
-      - {buy: "item:netherite_boots", buy2: "AMETHYST_BLOCK", result: "item:amethyst_boots"}
+      - {buy: "AMETHYST_SHARD:20", result: "item:amethyst_cluster"}
+      - {buy: "item:amethyst_cluster:2", result: "item:compressed_cluster"}
+      - {buy: "item:netherite_sword_2", buy2: "item:compressed_cluster:2", result: "item:amethyst_sword"}
+      - {buy: "item:netherite_helmet_2", buy2: "item:compressed_cluster", result: "item:amethyst_helmet"}
+      - {buy: "item:netherite_chestplate_2", buy2: "item:compressed_cluster", result: "item:amethyst_chestplate"}
+      - {buy: "item:netherite_leggings_2", buy2: "item:compressed_cluster", result: "item:amethyst_leggings"}
+      - {buy: "item:netherite_boots_2", buy2: "item:compressed_cluster", result: "item:amethyst_boots"}
 
   # Обсидиан (кит Deluxe): аметистовая вещь + 16 компонентов
   obsidian:
