@@ -1,0 +1,40 @@
+# =====================================================================
+#  MediaTops - голограммы-топы. Клик по голограмме переключает "за день" / "за вайп".
+#  Поставить: встань на место и /tops create <kills|clans|playtime>
+#  Тексты - MiniMessage. {mode} - "ЗА ДЕНЬ" / "ЗА ВАЙП".
+# =====================================================================
+
+# часовой пояс, по которому начинается новый день
+timezone: "Europe/Moscow"
+# как часто обновлять голограммы (секунды)
+update-seconds: 30
+# сколько строк в топе
+size: 10
+# убийство того же игрока тем же убийцей раньше этого времени не засчитывается (защита от фарма)
+anti-farm-seconds: 300
+# размер текста
+scale: 1.0
+
+mode-day: "ЗА ДЕНЬ"
+mode-wipe: "ЗА ВАЙП"
+footer-day: "<#A5E5B5>Топ за день, клик – за <b>вайп!</b></#A5E5B5>"
+footer-wipe: "<#A5E5B5>Топ за всё время, клик – за <b>день!</b></#A5E5B5>"
+empty-line: "<dark_gray>#{place} ---</dark_gray>"
+
+kills:
+  title: "<white><b>Топ</b></white> <#FF5555><b>Бойцов</b></#FF5555> <dark_gray>[</dark_gray><#9EEAB5>{mode}</#9EEAB5><dark_gray>]</dark_gray>"
+  # {place} {name} {value}
+  line: "<#E0334A>#{place}</#E0334A> <white>{name}</white> <gray>убийств:</gray> <#E0334A>{value}</#E0334A>"
+
+clans:
+  title: "<white><b>Топ</b></white> <#5AB4FF><b>Кланов</b></#5AB4FF> <dark_gray>[</dark_gray><#9EEAB5>{mode}</#9EEAB5><dark_gray>]</dark_gray>"
+  # {name} - название клана с его цветами
+  line: "<#5AB4FF>#{place}</#5AB4FF> {name} <gray>рейтинг:</gray> <#5ED6E0>{value}</#5ED6E0>"
+
+playtime:
+  title: "<white><b>Топ</b></white> <#C77DFF><b>Активистов</b></#C77DFF> <dark_gray>[</dark_gray><#9EEAB5>{mode}</#9EEAB5><dark_gray>]</dark_gray>"
+  # {value} - часы
+  line: "<#C77DFF>#{place}</#C77DFF> <white>{name}</white> <gray>наиграл:</gray> <#FFD166>{value}ч</#FFD166>"
+
+# голограммы (заполняется командой /tops create)
+boards: {}

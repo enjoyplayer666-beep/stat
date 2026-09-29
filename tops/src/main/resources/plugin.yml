@@ -1,0 +1,15 @@
+name: MediaTops
+version: '1.0'
+main: ru.dscraft.mediatops.MediaTopsPlugin
+api-version: '1.21'
+author: DestroyCraft
+description: Голограммы-топы (бойцы, кланы, активисты) за день и за вайп, переключение кликом
+softdepend: [MediaClans, StatPlugin]
+commands:
+  tops:
+    description: Голограммы-топы
+    usage: /tops <create|move|remove|list|reload|resetwipe>
+    permission: mediatops.admin
+permissions:
+  mediatops.admin:
+    default: op
