@@ -14,14 +14,13 @@
 items:
 
   # ---------- Мистер Пропер ----------
-  # ВНИМАНИЕ: конфеты и ускорительного компонента нет в паке SP-DS - пока стоят похожие модели (руды 47 и 23)
   candy:
     material: IRON_INGOT
-    model: 147
+    model: 188
     name: "<gradient:#D1C564:#FDA653>Конфета DestroyCraft"
   accel_component:
     material: IRON_INGOT
-    model: 123
+    model: 189
     name: "<gradient:#D1C564:#FDA653>Ускорительный компонент"
   # бустеры генераторов (модели boost из пака, string 101-115). Сами генераторы и активация - позже
   booster_x2:
