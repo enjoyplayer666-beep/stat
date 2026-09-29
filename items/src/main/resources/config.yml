@@ -51,5 +51,9 @@ tooltip:
     attack_speed:         {icon: "⚡", color: "#FFFF55", name: "Скорость атаки"}
     movement_speed:       {icon: "⚡", color: "#55FFFF", name: "Скорость"}
 
+# команды, которые открывают наковальню для улучшения сетов (перехватываются раньше Essentials)
+anvil-commands: ["/anvil", "/upgrade"]
+
 messages:
   wrong-ingredient: "<red>Сюда нужны обычные предметы, а не ресурсы с сервера."
+  use-anvil: "<yellow>Эти вещи улучшаются в наковальне: <white>/anvil</white> или <white>/upgrade</white>."

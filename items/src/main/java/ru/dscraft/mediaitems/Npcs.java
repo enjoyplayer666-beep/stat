@@ -305,9 +305,17 @@ final class Npcs implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onResultClick(InventoryClickEvent e) {
         if (!(e.getInventory() instanceof MerchantInventory mi) || e.getRawSlot() != 2) return;
-        if (!openShops.containsKey(e.getWhoClicked().getUniqueId())) return;
+        Shops.Shop shop = openShops.get(e.getWhoClicked().getUniqueId());
+        if (shop == null) return;
         MerchantRecipe r = mi.getSelectedRecipe();
         if (r == null) return;
+        int idx = mi.getSelectedRecipeIndex();
+        if (idx >= 0 && idx < shop.trades().size() && shop.trades().get(idx).displayOnly()) {
+            // строка-подсказка: такие вещи улучшаются в наковальне, у НПС их не выдаём
+            e.setCancelled(true);
+            e.getWhoClicked().sendMessage(Text.mm(plugin.msg("use-anvil")));
+            return;
+        }
         List<ItemStack> need = r.getIngredients();
         for (int i = 0; i < Math.min(2, need.size()); i++) {
             String want = plugin.items().idOf(need.get(i));

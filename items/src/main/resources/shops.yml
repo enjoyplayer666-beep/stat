@@ -128,26 +128,28 @@ shops:
       - {buy: "item:netherite_leggings_2", buy2: "item:compressed_cluster", result: "item:amethyst_leggings"}
       - {buy: "item:netherite_boots_2", buy2: "item:compressed_cluster", result: "item:amethyst_boots"}
 
-  # Обсидиан (кит Deluxe): аметистовая вещь + 16 компонентов
+  # Обсидиан (скрин): у НПС только блоки и призма; вещи - в наковальне (/anvil, /upgrade), у НПС они видны подсказкой
   obsidian:
     title: "<black><b>Обсидиановый сет"
     name: "<black><b>Обсидиановый сет"
     npc:
-      type: "PLAYER"
-      skin: ""
-      fallback-type: "ZOMBIE"
+      type: "SKELETON"
       equipment:
-        head: "OBSIDIAN"
-        chest: "LEATHER_CHESTPLATE#3B1B5C"
-        legs: "LEATHER_LEGGINGS#3B1B5C"
-        feet: "LEATHER_BOOTS#2A1240"
+        chest: "LEATHER_CHESTPLATE#4A2378"
+        legs: "LEATHER_LEGGINGS#4A2378"
+        feet: "LEATHER_BOOTS#2E1650"
         hand: "item:obsidian_sword"
     trades:
-      - {buy: "item:amethyst_helmet", buy2: "item:accel_component:16", result: "item:obsidian_helmet"}
-      - {buy: "item:amethyst_chestplate", buy2: "item:accel_component:16", result: "item:obsidian_chestplate"}
-      - {buy: "item:amethyst_leggings", buy2: "item:accel_component:16", result: "item:obsidian_leggings"}
-      - {buy: "item:amethyst_boots", buy2: "item:accel_component:16", result: "item:obsidian_boots"}
-      - {buy: "item:amethyst_sword", buy2: "item:accel_component:16", result: "item:obsidian_sword"}
+      - {buy: "CRYING_OBSIDIAN:32", result: "item:compressed_obsidian"}
+      - {buy: "item:compressed_obsidian:6", result: "item:obsidian_cluster"}
+      - {buy: "item:separator", buy2: "item:separator", result: "item:separator"}
+      - {buy: "item:prism_1", buy2: "item:obsidian_cluster:2", result: "item:prism_2"}
+    anvil:
+      - {item: "item:amethyst_sword", with: "item:obsidian_cluster:12", result: "item:obsidian_sword"}
+      - {item: "item:amethyst_boots", with: "item:obsidian_cluster:12", result: "item:obsidian_boots"}
+      - {item: "item:amethyst_helmet", with: "item:obsidian_cluster:4", result: "item:obsidian_helmet"}
+      - {item: "item:amethyst_chestplate", with: "item:obsidian_cluster:4", result: "item:obsidian_chestplate"}
+      - {item: "item:amethyst_leggings", with: "item:obsidian_cluster:4", result: "item:obsidian_leggings"}
 
   # Majestic (кит Ultra): обсидиановая вещь + 32 компонента
   majestic:

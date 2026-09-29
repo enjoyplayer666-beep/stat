@@ -411,6 +411,46 @@ items:
     attributes: ["attack_damage:12", "attack_speed:2"]
     unbreakable: true
 
+  # ---------- Обсидиановый сет (скрин): блоки у НПС, вещи - через наковальню ----------
+  compressed_obsidian:
+    material: CRYING_OBSIDIAN
+    name: "<dark_purple>Сжатый обсидиан"
+    lore-mode: vanilla
+  obsidian_cluster:
+    material: CRYING_OBSIDIAN
+    name: "<dark_purple><b>Обсидиановый кластер"
+    lore-mode: vanilla
+  # строка-подсказка у НПС: эти вещи улучшаются в наковальне
+  anvil_hint:
+    material: ANVIL
+    name: "<white><b>/anvil или /upgrade"
+    lore-mode: vanilla
+  # Призма Конденсации (модель compressor из пака, gold_ingot 150)
+  prism_1:
+    material: GOLD_INGOT
+    model: 150
+    name: "<gradient:#4C2B5A:#E281FF>Призма Конденсации</gradient> <dark_gray>[<gray>Ур.<white>1</white></gray>]"
+    lore-mode: vanilla
+    lore:
+      - "<#666666>▒ <gradient:#AFAFAF:#FFFFFF:#C8C8C8>Автоматический конденсатор</gradient> <#666666>▒"
+      - ""
+      - "<#5A5A5A>П<#5F5F5F>а<#646464>с<#696969>с<#6E6E6E>и<#737373>в<#787878>н<#7D7D7D>о <#828282>к<#878787>о<#8C8C8C>н<#919191>в<#969696>е<#9B9B9B>р<#A0A0A0>т<#A5A5A5>и<#AAAAAA>р<#AFAFAF>у<#B4B4B4>е<#B9B9B9>т"
+      - "<#BEBEBE>р<#C3C3C3>е<#C8C8C8>с<#CDCDCD>у<#D2D2D2>р<#D7D7D7>с<#DCDCDC>ы <#E1E1E1>в <#E6E6E6>и<#EBEBEB>н<#F0F0F0>в<#F5F5F5>е<#FAFAFA>н<#FFFFFF>т<#FAFAFA>а<#F5F5F5>р<#F0F0F0>е"
+      - "<#EBEBEB>п<#E6E6E6>р<#E1E1E1>и <#DCDCDC>д<#D7D7D7>о<#D2D2D2>с<#CDCDCD>т<#C8C8C8>и<#C3C3C3>ж<#BEBEBE>е<#B9B9B9>н<#B4B4B4>и<#AFAFAF>и"
+      - "<#AAAAAA>н<#A5A5A5>у<#A0A0A0>ж<#9B9B9B>н<#969696>о<#919191>г<#8C8C8C>о <#878787>к<#828282>о<#7D7D7D>л<#787878>и<#737373>ч<#6E6E6E>е<#696969>с<#646464>т<#5F5F5F>в<#5A5A5A>а"
+  prism_2:
+    material: GOLD_INGOT
+    model: 150
+    name: "<gradient:#4C2B5A:#E281FF>Призма Конденсации</gradient> <dark_gray>[<gray>Ур.<white>2</white></gray>]"
+    lore-mode: vanilla
+    lore:
+      - "<#666666>▒ <gradient:#AFAFAF:#FFFFFF:#C8C8C8>Автоматический конденсатор</gradient> <#666666>▒"
+      - ""
+      - "<#5A5A5A>П<#5F5F5F>а<#646464>с<#696969>с<#6E6E6E>и<#737373>в<#787878>н<#7D7D7D>о <#828282>к<#878787>о<#8C8C8C>н<#919191>в<#969696>е<#9B9B9B>р<#A0A0A0>т<#A5A5A5>и<#AAAAAA>р<#AFAFAF>у<#B4B4B4>е<#B9B9B9>т"
+      - "<#BEBEBE>р<#C3C3C3>е<#C8C8C8>с<#CDCDCD>у<#D2D2D2>р<#D7D7D7>с<#DCDCDC>ы <#E1E1E1>в <#E6E6E6>и<#EBEBEB>н<#F0F0F0>в<#F5F5F5>е<#FAFAFA>н<#FFFFFF>т<#FAFAFA>а<#F5F5F5>р<#F0F0F0>е"
+      - "<#EBEBEB>п<#E6E6E6>р<#E1E1E1>и <#DCDCDC>д<#D7D7D7>о<#D2D2D2>с<#CDCDCD>т<#C8C8C8>и<#C3C3C3>ж<#BEBEBE>е<#B9B9B9>н<#B4B4B4>и<#AFAFAF>и"
+      - "<#AAAAAA>н<#A5A5A5>у<#A0A0A0>ж<#9B9B9B>н<#969696>о<#919191>г<#8C8C8C>о <#878787>к<#828282>о<#7D7D7D>л<#787878>и<#737373>ч<#6E6E6E>е<#696969>с<#646464>т<#5F5F5F>в<#5A5A5A>а"
+
   # ---------- Обсидиановый шлем ... ----------
   obsidian_helmet:
     material: LEATHER_HELMET

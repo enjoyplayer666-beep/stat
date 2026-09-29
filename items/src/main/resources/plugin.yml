@@ -10,6 +10,9 @@ commands:
     description: НПС-торговцы предметами
     usage: /itemnpc <create|remove|list|movehere|give|shops|reload>
     permission: mediaitems.admin
+  upgrade:
+    description: Наковальня для улучшения сетов
+    aliases: [anvil]
 permissions:
   mediaitems.admin:
     default: op

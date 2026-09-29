@@ -11,17 +11,22 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Logger;
 
-/** Магазины из shops.yml: название, внешний вид НПС и список обменов. */
+/** Магазины из shops.yml: название, внешний вид НПС, обмены и улучшения через наковальню. */
 final class Shops {
 
-    /** Один обмен: 1-2 предмета -> результат. */
-    record Trade(List<ItemStack> ingredients, ItemStack result, ItemStack display) {
+    /** Один обмен: 1-2 предмета -> результат. displayOnly - строка только для показа (улучшение в наковальне). */
+    record Trade(List<ItemStack> ingredients, ItemStack result, ItemStack display, boolean displayOnly) {
+    }
+
+    /** Улучшение в наковальне: item (1 шт.) + with (count шт.) -> result. */
+    record Upgrade(String item, String with, int count, ItemStack result) {
     }
 
     record Shop(String id, String title, String name, ConfigurationSection npc, List<Trade> trades) {
     }
 
     private final Map<String, Shop> shops = new LinkedHashMap<>();
+    private final List<Upgrade> upgrades = new ArrayList<>();
     private final MediaItemsPlugin plugin;
     private final Logger log;
 
@@ -32,7 +37,9 @@ final class Shops {
 
     void load(ConfigurationSection sec, Items items) {
         shops.clear();
+        upgrades.clear();
         if (sec == null) return;
+        ItemStack hint = items.get("anvil_hint");
         for (String id : sec.getKeys(false)) {
             ConfigurationSection s = sec.getConfigurationSection(id);
             if (s == null) continue;
@@ -46,6 +53,28 @@ final class Shops {
                     else log.warning("Магазин " + id + ", обмен #" + n + ": не найден предмет");
                 } catch (Exception e) {
                     log.warning("Магазин " + id + ", обмен #" + n + ": " + e.getMessage());
+                }
+            }
+            // anvil: улучшения через наковальню (/anvil, /upgrade или любая наковальня);
+            // у НПС показываются строками "вещь + ресурс -> наковальня", обменять их у НПС нельзя
+            n = 0;
+            for (Map<?, ?> t : s.getMapList("anvil")) {
+                n++;
+                try {
+                    String item = str(t.get("item"));
+                    String with = str(t.get("with"));
+                    ItemStack base = items.parse(item);
+                    ItemStack cost = items.parse(with);
+                    ItemStack result = items.parse(str(t.get("result")));
+                    if (base == null || cost == null || result == null || items.idOf(base) == null || items.idOf(cost) == null) {
+                        log.warning("Магазин " + id + ", наковальня #" + n + ": не найден предмет из items.yml");
+                        continue;
+                    }
+                    upgrades.add(new Upgrade(items.idOf(base), items.idOf(cost), cost.getAmount(), result));
+                    ItemStack shown = hint != null ? hint : result.clone();
+                    trades.add(new Trade(List.of(base, cost), result, shown, true));
+                } catch (Exception e) {
+                    log.warning("Магазин " + id + ", наковальня #" + n + ": " + e.getMessage());
                 }
             }
             String key = id.toLowerCase(Locale.ROOT);
@@ -65,8 +94,7 @@ final class Shops {
             ing.add(it);
         }
         if (ing.isEmpty()) return null;
-        ItemStack display = result.clone();
-        return new Trade(ing, result, display);
+        return new Trade(ing, result, result.clone(), false);
     }
 
     private static String str(Object o) {
@@ -79,6 +107,10 @@ final class Shops {
 
     Map<String, Shop> all() {
         return shops;
+    }
+
+    List<Upgrade> upgrades() {
+        return upgrades;
     }
 
     static List<MerchantRecipe> recipes(Shop shop) {

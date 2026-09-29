@@ -38,6 +38,7 @@ public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
         loadAll();
         npcs.load();
         getServer().getPluginManager().registerEvents(npcs, this);
+        getServer().getPluginManager().registerEvents(new Anvils(this), this);
         getCommand("itemnpc").setTabCompleter(this);
         Bukkit.getScheduler().runTaskTimer(this, npcs::tick, 40L, 40L);
         getLogger().info("Предметов: " + items.all().size() + ", магазинов: " + shops.all().size() + ", НПС: " + npcs.all().size());
@@ -70,6 +71,10 @@ public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] a) {
+        if (cmd.getName().equalsIgnoreCase("upgrade")) {
+            if (sender instanceof Player p) new Anvils(this).open(p);
+            return true;
+        }
         if (a.length == 0) {
             help(sender);
             return true;
@@ -170,6 +175,7 @@ public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] a) {
         List<String> out = new ArrayList<>();
+        if (cmd.getName().equalsIgnoreCase("upgrade")) return out;
         if (a.length == 1) {
             out.addAll(List.of("create", "remove", "movehere", "list", "shops", "give", "reload"));
         } else if (a.length == 2) {
