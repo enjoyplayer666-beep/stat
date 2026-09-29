@@ -152,6 +152,37 @@ public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
                 target.getInventory().addItem(it).values().forEach(l -> target.getWorld().dropItemNaturally(target.getLocation(), l));
                 sender.sendMessage(Text.mm("<green>Выдано."));
             }
+            case "sethead" -> {
+                // /itemnpc sethead <предмет> [Value | хеш текстуры | ссылка textures.minecraft.net]
+                // без текстуры - берётся голова из руки
+                if (a.length < 2) return usage(sender, "/itemnpc sethead <предмет> [Value/хеш текстуры]  (или держи голову в руке)");
+                String id = a[1].toLowerCase(Locale.ROOT);
+                File f = new File(getDataFolder(), "items.yml");
+                YamlConfiguration y = YamlConfiguration.loadConfiguration(f);
+                if (!y.isConfigurationSection("items." + id)) return usage(sender, "Нет предмета '" + id + "' в items.yml");
+                String tex = a.length > 2 ? a[2] : null;
+                if (tex == null && sender instanceof Player p) {
+                    ItemStack hand = p.getInventory().getItemInMainHand();
+                    if (hand.getItemMeta() instanceof org.bukkit.inventory.meta.SkullMeta sm && sm.getPlayerProfile() != null) {
+                        for (var prop : sm.getPlayerProfile().getProperties()) {
+                            if (prop.getName().equals("textures")) tex = prop.getValue();
+                        }
+                    }
+                }
+                if (tex == null || tex.isBlank()) return usage(sender, "Укажи Value/хеш текстуры или возьми голову в руку.");
+                y.set("items." + id + ".material", "PLAYER_HEAD");
+                y.set("items." + id + ".head", tex);
+                y.set("items." + id + ".model", null);
+                y.set("items." + id + ".color", null);
+                try {
+                    y.save(f);
+                } catch (java.io.IOException e) {
+                    return usage(sender, "Не удалось сохранить items.yml: " + e.getMessage());
+                }
+                loadAll();
+                npcs.respawnAll();
+                sender.sendMessage(Text.mm("<green>Теперь <white>" + id + "</white> - голова. Выдать: /itemnpc give " + id));
+            }
             case "open" -> {
                 // для FancyNpcs: console_command itemnpc open {player} <магазин>
                 if (a.length < 3) return usage(sender, "/itemnpc open <игрок> <магазин>");
@@ -196,6 +227,7 @@ public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
                 <yellow>/itemnpc movehere [id]</yellow> <gray>- перенести к себе
                 <yellow>/itemnpc list</yellow> <gray>- все НПС,</gray> <yellow>/itemnpc shops</yellow> <gray>- магазины
                 <yellow>/itemnpc give <предмет> [кол-во] [игрок]</yellow>
+                <yellow>/itemnpc sethead <предмет> [текстура]</yellow> <gray>- сделать шлем головой (или голова в руке)
                 <yellow>/itemnpc reload</yellow>"""));
     }
 
@@ -204,12 +236,12 @@ public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
         List<String> out = new ArrayList<>();
         if (cmd.getName().equalsIgnoreCase("upgrade")) return out;
         if (a.length == 1) {
-            out.addAll(List.of("create", "remove", "movehere", "list", "shops", "give", "reload"));
+            out.addAll(List.of("create", "remove", "movehere", "list", "shops", "give", "sethead", "reload"));
         } else if (a.length == 2) {
             switch (a[0].toLowerCase(Locale.ROOT)) {
                 case "create" -> out.addAll(shops.all().keySet());
                 case "remove", "movehere" -> out.addAll(npcs.all().keySet());
-                case "give" -> out.addAll(items.all().keySet());
+                case "give", "sethead" -> out.addAll(items.all().keySet());
                 default -> {
                 }
             }

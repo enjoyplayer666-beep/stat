@@ -72,7 +72,8 @@ final class Shops {
                     }
                     upgrades.add(new Upgrade(items.idOf(base), items.idOf(cost), cost.getAmount(), result));
                     ItemStack shown = hint != null ? hint : result.clone();
-                    trades.add(new Trade(List.of(base, cost), result, shown, true));
+                    // только просмотр: ингредиенты с меткой, которой нет у настоящих вещей - обмен не сработает никак
+                    trades.add(new Trade(List.of(viewOnly(base), viewOnly(cost)), result, viewOnly(shown), true));
                 } catch (Exception e) {
                     log.warning("Магазин " + id + ", наковальня #" + n + ": " + e.getMessage());
                 }
@@ -95,6 +96,15 @@ final class Shops {
         }
         if (ing.isEmpty()) return null;
         return new Trade(ing, result, result.clone(), false);
+    }
+
+    private ItemStack viewOnly(ItemStack it) {
+        ItemStack c = it.clone();
+        var meta = c.getItemMeta();
+        meta.getPersistentDataContainer().set(new org.bukkit.NamespacedKey(plugin, "view"),
+                org.bukkit.persistence.PersistentDataType.BYTE, (byte) 1);
+        c.setItemMeta(meta);
+        return c;
     }
 
     private static String str(Object o) {
