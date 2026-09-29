@@ -174,7 +174,7 @@ final class Items {
         // hide-tooltip: true - без подсказки вообще (стекло-разделитель в окне обмена)
         if (s.getBoolean("hide-tooltip", false)) meta.setHideTooltip(true);
         if (!vanilla && !attrs.isEmpty()) meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        if (!s.getBoolean("glint", true)) meta.setEnchantmentGlintOverride(false);
+        if (s.contains("glint")) meta.setEnchantmentGlintOverride(s.getBoolean("glint"));
 
         meta.getPersistentDataContainer().set(idKey, PersistentDataType.STRING, id.toLowerCase(Locale.ROOT));
         it.setItemMeta(meta);

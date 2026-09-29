@@ -543,48 +543,67 @@ items:
     attributes: ["attack_damage:16", "attack_speed:2"]
     unbreakable: true
 
-  # ---------- Majestic Helmet ... ----------
+  # ---------- Majestic (скрин): через наковальню, пурпурные кластеры ----------
+  compressed_purpur:
+    material: MAGENTA_CONCRETE
+    name: "<light_purple>Сжатый пурпур"
+    glint: true
+    lore-mode: vanilla
+  purpur_cluster:
+    material: PURPLE_CONCRETE_POWDER
+    name: "<blue><b>Пурпурный кластер"
+    lore-mode: vanilla
   majestic_helmet:
     material: LEATHER_HELMET
     model: 10004
-    color: "#FFFFFF"
-    name: "<light_purple><b>Majestic Helmet</b></light_purple>"
+    color: "#E87CEE"
+    name: "<light_purple><b>Majestic Head"
     enchants: ["fire_protection:2", "protection:15", "thorns:2"]
     attributes: ["armor:3", "armor_toughness:3"]
     unbreakable: true
   majestic_chestplate:
     material: LEATHER_CHESTPLATE
     model: 10004
-    color: "#FFFFFF"
-    name: "<light_purple><b>Majestic Chestplate</b></light_purple>"
+    color: "#E87CEE"
+    name: "<light_purple><b>Majestic Chestplate"
     enchants: ["fire_protection:2", "protection:15", "thorns:2"]
     attributes: ["armor:8", "armor_toughness:3"]
     unbreakable: true
   majestic_leggings:
     material: LEATHER_LEGGINGS
     model: 10004
-    color: "#FFFFFF"
-    name: "<light_purple><b>Majestic Leggings</b></light_purple>"
+    color: "#E87CEE"
+    name: "<light_purple><b>Majestic Leggings"
     enchants: ["fire_protection:2", "protection:15", "thorns:2"]
     attributes: ["armor:6", "armor_toughness:3"]
     unbreakable: true
   majestic_boots:
     material: LEATHER_BOOTS
     model: 10004
-    color: "#FFFFFF"
-    name: "<light_purple><b>Majestic Boots</b></light_purple>"
+    color: "#E87CEE"
+    name: "<light_purple><b>Majestic Boots"
     enchants: ["fire_protection:2", "protection:15", "thorns:2"]
     attributes: ["armor:3", "armor_toughness:3"]
     unbreakable: true
   majestic_sword:
     material: DIAMOND_SWORD
     model: 10004
-    name: "<light_purple><b>Majestic Sword</b></light_purple>"
+    name: "<light_purple><b>Majestic Sword"
     enchants: ["fire_aspect:2", "sharpness:15"]
     attributes: ["attack_damage:20", "attack_speed:2"]
     unbreakable: true
+  # элитры сетов (на скринах есть строки "элитры + кластеры", подсказок нет - статы пока как у брони сета)
+  obsidian_elytra:
+    material: ELYTRA
+    name: "<dark_purple><b>Обсидиановые элитры"
+    enchants: ["fire_protection:2", "protection:12", "thorns:2"]
+    lore-mode: vanilla
+  majestic_elytra:
+    material: ELYTRA
+    name: "<light_purple><b>Majestic Elytra"
+    enchants: ["fire_protection:2", "protection:15", "thorns:2"]
+    lore-mode: vanilla
 
-  # ---------- Облачный шлем ... ----------
   cloud_helmet:
     material: LEATHER_HELMET
     model: 10001

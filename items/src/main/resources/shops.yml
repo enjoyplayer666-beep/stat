@@ -220,31 +220,31 @@ shops:
       - {buy: "item:prism_1", buy2: "item:obsidian_cluster:2", result: "item:prism_2"}
     anvil:
       - {item: "item:amethyst_sword", with: "item:obsidian_cluster:12", result: "item:obsidian_sword"}
-      - {item: "item:amethyst_boots", with: "item:obsidian_cluster:12", result: "item:obsidian_boots"}
+      - {item: "item:elytra_2", with: "item:obsidian_cluster:12", result: "item:obsidian_elytra"}
       - {item: "item:amethyst_helmet", with: "item:obsidian_cluster:4", result: "item:obsidian_helmet"}
       - {item: "item:amethyst_chestplate", with: "item:obsidian_cluster:4", result: "item:obsidian_chestplate"}
       - {item: "item:amethyst_leggings", with: "item:obsidian_cluster:4", result: "item:obsidian_leggings"}
+      - {item: "item:amethyst_boots", with: "item:obsidian_cluster:4", result: "item:obsidian_boots"}
 
-  # Majestic (кит Ultra): обсидиановая вещь + 32 компонента
+  # Majestic (скрин): у НПС пурпур -> сжатый пурпур -> пурпурный кластер; вещи - в наковальне из обсидиановых
   majestic:
     title: "<dark_purple><b>Majestic Set"
     name: "<dark_purple><b>Majestic Set"
     npc:
       type: "PLAYER"
-      skin: ""
+      skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/majestic.png"
       fallback-type: "ZOMBIE"
-      equipment:
-        head: "LEATHER_HELMET#F7A8D8"
-        chest: "LEATHER_CHESTPLATE#E07AB8"
-        legs: "LEATHER_LEGGINGS#E07AB8"
-        feet: "LEATHER_BOOTS#C9A27E"
-        hand: "item:majestic_sword"
     trades:
-      - {buy: "item:obsidian_helmet", buy2: "item:accel_component:32", result: "item:majestic_helmet"}
-      - {buy: "item:obsidian_chestplate", buy2: "item:accel_component:32", result: "item:majestic_chestplate"}
-      - {buy: "item:obsidian_leggings", buy2: "item:accel_component:32", result: "item:majestic_leggings"}
-      - {buy: "item:obsidian_boots", buy2: "item:accel_component:32", result: "item:majestic_boots"}
-      - {buy: "item:obsidian_sword", buy2: "item:accel_component:32", result: "item:majestic_sword"}
+      - {buy: "MAGENTA_CONCRETE:32", result: "item:compressed_purpur"}
+      - {buy: "item:compressed_purpur:6", result: "item:purpur_cluster"}
+      - {buy: "item:separator", buy2: "item:separator", result: "item:separator"}
+    anvil:
+      - {item: "item:obsidian_sword", with: "item:purpur_cluster:12", result: "item:majestic_sword"}
+      - {item: "item:obsidian_elytra", with: "item:purpur_cluster:8", result: "item:majestic_elytra"}
+      - {item: "item:obsidian_helmet", with: "item:purpur_cluster:4", result: "item:majestic_helmet"}
+      - {item: "item:obsidian_chestplate", with: "item:purpur_cluster:4", result: "item:majestic_chestplate"}
+      - {item: "item:obsidian_leggings", with: "item:purpur_cluster:4", result: "item:majestic_leggings"}
+      - {item: "item:obsidian_boots", with: "item:purpur_cluster:4", result: "item:majestic_boots"}
 
   # Облачный (кит Legend): majestic-вещь + 48 компонентов
   cloud:
