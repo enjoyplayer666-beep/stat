@@ -1,0 +1,209 @@
+# ============================================
+#  Магазины (НПС). Поставить: /itemnpc create <id магазина>
+#  title - заголовок окна обмена, name - ник над НПС (MiniMessage, градиенты)
+#  npc.type - моб: VILLAGER, IRON_GOLEM, SKELETON, ZOMBIE, ENDERMAN, WITHER_SKELETON, PIGLIN_BRUTE ...
+#             PLAYER - игрок со скином через FancyNpcs (npc.skin: ник или ссылка на png скина);
+#             пока скин не указан или нет FancyNpcs - ставится моб из fallback-type.
+#  npc.equipment - что надето: head/chest/legs/feet/hand/offhand
+#             "item:id" из items.yml, "MATERIAL" или "LEATHER_CHESTPLATE#RRGGBB" (крашеная кожа)
+#  trades - обмены: buy (+ buy2) -> result.  "item:id:кол-во" или "MATERIAL:кол-во"
+#           coins: 200 - покупка за коины (нажать на обмен 2 раза), display-lore - строки в списке обменов
+# ============================================
+shops:
+
+  # Обмен ресурсов (кожа НПС - житель-нитвит, в ресурспаке ему нарисован костюм)
+  proper:
+    title: "<dark_green>Shopkeeper"
+    name: "<gradient:#E8C45A:#FFA14A>Мистер Пропер"
+    npc:
+      type: "VILLAGER"
+      profession: "nitwit"
+      villager-type: "plains"
+    trades:
+      - {buy: "item:bat_head:64", result: "item:blood_crystal"}
+      - {buy: "item:blood_crystal:5", result: "item:emerald_amulet"}
+      - {buy: "item:emerald_amulet:2", buy2: "item:blood_crystal:10", result: "item:aqua_amulet"}
+      - {buy: "item:aqua_amulet:5", buy2: "item:blood_crystal:15", result: "item:sapphire"}
+      - {buy: "item:sapphire:5", buy2: "item:blood_crystal:20", result: "item:meteor_star"}
+
+  # Кольчуга (скелет в кольчуге)
+  chain:
+    title: "<gray>Кольчужный сет"
+    name: "<gray>Кольчужный сет"
+    npc:
+      type: "SKELETON"
+      equipment:
+        head: "CHAINMAIL_HELMET"
+        chest: "CHAINMAIL_CHESTPLATE"
+        legs: "CHAINMAIL_LEGGINGS"
+        feet: "CHAINMAIL_BOOTS"
+        hand: "item:amethyst_sword"
+    trades:
+      - {buy: "item:blood_crystal:2", result: "item:chain_helmet"}
+      - {buy: "item:blood_crystal:2", result: "item:chain_chestplate"}
+      - {buy: "item:blood_crystal:2", result: "item:chain_leggings"}
+      - {buy: "item:blood_crystal:2", result: "item:chain_boots"}
+      - {buy: "item:blood_crystal:2", result: "item:chain_sword"}
+
+  # Железо: кольчужная вещь + 16 железа (железный голем)
+  iron:
+    title: "<white><b>Железный сет"
+    name: "<white><b>Железный сет"
+    npc:
+      type: "IRON_GOLEM"
+    trades:
+      - {buy: "item:chain_helmet", buy2: "IRON_INGOT:16", result: "item:iron_helmet"}
+      - {buy: "item:chain_chestplate", buy2: "IRON_INGOT:16", result: "item:iron_chestplate"}
+      - {buy: "item:chain_leggings", buy2: "IRON_INGOT:16", result: "item:iron_leggings"}
+      - {buy: "item:chain_boots", buy2: "IRON_INGOT:16", result: "item:iron_boots"}
+      - {buy: "item:chain_sword", buy2: "IRON_INGOT:16", result: "item:iron_sword"}
+      - {buy: "item:iron_helmet", buy2: "IRON_BLOCK", result: "item:iron_helmet_2"}
+
+  # Алмаз: железная вещь + 16 алмазов (зомби в алмазной броне)
+  diamond:
+    title: "<aqua><b>Алмазный сет"
+    name: "<aqua><b>Алмазный сет"
+    npc:
+      type: "ZOMBIE"
+      equipment:
+        head: "DIAMOND_HELMET"
+        chest: "DIAMOND_CHESTPLATE"
+        legs: "DIAMOND_LEGGINGS"
+        feet: "DIAMOND_BOOTS"
+        hand: "DIAMOND_SWORD"
+    trades:
+      - {buy: "item:iron_helmet", buy2: "DIAMOND:16", result: "item:diamond_helmet"}
+      - {buy: "item:iron_chestplate", buy2: "DIAMOND:16", result: "item:diamond_chestplate"}
+      - {buy: "item:iron_leggings", buy2: "DIAMOND:16", result: "item:diamond_leggings"}
+      - {buy: "item:iron_boots", buy2: "DIAMOND:16", result: "item:diamond_boots"}
+      - {buy: "item:iron_sword", buy2: "DIAMOND:16", result: "item:diamond_sword"}
+      - {buy: "item:diamond_helmet", buy2: "DIAMOND_BLOCK", result: "item:diamond_helmet_2"}
+
+  # Незерит: алмазная вещь + 16 обломков (меч - 32)
+  netherite:
+    title: "<gradient:#7A6A8C:#3B2F4A><b>Незеритовый сет"
+    name: "<gradient:#7A6A8C:#3B2F4A><b>Незеритовый сет"
+    npc:
+      type: "PIGLIN_BRUTE"
+      equipment:
+        hand: "item:netherite_sword"
+    trades:
+      - {buy: "item:diamond_helmet", buy2: "NETHERITE_SCRAP:16", result: "item:netherite_helmet"}
+      - {buy: "item:diamond_chestplate", buy2: "NETHERITE_SCRAP:16", result: "item:netherite_chestplate"}
+      - {buy: "item:diamond_leggings", buy2: "NETHERITE_SCRAP:16", result: "item:netherite_leggings"}
+      - {buy: "item:diamond_boots", buy2: "NETHERITE_SCRAP:16", result: "item:netherite_boots"}
+      - {buy: "item:diamond_sword", buy2: "NETHERITE_SCRAP:32", result: "item:netherite_sword"}
+      - {buy: "item:netherite_helmet", buy2: "NETHERITE_BLOCK", result: "item:netherite_helmet_2"}
+
+  # Аметист: 20 осколков -> блок, незеритовая вещь + блок (меч - 2 блока), эндермен
+  amethyst:
+    title: "<light_purple><b>Аметистовый сет"
+    name: "<light_purple><b>Аметистовый сет"
+    npc:
+      type: "ENDERMAN"
+    trades:
+      - {buy: "AMETHYST_SHARD:20", result: "AMETHYST_BLOCK"}
+      - {buy: "AMETHYST_CLUSTER:2", result: "AMETHYST_BLOCK"}
+      - {buy: "item:netherite_sword", buy2: "AMETHYST_BLOCK:2", result: "item:amethyst_sword"}
+      - {buy: "item:netherite_helmet", buy2: "AMETHYST_BLOCK", result: "item:amethyst_helmet"}
+      - {buy: "item:netherite_chestplate", buy2: "AMETHYST_BLOCK", result: "item:amethyst_chestplate"}
+      - {buy: "item:netherite_leggings", buy2: "AMETHYST_BLOCK", result: "item:amethyst_leggings"}
+      - {buy: "item:netherite_boots", buy2: "AMETHYST_BLOCK", result: "item:amethyst_boots"}
+
+  # Обсидиан (кит Deluxe): аметистовая вещь + 8 изумрудных амулетов
+  obsidian:
+    title: "<black><b>Обсидиановый сет"
+    name: "<black><b>Обсидиановый сет"
+    npc:
+      type: "PLAYER"
+      skin: ""
+      fallback-type: "ZOMBIE"
+      equipment:
+        head: "OBSIDIAN"
+        chest: "LEATHER_CHESTPLATE#3B1B5C"
+        legs: "LEATHER_LEGGINGS#3B1B5C"
+        feet: "LEATHER_BOOTS#2A1240"
+        hand: "item:obsidian_sword"
+    trades:
+      - {buy: "item:amethyst_helmet", buy2: "item:emerald_amulet:8", result: "item:obsidian_helmet"}
+      - {buy: "item:amethyst_chestplate", buy2: "item:emerald_amulet:8", result: "item:obsidian_chestplate"}
+      - {buy: "item:amethyst_leggings", buy2: "item:emerald_amulet:8", result: "item:obsidian_leggings"}
+      - {buy: "item:amethyst_boots", buy2: "item:emerald_amulet:8", result: "item:obsidian_boots"}
+      - {buy: "item:amethyst_sword", buy2: "item:emerald_amulet:8", result: "item:obsidian_sword"}
+
+  # Majestic (кит Ultra): обсидиановая вещь + 16 изумрудных амулетов
+  majestic:
+    title: "<dark_purple><b>Majestic Set"
+    name: "<dark_purple><b>Majestic Set"
+    npc:
+      type: "PLAYER"
+      skin: ""
+      fallback-type: "ZOMBIE"
+      equipment:
+        head: "LEATHER_HELMET#F7A8D8"
+        chest: "LEATHER_CHESTPLATE#E07AB8"
+        legs: "LEATHER_LEGGINGS#E07AB8"
+        feet: "LEATHER_BOOTS#C9A27E"
+        hand: "item:majestic_sword"
+    trades:
+      - {buy: "item:obsidian_helmet", buy2: "item:emerald_amulet:16", result: "item:majestic_helmet"}
+      - {buy: "item:obsidian_chestplate", buy2: "item:emerald_amulet:16", result: "item:majestic_chestplate"}
+      - {buy: "item:obsidian_leggings", buy2: "item:emerald_amulet:16", result: "item:majestic_leggings"}
+      - {buy: "item:obsidian_boots", buy2: "item:emerald_amulet:16", result: "item:majestic_boots"}
+      - {buy: "item:obsidian_sword", buy2: "item:emerald_amulet:16", result: "item:majestic_sword"}
+
+  # Облачный (кит Legend): majestic-вещь + 8 бирюзовых амулетов
+  cloud:
+    title: "<white><b>Облачный сет"
+    name: "<white><b>Облачный сет"
+    npc:
+      type: "PLAYER"
+      skin: ""
+      fallback-type: "SKELETON"
+      equipment:
+        head: "WHITE_WOOL"
+        chest: "LEATHER_CHESTPLATE#FFFFFF"
+        legs: "LEATHER_LEGGINGS#FFFFFF"
+        feet: "LEATHER_BOOTS#FFFFFF"
+        hand: "item:cloud_sword"
+    trades:
+      - {buy: "item:majestic_helmet", buy2: "item:aqua_amulet:8", result: "item:cloud_helmet"}
+      - {buy: "item:majestic_chestplate", buy2: "item:aqua_amulet:8", result: "item:cloud_chestplate"}
+      - {buy: "item:majestic_leggings", buy2: "item:aqua_amulet:8", result: "item:cloud_leggings"}
+      - {buy: "item:majestic_boots", buy2: "item:aqua_amulet:8", result: "item:cloud_boots"}
+      - {buy: "item:majestic_sword", buy2: "item:aqua_amulet:8", result: "item:cloud_sword"}
+
+  # Пустота: облачная вещь + 4 сапфира
+  void:
+    title: "<gradient:#AA00AA:#3C1C66><b>Сет пустоты"
+    name: "<gradient:#AA00AA:#3C1C66><b>Сет пустоты"
+    npc:
+      type: "PLAYER"
+      skin: ""
+      fallback-type: "WITHER_SKELETON"
+      equipment:
+        chest: "LEATHER_CHESTPLATE#2A1240"
+        legs: "LEATHER_LEGGINGS#2A1240"
+        feet: "LEATHER_BOOTS#1A0B2E"
+        hand: "item:void_sword"
+    trades:
+      - {buy: "item:cloud_helmet", buy2: "item:sapphire:4", result: "item:void_helmet"}
+      - {buy: "item:cloud_chestplate", buy2: "item:sapphire:4", result: "item:void_chestplate"}
+      - {buy: "item:cloud_leggings", buy2: "item:sapphire:4", result: "item:void_leggings"}
+      - {buy: "item:cloud_boots", buy2: "item:sapphire:4", result: "item:void_boots"}
+      - {buy: "item:cloud_sword", buy2: "item:sapphire:4", result: "item:void_sword"}
+
+  # Метеоритный: вещь пустоты + 4 метеоритные звезды, меч - за 200 коинов
+  meteor:
+    title: "<gradient:#FF6B4A:#C81E1E><b>Метеоритный сет"
+    name: "<gradient:#FF6B4A:#C81E1E><b>Метеоритный сет"
+    npc:
+      type: "WITHER_SKELETON"
+      equipment:
+        hand: "item:meteor_sword"
+    trades:
+      - {buy: "item:void_helmet", buy2: "item:meteor_star:4", result: "item:meteor_helmet"}
+      - {buy: "item:void_chestplate", buy2: "item:meteor_star:4", result: "item:meteor_chestplate"}
+      - {buy: "item:void_leggings", buy2: "item:meteor_star:4", result: "item:meteor_leggings"}
+      - {buy: "item:void_boots", buy2: "item:meteor_star:4", result: "item:meteor_boots"}
+      - {coins: 200, result: "item:meteor_sword", display-lore: ["", "<white>Цена: <yellow>200</yellow> коинов"]}

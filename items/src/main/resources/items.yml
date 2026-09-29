@@ -1,0 +1,459 @@
+# ============================================
+#  Предметы MediaItems
+#  material  - предмет Minecraft, model - custom_model_data из ресурспака SP-DS
+#  color     - цвет кожаной брони (иконка из пака тоже красится этим цветом)
+#  name      - MiniMessage (<gradient:#A:#B>, <b>, <#RRGGBB>)
+#  enchants  - "ключ:уровень" (+ ":#RRGGBB" - свой цвет уровня). Реально накладываются на предмет,
+#              ванильная строка скрыта, вместо неё своя: [иконка] Название УРОВЕНЬ
+#  attributes- "ключ:число" (armor, armor_toughness, knockback_resistance, max_health,
+#              attack_damage, attack_speed). Реально работают, показываются своими строками.
+#  lore-mode: vanilla - атрибуты показывает сама игра (как у кольчуги/железа/алмаза на скринах)
+#  lore      - дополнительные строки в конце описания
+#  Выдать себе для проверки: /itemnpc give <id>
+# ============================================
+items:
+
+  # ---------- Ресурсы (меняются у Мистера Пропера) ----------
+  bat_head:
+    material: IRON_INGOT
+    model: 147
+    name: "<gradient:#C9A27E:#8A5A3C>Голова летучей мыши"
+    lore:
+      - "<gray>Ресурс для обмена у торговцев"
+  blood_crystal:
+    material: IRON_INGOT
+    model: 123
+    name: "<gradient:#FF5555:#AA0000>Кровавый кристалл"
+    lore:
+      - "<gray>Ресурс для обмена у торговцев"
+  emerald_amulet:
+    material: IRON_INGOT
+    model: 109
+    name: "<gradient:#55FF55:#00AA00>Изумрудный амулет"
+    lore:
+      - "<gray>Ресурс для обмена у торговцев"
+  aqua_amulet:
+    material: IRON_INGOT
+    model: 105
+    name: "<gradient:#55FFFF:#00AAAA>Бирюзовый амулет"
+    lore:
+      - "<gray>Ресурс для обмена у торговцев"
+  sapphire:
+    material: IRON_INGOT
+    model: 114
+    name: "<gradient:#9CD0FF:#3C6CFF>Сапфир"
+    lore:
+      - "<gray>Ресурс для обмена у торговцев"
+  meteor_star:
+    material: IRON_INGOT
+    model: 112
+    name: "<gradient:#FF6B4A:#C81E1E>Метеоритная звезда"
+    lore:
+      - "<gray>Ресурс для обмена у торговцев"
+  coin:
+    material: FLINT
+    model: 101
+    name: "<yellow>Коины"
+
+  # ---------- Кольчужный сет ----------
+  chain_helmet:
+    material: CHAINMAIL_HELMET
+    name: "<gold><b>Кольчужная каска</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["protection:5"]
+    lore-mode: vanilla
+    unbreakable: true
+  chain_chestplate:
+    material: CHAINMAIL_CHESTPLATE
+    name: "<gold><b>Кольчужный нагрудник</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["protection:5"]
+    lore-mode: vanilla
+    unbreakable: true
+  chain_leggings:
+    material: CHAINMAIL_LEGGINGS
+    name: "<gold><b>Кольчужные поножи</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["protection:5"]
+    lore-mode: vanilla
+    unbreakable: true
+  chain_boots:
+    material: CHAINMAIL_BOOTS
+    name: "<gold><b>Кольчужные ботинки</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["protection:5"]
+    lore-mode: vanilla
+    unbreakable: true
+  chain_sword:
+    material: STONE_SWORD
+    name: "<gold><b>Кольчужный меч</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["sharpness:5"]
+    lore-mode: vanilla
+    unbreakable: true
+
+  # ---------- Железный сет ----------
+  iron_helmet:
+    material: IRON_HELMET
+    name: "<gold><b>Железная каска</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["protection:5"]
+    lore-mode: vanilla
+    unbreakable: true
+  iron_chestplate:
+    material: IRON_CHESTPLATE
+    name: "<gold><b>Железный нагрудник</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["protection:5"]
+    lore-mode: vanilla
+    unbreakable: true
+  iron_leggings:
+    material: IRON_LEGGINGS
+    name: "<gold><b>Железные поножи</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["protection:5"]
+    lore-mode: vanilla
+    unbreakable: true
+  iron_boots:
+    material: IRON_BOOTS
+    name: "<gold><b>Железные ботинки</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["protection:5"]
+    lore-mode: vanilla
+    unbreakable: true
+  iron_sword:
+    material: IRON_SWORD
+    name: "<gold><b>Железный меч</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["sharpness:5"]
+    lore-mode: vanilla
+    unbreakable: true
+  iron_helmet_2:
+    material: IRON_HELMET
+    name: "<gold><b>Железная каска</b></gold> <dark_gray>[<aqua>II</aqua>]"
+    enchants: ["protection:6"]
+    lore-mode: vanilla
+    unbreakable: true
+
+  # ---------- Алмазный сет ----------
+  diamond_helmet:
+    material: DIAMOND_HELMET
+    name: "<gold><b>Алмазная каска</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["protection:5"]
+    lore-mode: vanilla
+    unbreakable: true
+  diamond_chestplate:
+    material: DIAMOND_CHESTPLATE
+    name: "<gold><b>Алмазный нагрудник</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["protection:5"]
+    lore-mode: vanilla
+    unbreakable: true
+  diamond_leggings:
+    material: DIAMOND_LEGGINGS
+    name: "<gold><b>Алмазные поножи</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["protection:5"]
+    lore-mode: vanilla
+    unbreakable: true
+  diamond_boots:
+    material: DIAMOND_BOOTS
+    name: "<gold><b>Алмазные ботинки</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["protection:5"]
+    lore-mode: vanilla
+    unbreakable: true
+  diamond_sword:
+    material: DIAMOND_SWORD
+    name: "<gold><b>Алмазный меч</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["sharpness:5"]
+    lore-mode: vanilla
+    unbreakable: true
+  diamond_helmet_2:
+    material: DIAMOND_HELMET
+    name: "<gold><b>Алмазная каска</b></gold> <dark_gray>[<aqua>II</aqua>]"
+    enchants: ["protection:6"]
+    lore-mode: vanilla
+    unbreakable: true
+
+  # ---------- Незеритовый сет ----------
+  netherite_helmet:
+    material: LEATHER_HELMET
+    model: 10001
+    color: "#3B2F4A"
+    name: "<gold><b>Незеритовая каска</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["protection:6"]
+    attributes: ["armor:3", "armor_toughness:3"]
+    unbreakable: true
+  netherite_chestplate:
+    material: LEATHER_CHESTPLATE
+    model: 10001
+    color: "#3B2F4A"
+    name: "<gold><b>Незеритовый нагрудник</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["protection:6"]
+    attributes: ["armor:8", "armor_toughness:3"]
+    unbreakable: true
+  netherite_leggings:
+    material: LEATHER_LEGGINGS
+    model: 10001
+    color: "#3B2F4A"
+    name: "<gold><b>Незеритовые поножи</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["protection:6"]
+    attributes: ["armor:6", "armor_toughness:3"]
+    unbreakable: true
+  netherite_boots:
+    material: LEATHER_BOOTS
+    model: 10001
+    color: "#3B2F4A"
+    name: "<gold><b>Незеритовые ботинки</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["protection:6"]
+    attributes: ["armor:3", "armor_toughness:3"]
+    unbreakable: true
+  netherite_sword:
+    material: DIAMOND_SWORD
+    model: 10001
+    name: "<gold><b>Незеритовый меч</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["sharpness:6"]
+    attributes: ["attack_damage:9", "attack_speed:2"]
+    unbreakable: true
+  netherite_helmet_2:
+    material: LEATHER_HELMET
+    model: 10001
+    color: "#3B2F4A"
+    name: "<gold><b>Незеритовая каска</b></gold> <dark_gray>[<aqua>II</aqua>]"
+    enchants: ["protection:7"]
+    attributes: ["armor:3", "armor_toughness:3"]
+    unbreakable: true
+
+  # ---------- Аметистовый шлем ... ----------
+  amethyst_helmet:
+    material: LEATHER_HELMET
+    model: 10002
+    color: "#FFFFFF"
+    name: "<light_purple><b>Аметистовый шлем</b></light_purple>"
+    enchants: ["protection:8"]
+    attributes: ["armor:3", "armor_toughness:3"]
+    unbreakable: true
+  amethyst_chestplate:
+    material: LEATHER_CHESTPLATE
+    model: 10002
+    color: "#FFFFFF"
+    name: "<light_purple><b>Аметистовый нагрудник</b></light_purple>"
+    enchants: ["protection:8"]
+    attributes: ["armor:8", "armor_toughness:3"]
+    unbreakable: true
+  amethyst_leggings:
+    material: LEATHER_LEGGINGS
+    model: 10002
+    color: "#FFFFFF"
+    name: "<light_purple><b>Аметистовые поножи</b></light_purple>"
+    enchants: ["protection:8"]
+    attributes: ["armor:6", "armor_toughness:3"]
+    unbreakable: true
+  amethyst_boots:
+    material: LEATHER_BOOTS
+    model: 10002
+    color: "#FFFFFF"
+    name: "<light_purple><b>Аметистовые ботинки</b></light_purple>"
+    enchants: ["protection:8"]
+    attributes: ["armor:3", "armor_toughness:3"]
+    unbreakable: true
+  amethyst_sword:
+    material: DIAMOND_SWORD
+    model: 10002
+    name: "<light_purple><b>Аметистовый меч</b></light_purple>"
+    enchants: ["fire_aspect:2", "sharpness:9:#FFFFFF"]
+    attributes: ["attack_damage:12", "attack_speed:2"]
+    unbreakable: true
+
+  # ---------- Обсидиановый шлем ... ----------
+  obsidian_helmet:
+    material: LEATHER_HELMET
+    model: 10003
+    color: "#FFFFFF"
+    name: "<dark_purple><b>Обсидиановый шлем</b></dark_purple>"
+    enchants: ["fire_protection:2", "protection:12", "thorns:2"]
+    attributes: ["armor:3", "armor_toughness:3"]
+    unbreakable: true
+  obsidian_chestplate:
+    material: LEATHER_CHESTPLATE
+    model: 10003
+    color: "#FFFFFF"
+    name: "<dark_purple><b>Обсидиановый нагрудник</b></dark_purple>"
+    enchants: ["fire_protection:2", "protection:12", "thorns:2"]
+    attributes: ["armor:8", "armor_toughness:3"]
+    unbreakable: true
+  obsidian_leggings:
+    material: LEATHER_LEGGINGS
+    model: 10003
+    color: "#FFFFFF"
+    name: "<dark_purple><b>Обсидиановые поножи</b></dark_purple>"
+    enchants: ["fire_protection:2", "protection:12", "thorns:2"]
+    attributes: ["armor:6", "armor_toughness:3"]
+    unbreakable: true
+  obsidian_boots:
+    material: LEATHER_BOOTS
+    model: 10003
+    color: "#FFFFFF"
+    name: "<dark_purple><b>Обсидиановые ботинки</b></dark_purple>"
+    enchants: ["fire_protection:2", "protection:12", "thorns:2"]
+    attributes: ["armor:3", "armor_toughness:3"]
+    unbreakable: true
+  obsidian_sword:
+    material: DIAMOND_SWORD
+    model: 10003
+    name: "<dark_purple><b>Обсидиановый меч</b></dark_purple>"
+    enchants: ["fire_aspect:2", "sharpness:12"]
+    attributes: ["attack_damage:16", "attack_speed:2"]
+    unbreakable: true
+
+  # ---------- Majestic Helmet ... ----------
+  majestic_helmet:
+    material: LEATHER_HELMET
+    model: 10004
+    color: "#FFFFFF"
+    name: "<light_purple><b>Majestic Helmet</b></light_purple>"
+    enchants: ["fire_protection:2", "protection:15", "thorns:2"]
+    attributes: ["armor:3", "armor_toughness:3"]
+    unbreakable: true
+  majestic_chestplate:
+    material: LEATHER_CHESTPLATE
+    model: 10004
+    color: "#FFFFFF"
+    name: "<light_purple><b>Majestic Chestplate</b></light_purple>"
+    enchants: ["fire_protection:2", "protection:15", "thorns:2"]
+    attributes: ["armor:8", "armor_toughness:3"]
+    unbreakable: true
+  majestic_leggings:
+    material: LEATHER_LEGGINGS
+    model: 10004
+    color: "#FFFFFF"
+    name: "<light_purple><b>Majestic Leggings</b></light_purple>"
+    enchants: ["fire_protection:2", "protection:15", "thorns:2"]
+    attributes: ["armor:6", "armor_toughness:3"]
+    unbreakable: true
+  majestic_boots:
+    material: LEATHER_BOOTS
+    model: 10004
+    color: "#FFFFFF"
+    name: "<light_purple><b>Majestic Boots</b></light_purple>"
+    enchants: ["fire_protection:2", "protection:15", "thorns:2"]
+    attributes: ["armor:3", "armor_toughness:3"]
+    unbreakable: true
+  majestic_sword:
+    material: DIAMOND_SWORD
+    model: 10004
+    name: "<light_purple><b>Majestic Sword</b></light_purple>"
+    enchants: ["fire_aspect:2", "sharpness:15"]
+    attributes: ["attack_damage:20", "attack_speed:2"]
+    unbreakable: true
+
+  # ---------- Облачный шлем ... ----------
+  cloud_helmet:
+    material: LEATHER_HELMET
+    model: 10001
+    color: "#FFFFFF"
+    name: "<white><b>Облачный шлем</b></white>"
+    enchants: ["fire_protection:5", "protection:20", "thorns:5"]
+    attributes: ["armor:3", "armor_toughness:3", "max_health:2.5"]
+    unbreakable: true
+  cloud_chestplate:
+    material: LEATHER_CHESTPLATE
+    model: 10001
+    color: "#FFFFFF"
+    name: "<white><b>Облачный нагрудник</b></white>"
+    enchants: ["fire_protection:5", "protection:20", "thorns:5"]
+    attributes: ["armor:8", "armor_toughness:3", "max_health:2.5"]
+    unbreakable: true
+  cloud_leggings:
+    material: LEATHER_LEGGINGS
+    model: 10001
+    color: "#FFFFFF"
+    name: "<white><b>Облачные поножи</b></white>"
+    enchants: ["fire_protection:5", "protection:20", "thorns:5"]
+    attributes: ["armor:6", "armor_toughness:3", "max_health:2.5"]
+    unbreakable: true
+  cloud_boots:
+    material: LEATHER_BOOTS
+    model: 10001
+    color: "#FFFFFF"
+    name: "<white><b>Облачные ботинки</b></white>"
+    enchants: ["fire_protection:5", "protection:20", "thorns:5"]
+    attributes: ["armor:3", "armor_toughness:3", "max_health:2.5"]
+    unbreakable: true
+  cloud_sword:
+    material: DIAMOND_SWORD
+    model: 10006
+    name: "<white><b>Облачный клинок</b></white>"
+    enchants: ["fire_aspect:2", "sharpness:20"]
+    attributes: ["attack_damage:30", "attack_speed:2"]
+    unbreakable: true
+
+  # ---------- Шлем пустоты ... ----------
+  void_helmet:
+    material: LEATHER_HELMET
+    model: 10001
+    color: "#3C1C66"
+    name: "<dark_purple><b>Шлем пустоты</b></dark_purple>"
+    enchants: ["fire_protection:8", "protection:30", "thorns:8"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:20"]
+    unbreakable: true
+  void_chestplate:
+    material: LEATHER_CHESTPLATE
+    model: 10001
+    color: "#3C1C66"
+    name: "<dark_purple><b>Нагрудник пустоты</b></dark_purple>"
+    enchants: ["fire_protection:8", "protection:30", "thorns:8"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:20"]
+    unbreakable: true
+  void_leggings:
+    material: LEATHER_LEGGINGS
+    model: 10001
+    color: "#3C1C66"
+    name: "<dark_purple><b>Поножи пустоты</b></dark_purple>"
+    enchants: ["fire_protection:8", "protection:30", "thorns:8"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:20"]
+    unbreakable: true
+  void_boots:
+    material: LEATHER_BOOTS
+    model: 10001
+    color: "#3C1C66"
+    name: "<dark_purple><b>Ботинки пустоты</b></dark_purple>"
+    enchants: ["fire_protection:8", "protection:30", "thorns:8"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:20"]
+    unbreakable: true
+  void_sword:
+    material: DIAMOND_SWORD
+    model: 10009
+    name: "<dark_purple><b>Меч пустоты</b></dark_purple>"
+    enchants: ["fire_aspect:5", "sharpness:30"]
+    attributes: ["attack_damage:40", "attack_speed:3"]
+    unbreakable: true
+
+  # ---------- Метеоритный шлем ... ----------
+  meteor_helmet:
+    material: LEATHER_HELMET
+    model: 10001
+    color: "#6F4CDC"
+    name: "<gray><b>Метеоритный шлем</b></gray>"
+    enchants: ["fire_protection:10", "protection:40", "thorns:10"]
+    attributes: ["armor:12", "armor_toughness:12", "knockback_resistance:0.5", "max_health:25"]
+    unbreakable: true
+  meteor_chestplate:
+    material: LEATHER_CHESTPLATE
+    model: 10001
+    color: "#6F4CDC"
+    name: "<gray><b>Метеоритный нагрудник</b></gray>"
+    enchants: ["fire_protection:10", "protection:40", "thorns:10"]
+    attributes: ["armor:12", "armor_toughness:12", "knockback_resistance:0.5", "max_health:25"]
+    unbreakable: true
+  meteor_leggings:
+    material: LEATHER_LEGGINGS
+    model: 10001
+    color: "#6F4CDC"
+    name: "<gray><b>Метеоритные поножи</b></gray>"
+    enchants: ["fire_protection:10", "protection:40", "thorns:10"]
+    attributes: ["armor:12", "armor_toughness:12", "knockback_resistance:0.5", "max_health:25"]
+    unbreakable: true
+  meteor_boots:
+    material: LEATHER_BOOTS
+    model: 10001
+    color: "#6F4CDC"
+    name: "<gray><b>Метеоритные ботинки</b></gray>"
+    enchants: ["fire_protection:10", "protection:40", "thorns:10"]
+    attributes: ["armor:12", "armor_toughness:12", "knockback_resistance:0.5", "max_health:25"]
+    unbreakable: true
+  meteor_sword:
+    material: DIAMOND_SWORD
+    model: 10015
+    name: "<gray><b>Метеоритный меч</b></gray>"
+    enchants: ["fire_aspect:10", "sharpness:43", "sweeping_edge:2"]
+    attributes: ["attack_damage:70", "attack_speed:5"]
+    unbreakable: true

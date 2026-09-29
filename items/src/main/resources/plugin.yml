@@ -1,0 +1,15 @@
+name: MediaItems
+version: '1.0'
+main: ru.dscraft.mediaitems.MediaItemsPlugin
+api-version: '1.21'
+author: DestroyCraft
+description: НПС-торговцы сетами и мечами с бафами (обмен ресурсов), /itemnpc create <магазин>
+softdepend: [FancyNpcs, DestroyLobby, Vault]
+commands:
+  itemnpc:
+    description: НПС-торговцы предметами
+    usage: /itemnpc <create|remove|list|movehere|give|shops|reload>
+    permission: mediaitems.admin
+permissions:
+  mediaitems.admin:
+    default: op
