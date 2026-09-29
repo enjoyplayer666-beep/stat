@@ -430,6 +430,7 @@ items:
     lore-mode: vanilla
   compressed_cluster:
     material: AMETHYST_BLOCK
+    glint: true
     name: "<light_purple><b>Сжатый кластер"
     lore-mode: vanilla
   amethyst_helmet:

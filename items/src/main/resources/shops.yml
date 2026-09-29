@@ -60,6 +60,24 @@ shops:
       - {buy: "item:compressed_gold:4", result: "item:firework_3:64"}
       - {buy: "item:firework_3:64", result: "item:compressed_gold:3"}
 
+  # Обменник 1 (скрин): НПС-игрок; сжатое золото -> другие сжатые ресурсы, элитры -> золото
+  # пришли скин - впишу skin (пока зомби)
+  exchanger1:
+    title: "<white><b>Обменник <aqua>1"
+    name: "<white><b>Обменник <aqua>1"
+    npc:
+      type: "PLAYER"
+      skin: ""
+      fallback-type: "ZOMBIE"
+    trades:
+      - {buy: "item:compressed_gold", result: "item:compressed_coal"}
+      - {buy: "item:compressed_gold:2", result: "item:compressed_iron"}
+      - {buy: "item:compressed_gold:2", result: "item:compressed_diamond"}
+      - {buy: "item:compressed_gold:2", result: "item:compressed_gunpowder"}
+      - {buy: "item:compressed_gold:3", result: "item:compressed_cluster"}
+      - {buy: "item:elytra", result: "item:compressed_gold:8"}
+      - {buy: "item:elytra_2", result: "item:compressed_gold:32"}
+
   # Компрессор (скрин): житель, ресурсы -> сжатые блоки
   compressor:
     title: "<white><b>Компрессор"
