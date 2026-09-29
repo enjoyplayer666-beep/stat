@@ -44,13 +44,19 @@ items:
     name: "<gradient:#9CD0FF:#3C6CFF>Сапфир"
     lore:
       - "<gray>Ресурс для обмена у торговцев"
+  # ресурсы метеоритного торговца (как на скринах)
+  meteor_scrap:
+    material: IRON_INGOT
+    model: 185
+    name: "<dark_gray>Метеоритный скрап"
   meteor_energy:
     material: IRON_INGOT
-    model: 112
-    name: "<gradient:#FF6B4A:#C81E1E>Метеоритная энергия"
-    lore:
-      - "<gray>Ресурс для обмена у торговцев"
-    name: "<yellow>Коины"
+    model: 186
+    name: "<gray>Метеоритная энергия"
+  universe_charge:
+    material: IRON_INGOT
+    model: 187
+    name: "<light_purple><b>Заряд вселенной"
 
   # ---------- Кольчужный сет ----------
   chain_helmet:

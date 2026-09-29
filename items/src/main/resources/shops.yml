@@ -23,7 +23,6 @@ shops:
       - {buy: "item:blood_crystal:5", result: "item:emerald_amulet"}
       - {buy: "item:emerald_amulet:2", buy2: "item:blood_crystal:10", result: "item:aqua_amulet"}
       - {buy: "item:aqua_amulet:5", buy2: "item:blood_crystal:15", result: "item:sapphire"}
-      - {buy: "item:sapphire:5", buy2: "item:blood_crystal:20", result: "item:meteor_energy"}
 
   # Кольчуга (скелет в кольчуге)
   chain:
@@ -192,7 +191,7 @@ shops:
       - {buy: "item:cloud_boots", buy2: "item:sapphire:4", result: "item:void_boots"}
       - {buy: "item:cloud_sword", buy2: "item:sapphire:4", result: "item:void_sword"}
 
-  # Метеоритный: вещь пустоты + 4 метеоритной энергии (меч тоже)
+  # Метеоритный (чёрный скелет): 32 скрапа -> энергия, 20 энергии -> заряд вселенной, вещь пустоты + заряды -> метеоритная вещь
   meteor:
     title: "<gradient:#FF6B4A:#C81E1E><b>Метеоритный сет"
     name: "<gradient:#FF6B4A:#C81E1E><b>Метеоритный сет"
@@ -201,8 +200,10 @@ shops:
       equipment:
         hand: "item:meteor_sword"
     trades:
-      - {buy: "item:void_helmet", buy2: "item:meteor_energy:4", result: "item:meteor_helmet"}
-      - {buy: "item:void_chestplate", buy2: "item:meteor_energy:4", result: "item:meteor_chestplate"}
-      - {buy: "item:void_leggings", buy2: "item:meteor_energy:4", result: "item:meteor_leggings"}
-      - {buy: "item:void_boots", buy2: "item:meteor_energy:4", result: "item:meteor_boots"}
-      - {buy: "item:void_sword", buy2: "item:meteor_energy:4", result: "item:meteor_sword"}
+      - {buy: "item:meteor_scrap:32", result: "item:meteor_energy"}
+      - {buy: "item:meteor_energy:20", result: "item:universe_charge"}
+      - {buy: "item:void_sword", buy2: "item:universe_charge:8", result: "item:meteor_sword"}
+      - {buy: "item:void_boots", buy2: "item:universe_charge:8", result: "item:meteor_boots"}
+      - {buy: "item:void_helmet", buy2: "item:universe_charge:4", result: "item:meteor_helmet"}
+      - {buy: "item:void_chestplate", buy2: "item:universe_charge:4", result: "item:meteor_chestplate"}
+      - {buy: "item:void_leggings", buy2: "item:universe_charge:4", result: "item:meteor_leggings"}
