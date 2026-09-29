@@ -184,7 +184,7 @@ final class Npcs implements Listener {
         String type = s == null ? "VILLAGER" : s.getString("type", "VILLAGER").toUpperCase(Locale.ROOT);
         String skin = s == null ? "" : s.getString("skin", "");
         boolean fancyOk = Bukkit.getPluginManager().isPluginEnabled("FancyNpcs");
-        if (type.equals("PLAYER") && fancyOk && !skin.isBlank() && creator != null) {
+        if (type.equals("PLAYER") && fancyOk && creator != null) {
             spawnFancy(n, shop, creator, skin);
             return;
         }
@@ -206,7 +206,7 @@ final class Npcs implements Listener {
         String name = "mi_" + n.id;
         n.fancy = name;
         creator.performCommand("npc create " + name);
-        creator.performCommand("npc skin " + name + " " + skin);
+        if (!skin.isBlank()) creator.performCommand("npc skin " + name + " " + skin);
         creator.performCommand("npc displayname " + name + " " + shop.name());
         creator.performCommand("npc turn_to_player " + name + " true");
         creator.performCommand("npc action " + name + " any_click add console_command itemnpc open {player} " + shop.id());
