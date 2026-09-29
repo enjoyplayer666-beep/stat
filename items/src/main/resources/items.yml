@@ -857,3 +857,10 @@ items:
     name: "<green><b>Элитры джунглей"
     enchants: ["fire_protection:2", "protection:17", "thorns:2"]
     lore-mode: vanilla
+
+  # ---------- Мастер Оттенков ----------
+  # смоляного кирпича нет в 1.21.1 (появился в 1.21.4) - пока обычный кирпич с таким названием
+  resin_brick:
+    material: BRICK
+    name: "<white>Смоляной кирпич"
+    lore-mode: vanilla

@@ -110,6 +110,23 @@ shops:
       - {buy: "item:compressed_gunpowder", result: "item:compressed_diamond"}
       - {buy: "item:compressed_cluster", result: "item:compressed_gunpowder:2"}
 
+  # Мастер Оттенков (скрин): НПС-игрок; 2 сжатого золота -> ресурсы
+  shades:
+    title: "<#F59230>М<#B2A144>а<#6CAF58>с<#20C267>т<#30AB84>е<#4292A3>р <#655EDF>О<#8885E0>т<#ADA8E6>т<#D9CEF0>е<#F3F3F1>н<#FDCDCA>к<#F89191>о<#FD6362>в"
+    name: "<#F59230>М<#B2A144>а<#6CAF58>с<#20C267>т<#30AB84>е<#4292A3>р <#655EDF>О<#8885E0>т<#ADA8E6>т<#D9CEF0>е<#F3F3F1>н<#FDCDCA>к<#F89191>о<#FD6362>в"
+    npc:
+      type: "PLAYER"
+      skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/shades.png"
+      fallback-type: "ZOMBIE"
+    trades:
+      - {buy: "item:compressed_gold:2", result: "COPPER_INGOT"}
+      - {buy: "item:compressed_gold:2", result: "EMERALD"}
+      - {buy: "item:compressed_gold:2", result: "LAPIS_LAZULI"}
+      - {buy: "item:compressed_gold:2", result: "QUARTZ"}
+      - {buy: "item:compressed_gold:2", result: "NETHERITE_INGOT"}
+      - {buy: "item:compressed_gold:2", result: "REDSTONE"}
+      - {buy: "item:compressed_gold:2", result: "item:resin_brick"}
+
   # Компрессор (скрин): житель, ресурсы -> сжатые блоки
   compressor:
     title: "<white><b>Компрессор"
