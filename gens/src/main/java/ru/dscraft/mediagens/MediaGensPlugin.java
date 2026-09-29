@@ -79,6 +79,7 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
         saveDefaultConfig();
         if (getConfig().getDouble("generator.item-scale") == 0.6) getConfig().set("generator.item-scale", 0.35);
         if (getConfig().getDouble("generator.item-offset") == 1.35) getConfig().set("generator.item-offset", 1.2);
+        if (!getConfig().contains("generator.view-distance")) getConfig().set("generator.view-distance", 5);
         if (!getConfig().contains("generator.spin-degrees")) {
             getConfig().set("generator.spin-degrees", 15);
             getConfig().set("generator.bob", 0.06);
@@ -234,6 +235,7 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
                 e.setPersistent(false);
                 e.getPersistentDataContainer().set(genKey, PersistentDataType.STRING, g.name);
                 e.setItemStack(new ItemStack(g.material));
+                e.setViewRange(viewRange());
                 e.setTransformation(new Transformation(new Vector3f(), new AxisAngle4f(), new Vector3f(sc, sc, sc), new AxisAngle4f()));
             });
             g.itemEntity = d.getUniqueId();
@@ -244,6 +246,7 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
                 e.setPersistent(false);
                 e.getPersistentDataContainer().set(genKey, PersistentDataType.STRING, g.name);
                 e.setBillboard(Display.Billboard.CENTER);
+                e.setViewRange(viewRange());
                 e.setBackgroundColor(org.bukkit.Color.fromARGB(0, 0, 0, 0));
                 e.setShadowed(true);
             });
@@ -251,12 +254,28 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
             g.shown = null;
             text = d;
         }
-        if (g.itemEntity != null && Bukkit.getEntity(g.itemEntity) instanceof ItemDisplay d) spin(d, g);
+        if (g.itemEntity != null && Bukkit.getEntity(g.itemEntity) instanceof ItemDisplay d && someoneNear(g)) spin(d, g);
         String s = gc.getString("generator.text", "<gray>x<aqua>{count}").replace("{count}", String.valueOf(g.count));
         if (!s.equals(g.shown) && text instanceof TextDisplay td) {
             td.text(mm(s));
             g.shown = s;
         }
+    }
+
+    /** Дальность видимости в блоках -> множитель Minecraft (1.0 = 64 блока). */
+    private float viewRange() {
+        return (float) (getConfig().getDouble("generator.view-distance", 5) / 64.0);
+    }
+
+    private boolean someoneNear(Gen g) {
+        double r = getConfig().getDouble("generator.view-distance", 5) + 2;
+        World w = Bukkit.getWorld(g.world);
+        if (w == null) return false;
+        Location c = new Location(w, g.x + 0.5, g.y + 1, g.z + 0.5);
+        for (Player p : w.getPlayers()) {
+            if (p.getLocation().distanceSquared(c) <= r * r) return true;
+        }
+        return false;
     }
 
     /** Поворот и покачивание, как у выпавшего предмета. */
