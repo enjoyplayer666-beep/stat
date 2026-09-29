@@ -38,16 +38,16 @@ colors:
   title: "Выбор цвета"
   lore: ["<gray>Нажми, чтобы выбрать"]
   list:
-    white:  {slot: 20, icon: "WHITE_CONCRETE",      color: "#FFFFFF", name: "Белый"}
-    yellow: {slot: 21, icon: "YELLOW_CONCRETE",     color: "#FFFF55", name: "Жёлтый"}
-    red:    {slot: 22, icon: "RED_CONCRETE",        color: "#FF5555", name: "Красный"}
-    pink:   {slot: 23, icon: "PINK_CONCRETE",       color: "#FF8FD8", name: "Розовый"}
-    orange: {slot: 24, icon: "ORANGE_CONCRETE",     color: "#FFAA00", name: "Оранжевый"}
-    purple: {slot: 29, icon: "PURPLE_CONCRETE",     color: "#AA00AA", name: "Фиолетовый"}
-    light_blue: {slot: 30, icon: "LIGHT_BLUE_CONCRETE", color: "#55CFFF", name: "Голубой"}
-    blue:   {slot: 31, icon: "BLUE_CONCRETE",       color: "#5555FF", name: "Синий"}
-    cyan:   {slot: 32, icon: "CYAN_CONCRETE",       color: "#00AAAA", name: "Бирюзовый"}
-    lime:   {slot: 33, icon: "LIME_CONCRETE",       color: "#55FF55", name: "Салатовый"}
+    white:  {slot: 20, icon: "head:1884d5dabe073e28e6b7eb166ff61247905c79f838b6f5752e7ad406091eeaf3",      color: "#FFFFFF", name: "Белый"}
+    yellow: {slot: 21, icon: "head:6c183f3601f67293a51e2577dbea05a4602efa433cc354e63fcf7fbe026486bc",     color: "#FFFF55", name: "Жёлтый"}
+    red:    {slot: 22, icon: "head:68d40935279771adc63936ed9c8463abdf5c5ba78d2e86cb1ec10b4d1d225fb",        color: "#FF5555", name: "Красный"}
+    pink:   {slot: 23, icon: "head:f2951793179a86388cae21999f3d43dfb7fef6ccf6d8b71d36c858ec395bfa",       color: "#FF8FD8", name: "Розовый"}
+    orange: {slot: 24, icon: "head:5189f347f42450cd2a2e9b8a5398807d28c7f4254bd99a8a499ce5435320955",     color: "#FFAA00", name: "Оранжевый"}
+    purple: {slot: 29, icon: "head:467f2b506370c1e84f90fbf29c80e0cb7e2ac93230301b5d8e42c68fdde89fe0",     color: "#AA00AA", name: "Фиолетовый"}
+    light_blue: {slot: 30, icon: "head:f9e16979309b5a9b673d60d1390bbab0d0385eac7254d828ada2a36a46f73a59", color: "#55CFFF", name: "Голубой"}
+    blue:   {slot: 31, icon: "head:7e7ab712c87f67d48b98f70634d1dcfcd5980c3d6f0d622cdc3230912361b54e",       color: "#5555FF", name: "Синий"}
+    cyan:   {slot: 32, icon: "head:e0fb1f13ecb7fbb2fa49cd03d357fa7e278502b78730602aaa10655e4d9490e1",       color: "#00AAAA", name: "Бирюзовый"}
+    lime:   {slot: 33, icon: "head:a3e9f4dbadde0f727c5803d75d8bb378fb9fcb4b60d33bec19092a3a2e7b07a9",       color: "#55FF55", name: "Салатовый"}
   custom-slot: 49
   custom-icon: "PAINTING"
   custom-name: "<gradient:#F1DA9C:#9035B0><i>Свой цвет"
