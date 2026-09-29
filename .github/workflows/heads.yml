@@ -15,7 +15,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install pillow
-      - run: cd tools/heads && python find_heads.py
+      - run: cd tools/heads && python match_heads.py
       - run: |
           cp -r tools/heads/out /tmp/out
           git config user.name "github-actions" && git config user.email "actions@github.com"
