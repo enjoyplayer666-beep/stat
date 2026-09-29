@@ -553,9 +553,8 @@ items:
     name: "<blue><b>Пурпурный кластер"
     lore-mode: vanilla
   majestic_helmet:
-    material: LEATHER_HELMET
-    model: 10004
-    color: "#E87CEE"
+    material: PLAYER_HEAD
+    head: "bda4e0a85eb614964cd67d6e896e166d860301f174e6566c5e2afc8510b292a9"
     name: "<light_purple><b>Majestic Head"
     enchants: ["fire_protection:2", "protection:15", "thorns:2"]
     attributes: ["armor:3", "armor_toughness:3"]
