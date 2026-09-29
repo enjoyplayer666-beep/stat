@@ -19,6 +19,7 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -316,6 +317,12 @@ final class Npcs implements Listener {
                 return;
             }
         }
+    }
+
+    /** Бустеры сделаны на нитке - по ПКМ не ставим её на землю. */
+    @EventHandler(ignoreCancelled = true)
+    public void onPlace(BlockPlaceEvent e) {
+        if (plugin.items().idOf(e.getItemInHand()) != null) e.setCancelled(true);
     }
 
     /** Наши ресурсы нельзя переплавить/скрафтить как обычное железо. */

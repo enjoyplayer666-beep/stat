@@ -13,37 +13,50 @@
 # ============================================
 items:
 
-  # ---------- Ресурсы (меняются у Мистера Пропера) ----------
-  bat_head:
+  # ---------- Мистер Пропер ----------
+  # ВНИМАНИЕ: конфеты и ускорительного компонента нет в паке SP-DS - пока стоят похожие модели (руды 47 и 23)
+  candy:
     material: IRON_INGOT
     model: 147
-    name: "<gradient:#C9A27E:#8A5A3C>Голова летучей мыши"
-    lore:
-      - "<gray>Ресурс для обмена у торговцев"
-  blood_crystal:
+    name: "<gold>Конфета DestroyCraft"
+  accel_component:
     material: IRON_INGOT
     model: 123
-    name: "<gradient:#FF5555:#AA0000>Кровавый кристалл"
+    name: "<gold>Ускорительный компонент"
+  # бустеры генераторов (модели boost из пака, string 101-115). Сами генераторы и активация - позже
+  booster_x2:
+    material: STRING
+    model: 101
+    name: "<gold>Бустер <white>x2"
     lore:
-      - "<gray>Ресурс для обмена у торговцев"
-  emerald_amulet:
-    material: IRON_INGOT
-    model: 109
-    name: "<gradient:#55FF55:#00AA00>Изумрудный амулет"
+      - "<light_purple>Бустер генераторов на <white><u>120 сек</u></white>"
+      - ""
+      - "<gray>Для активирования жми <aqua><u>ПКМ</u></aqua>"
+  booster_x2_plus:
+    material: STRING
+    model: 102
+    name: "<gold>Бустер <white>x2"
     lore:
-      - "<gray>Ресурс для обмена у торговцев"
-  aqua_amulet:
-    material: IRON_INGOT
-    model: 105
-    name: "<gradient:#55FFFF:#00AAAA>Бирюзовый амулет"
+      - "<light_purple>Бустер генераторов на <white><u>240 сек</u></white>"
+      - ""
+      - "<gray>Для активирования жми <aqua><u>ПКМ</u></aqua>"
+  booster_x3:
+    material: STRING
+    model: 103
+    name: "<gold>Бустер <white>x3"
     lore:
-      - "<gray>Ресурс для обмена у торговцев"
-  sapphire:
-    material: IRON_INGOT
-    model: 114
-    name: "<gradient:#9CD0FF:#3C6CFF>Сапфир"
+      - "<light_purple>Бустер генераторов на <white><u>90 сек</u></white>"
+      - ""
+      - "<gray>Для активирования жми <aqua><u>ПКМ</u></aqua>"
+  booster_x10:
+    material: STRING
+    model: 108
+    name: "<aqua>Бустер <white>x10"
     lore:
-      - "<gray>Ресурс для обмена у торговцев"
+      - "<light_purple>Бустер генераторов на <white><u>60 сек</u></white>"
+      - ""
+      - "<gray>Для активирования жми <aqua><u>ПКМ</u></aqua>"
+
   # ресурсы метеоритного торговца (как на скринах)
   meteor_scrap:
     material: IRON_INGOT

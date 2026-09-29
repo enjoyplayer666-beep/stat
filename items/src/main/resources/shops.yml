@@ -10,7 +10,7 @@
 # ============================================
 shops:
 
-  # Обмен ресурсов (житель)
+  # Мистер Пропер: конфеты -> ускорительный компонент -> бустеры генераторов
   proper:
     title: "<dark_green>Shopkeeper"
     name: "<gradient:#E8C45A:#FFA14A>Мистер Пропер"
@@ -19,10 +19,11 @@ shops:
       profession: "none"
       villager-type: "plains"
     trades:
-      - {buy: "item:bat_head:64", result: "item:blood_crystal"}
-      - {buy: "item:blood_crystal:5", result: "item:emerald_amulet"}
-      - {buy: "item:emerald_amulet:2", buy2: "item:blood_crystal:10", result: "item:aqua_amulet"}
-      - {buy: "item:aqua_amulet:5", buy2: "item:blood_crystal:15", result: "item:sapphire"}
+      - {buy: "item:candy:64", result: "item:accel_component"}
+      - {buy: "item:accel_component:5", result: "item:booster_x2"}
+      - {buy: "item:booster_x2", buy2: "item:accel_component:5", result: "item:booster_x2_plus"}
+      - {buy: "item:booster_x2:2", buy2: "item:accel_component:10", result: "item:booster_x3"}
+      - {buy: "item:booster_x3:5", buy2: "item:accel_component:15", result: "item:booster_x10"}
 
   # Кольчуга (скелет в кольчуге)
   chain:
@@ -37,11 +38,11 @@ shops:
         feet: "CHAINMAIL_BOOTS"
         hand: "item:amethyst_sword"
     trades:
-      - {buy: "item:blood_crystal:2", result: "item:chain_helmet"}
-      - {buy: "item:blood_crystal:2", result: "item:chain_chestplate"}
-      - {buy: "item:blood_crystal:2", result: "item:chain_leggings"}
-      - {buy: "item:blood_crystal:2", result: "item:chain_boots"}
-      - {buy: "item:blood_crystal:2", result: "item:chain_sword"}
+      - {buy: "item:candy:32", result: "item:chain_helmet"}
+      - {buy: "item:candy:32", result: "item:chain_chestplate"}
+      - {buy: "item:candy:32", result: "item:chain_leggings"}
+      - {buy: "item:candy:32", result: "item:chain_boots"}
+      - {buy: "item:candy:32", result: "item:chain_sword"}
 
   # Железо: кольчужная вещь + 16 железа (железный голем)
   iron:
@@ -108,7 +109,7 @@ shops:
       - {buy: "item:netherite_leggings", buy2: "AMETHYST_BLOCK", result: "item:amethyst_leggings"}
       - {buy: "item:netherite_boots", buy2: "AMETHYST_BLOCK", result: "item:amethyst_boots"}
 
-  # Обсидиан (кит Deluxe): аметистовая вещь + 8 изумрудных амулетов
+  # Обсидиан (кит Deluxe): аметистовая вещь + 16 компонентов
   obsidian:
     title: "<black><b>Обсидиановый сет"
     name: "<black><b>Обсидиановый сет"
@@ -123,13 +124,13 @@ shops:
         feet: "LEATHER_BOOTS#2A1240"
         hand: "item:obsidian_sword"
     trades:
-      - {buy: "item:amethyst_helmet", buy2: "item:emerald_amulet:8", result: "item:obsidian_helmet"}
-      - {buy: "item:amethyst_chestplate", buy2: "item:emerald_amulet:8", result: "item:obsidian_chestplate"}
-      - {buy: "item:amethyst_leggings", buy2: "item:emerald_amulet:8", result: "item:obsidian_leggings"}
-      - {buy: "item:amethyst_boots", buy2: "item:emerald_amulet:8", result: "item:obsidian_boots"}
-      - {buy: "item:amethyst_sword", buy2: "item:emerald_amulet:8", result: "item:obsidian_sword"}
+      - {buy: "item:amethyst_helmet", buy2: "item:accel_component:16", result: "item:obsidian_helmet"}
+      - {buy: "item:amethyst_chestplate", buy2: "item:accel_component:16", result: "item:obsidian_chestplate"}
+      - {buy: "item:amethyst_leggings", buy2: "item:accel_component:16", result: "item:obsidian_leggings"}
+      - {buy: "item:amethyst_boots", buy2: "item:accel_component:16", result: "item:obsidian_boots"}
+      - {buy: "item:amethyst_sword", buy2: "item:accel_component:16", result: "item:obsidian_sword"}
 
-  # Majestic (кит Ultra): обсидиановая вещь + 16 изумрудных амулетов
+  # Majestic (кит Ultra): обсидиановая вещь + 32 компонента
   majestic:
     title: "<dark_purple><b>Majestic Set"
     name: "<dark_purple><b>Majestic Set"
@@ -144,13 +145,13 @@ shops:
         feet: "LEATHER_BOOTS#C9A27E"
         hand: "item:majestic_sword"
     trades:
-      - {buy: "item:obsidian_helmet", buy2: "item:emerald_amulet:16", result: "item:majestic_helmet"}
-      - {buy: "item:obsidian_chestplate", buy2: "item:emerald_amulet:16", result: "item:majestic_chestplate"}
-      - {buy: "item:obsidian_leggings", buy2: "item:emerald_amulet:16", result: "item:majestic_leggings"}
-      - {buy: "item:obsidian_boots", buy2: "item:emerald_amulet:16", result: "item:majestic_boots"}
-      - {buy: "item:obsidian_sword", buy2: "item:emerald_amulet:16", result: "item:majestic_sword"}
+      - {buy: "item:obsidian_helmet", buy2: "item:accel_component:32", result: "item:majestic_helmet"}
+      - {buy: "item:obsidian_chestplate", buy2: "item:accel_component:32", result: "item:majestic_chestplate"}
+      - {buy: "item:obsidian_leggings", buy2: "item:accel_component:32", result: "item:majestic_leggings"}
+      - {buy: "item:obsidian_boots", buy2: "item:accel_component:32", result: "item:majestic_boots"}
+      - {buy: "item:obsidian_sword", buy2: "item:accel_component:32", result: "item:majestic_sword"}
 
-  # Облачный (кит Legend): majestic-вещь + 8 бирюзовых амулетов
+  # Облачный (кит Legend): majestic-вещь + 48 компонентов
   cloud:
     title: "<white><b>Облачный сет"
     name: "<white><b>Облачный сет"
@@ -165,13 +166,13 @@ shops:
         feet: "LEATHER_BOOTS#FFFFFF"
         hand: "item:cloud_sword"
     trades:
-      - {buy: "item:majestic_helmet", buy2: "item:aqua_amulet:8", result: "item:cloud_helmet"}
-      - {buy: "item:majestic_chestplate", buy2: "item:aqua_amulet:8", result: "item:cloud_chestplate"}
-      - {buy: "item:majestic_leggings", buy2: "item:aqua_amulet:8", result: "item:cloud_leggings"}
-      - {buy: "item:majestic_boots", buy2: "item:aqua_amulet:8", result: "item:cloud_boots"}
-      - {buy: "item:majestic_sword", buy2: "item:aqua_amulet:8", result: "item:cloud_sword"}
+      - {buy: "item:majestic_helmet", buy2: "item:accel_component:48", result: "item:cloud_helmet"}
+      - {buy: "item:majestic_chestplate", buy2: "item:accel_component:48", result: "item:cloud_chestplate"}
+      - {buy: "item:majestic_leggings", buy2: "item:accel_component:48", result: "item:cloud_leggings"}
+      - {buy: "item:majestic_boots", buy2: "item:accel_component:48", result: "item:cloud_boots"}
+      - {buy: "item:majestic_sword", buy2: "item:accel_component:48", result: "item:cloud_sword"}
 
-  # Пустота: облачная вещь + 4 сапфира
+  # Пустота: облачная вещь + 64 компонента
   void:
     title: "<gradient:#AA00AA:#3C1C66><b>Сет пустоты"
     name: "<gradient:#AA00AA:#3C1C66><b>Сет пустоты"
@@ -185,11 +186,11 @@ shops:
         feet: "LEATHER_BOOTS#1A0B2E"
         hand: "item:void_sword"
     trades:
-      - {buy: "item:cloud_helmet", buy2: "item:sapphire:4", result: "item:void_helmet"}
-      - {buy: "item:cloud_chestplate", buy2: "item:sapphire:4", result: "item:void_chestplate"}
-      - {buy: "item:cloud_leggings", buy2: "item:sapphire:4", result: "item:void_leggings"}
-      - {buy: "item:cloud_boots", buy2: "item:sapphire:4", result: "item:void_boots"}
-      - {buy: "item:cloud_sword", buy2: "item:sapphire:4", result: "item:void_sword"}
+      - {buy: "item:cloud_helmet", buy2: "item:accel_component:64", result: "item:void_helmet"}
+      - {buy: "item:cloud_chestplate", buy2: "item:accel_component:64", result: "item:void_chestplate"}
+      - {buy: "item:cloud_leggings", buy2: "item:accel_component:64", result: "item:void_leggings"}
+      - {buy: "item:cloud_boots", buy2: "item:accel_component:64", result: "item:void_boots"}
+      - {buy: "item:cloud_sword", buy2: "item:accel_component:64", result: "item:void_sword"}
 
   # Метеоритный (чёрный скелет): 32 скрапа -> энергия, 20 энергии -> заряд вселенной, вещь пустоты + заряды -> метеоритная вещь
   meteor:
