@@ -54,6 +54,7 @@ final class Titles implements Listener {
         final String kind;
         final String category;
         Inventory inv;
+        boolean busy;
 
         Menu(String kind, String category) {
             this.kind = kind;
@@ -248,6 +249,7 @@ final class Titles implements Listener {
         e.setCancelled(true);
         if (!(e.getWhoClicked() instanceof Player p) || e.getClickedInventory() != e.getInventory()) return;
         int slot = e.getRawSlot();
+        if (menu.busy) return;
         switch (menu.kind) {
             case "main" -> {
                 if (slot == cfg.getInt("menu.color-slot", 48)) {
@@ -356,10 +358,30 @@ final class Titles implements Listener {
         String[] t = left.get(random.nextInt(left.size()));
         have.add(t[0]);
         save();
-        p.sendMessage(Text.mm(cfg.getString("messages.dropped", "<gold>Из кейса выпал титул: <white>{title}")
-                .replace("{title}", t[1].replace("<", "\\<"))));
         p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.2f);
-        openCategory(p, c);
+        // на месте кейса: "Выпало: титул" и отсчёт, потом окно обновится
+        if (!(p.getOpenInventory().getTopInventory().getHolder() instanceof Menu menu)) {
+            openCategory(p, c);
+            return;
+        }
+        menu.busy = true;
+        int seconds = Math.max(1, cfg.getInt("case.reveal-seconds", 3));
+        int[] left2 = {seconds};
+        String titleText = t[1].replace("<", "\\<");
+        Bukkit.getScheduler().runTaskTimer(plugin, task -> {
+            if (!p.isOnline() || p.getOpenInventory().getTopInventory() != menu.inv) {
+                task.cancel();
+                return;
+            }
+            if (left2[0] <= 0) {
+                task.cancel();
+                openCategory(p, c);
+                return;
+            }
+            menu.inv.setItem(4, item(c.icon(), cfg.getString("case.dropped-name", "<green>Выпало: <yellow>{title}").replace("{title}", titleText),
+                    List.of(cfg.getString("case.dropped-lore", "<gray>Инвентарь обновится через {s} сек...").replace("{s}", String.valueOf(left2[0])))));
+            left2[0]--;
+        }, 0L, 20L);
     }
 
     // ---------- свой цвет через чат ----------

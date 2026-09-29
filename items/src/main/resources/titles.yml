@@ -28,6 +28,10 @@ case:
   lore: ["<gray>Нажми, чтобы открыть", "<gray>Выпадет случайный закрытый титул"]
   # цена открытия предметом (item:<id>:кол-во или MATERIAL:кол-во); пусто - бесплатно
   cost: ""
+  # после открытия на месте кейса показывается выпавший титул, через reveal-seconds окно обновится
+  reveal-seconds: 3
+  dropped-name: "<green>Выпало: <yellow>{title}"
+  dropped-lore: "<gray>Инвентарь обновится через {s} сек..."
 
 title-name: "<white>Титул: <yellow>{title}"
 title-available: "<green>Доступен"
@@ -84,17 +88,19 @@ categories:
     slot: 10
     menu-icon: "head:d4b3975c6d9a17131f3836f3609ba3dcc354158e6775fea9a2c96f9b02d04f00"
     icon: "head:d4b3975c6d9a17131f3836f3609ba3dcc354158e6775fea9a2c96f9b02d04f00"
-    locked-icon: "PURPLE_CONCRETE"
+    locked-icon: "head:d4b3975c6d9a17131f3836f3609ba3dcc354158e6775fea9a2c96f9b02d04f00"
     titles:
       - {id: "hozyain", text: "Хозяин"}
       - {id: "18plus", text: "18+"}
       - {id: "nyuhaet", text: "Нюхает трусики"}
+      - {id: "chulki", text: "Люблю чулки"}
+      - {id: "sexy", text: "Я секси"}
   anime18:
     name: "<#FF55FF>Аниме 18+"
     slot: 13
     menu-icon: "head:485d9392e84ff85686250a7e17d6adccd6befc05c57b71b6395353fd1071ea0a"
     icon: "head:485d9392e84ff85686250a7e17d6adccd6befc05c57b71b6395353fd1071ea0a"
-    locked-icon: "PURPLE_CONCRETE"
+    locked-icon: "head:485d9392e84ff85686250a7e17d6adccd6befc05c57b71b6395353fd1071ea0a"
     titles:
       - {id: "hentai", text: "Хентай"}
   memes:
@@ -102,15 +108,29 @@ categories:
     slot: 16
     menu-icon: "head:4ff182f76f4dd493301940328f35eede1ca8f268a4138fede025a5991d16bd9d"
     icon: "head:4ff182f76f4dd493301940328f35eede1ca8f268a4138fede025a5991d16bd9d"
-    locked-icon: "PURPLE_CONCRETE"
+    locked-icon: "head:4ff182f76f4dd493301940328f35eede1ca8f268a4138fede025a5991d16bd9d"
     titles:
       - {id: "drun", text: "Друн"}
       - {id: "sixseven", text: "сикс севен"}
+      - {id: "plaki", text: "плаки-плаки"}
+      - {id: "bembem", text: "бэм-бэм-бэм"}
+      - {id: "nespesha", text: "не спеша"}
   emotions:
     name: "<#55FFFF>Чувства и эмоции"
     slot: 11
     menu-icon: "head:f14afd24dfc0d2ba7d6456f396e48ac0155b553b9a366a0c4e217e62efff7f59"
     icon: "head:f14afd24dfc0d2ba7d6456f396e48ac0155b553b9a366a0c4e217e62efff7f59"
-    locked-icon: "PURPLE_CONCRETE"
+    locked-icon: "head:f14afd24dfc0d2ba7d6456f396e48ac0155b553b9a366a0c4e217e62efff7f59"
     titles:
       - {id: "happy", text: "ヽ(*^▽^*)/"}
+      - {id: "love", text: "(—‿‿—)♡"}
+      - {id: "fu", text: "┌∩┐(◣_◢)┌∩┐"}
+      - {id: "cry", text: "~(>_<)~"}
+  emotional:
+    name: "<#FF5555>Эмоциональные"
+    slot: 12
+    menu-icon: "COAL_BLOCK"
+    icon: "COAL_BLOCK"
+    locked-icon: "COAL_BLOCK"
+    titles:
+      - {id: "zloy", text: "Злой"}
