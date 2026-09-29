@@ -60,6 +60,23 @@ shops:
       - {buy: "item:compressed_gold:4", result: "item:firework_3:64"}
       - {buy: "item:firework_3:64", result: "item:compressed_gold:3"}
 
+  # Декомпрессор (скрин): житель, сжатые блоки -> обратно в ресурсы
+  decompressor:
+    title: "<white><b>Декомпрессор"
+    name: "<white><b>Декомпрессор"
+    npc:
+      type: "VILLAGER"
+      profession: "none"
+      villager-type: "plains"
+    trades:
+      - {buy: "item:compressed_dirt", result: "DIRT:64"}
+      - {buy: "item:compressed_stone", result: "STONE:32"}
+      - {buy: "item:compressed_coal", result: "COAL:48"}
+      - {buy: "item:compressed_iron", result: "IRON_INGOT:32"}
+      - {buy: "item:compressed_diamond", result: "DIAMOND:64"}
+      - {buy: "item:compressed_gunpowder", result: "GUNPOWDER:64"}
+      - {buy: "item:compressed_gold", result: "GOLD_INGOT:48"}
+
   # Кожаная броня (скрин): 12 земли -> кожа [I]; кожа [I] + сжатая земля -> кожа [II]
   # НПС-игрок (скин со скрина) в кожаной броне
   leather:

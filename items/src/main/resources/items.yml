@@ -80,21 +80,30 @@ items:
 
   # ---------- Сжатые ресурсы: вещь [I] + сжатый ресурс -> вещь [II] ----------
   compressed_coal:
-    material: PURPLE_CONCRETE_POWDER
+    material: COAL_BLOCK
+    glint: true
     name: "<red>Сжатый уголь"
     lore-mode: vanilla
   compressed_iron:
     material: IRON_BLOCK
+    glint: true
     name: "<red>Сжатое железо"
     lore-mode: vanilla
   compressed_diamond:
     material: DIAMOND_BLOCK
+    glint: true
     name: "<red>Сжатый алмаз"
     lore-mode: vanilla
 
   # ---------- Кожаный сет [I] (скрин: Защита I, Unbreakable) и сжатая земля ----------
+  compressed_stone:
+    material: STONE
+    glint: true
+    name: "<red>Сжатый камень"
+    lore-mode: vanilla
   compressed_dirt:
-    material: GRANITE
+    material: DIRT
+    glint: true
     name: "<red>Сжатая земля"
     lore-mode: vanilla
   leather_helmet:
@@ -409,7 +418,8 @@ items:
     attributes: ["attack_damage:9"]
     unbreakable: true
   compressed_gunpowder:
-    material: PURPUR_BLOCK
+    material: GRAVEL
+    glint: true
     name: "<red>Сжатый порох"
     lore-mode: vanilla
 
