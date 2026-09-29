@@ -60,6 +60,8 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
         int count;
         UUID itemEntity, textEntity;
         String shown;
+        /** угол поворота иконки (как у выпавшего предмета) */
+        float angle;
     }
 
     private record Boost(int multiplier, long until) {
@@ -75,6 +77,13 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         saveDefaultConfig();
+        if (getConfig().getDouble("generator.item-scale") == 0.6) getConfig().set("generator.item-scale", 0.35);
+        if (getConfig().getDouble("generator.item-offset") == 1.35) getConfig().set("generator.item-offset", 1.2);
+        if (!getConfig().contains("generator.spin-degrees")) {
+            getConfig().set("generator.spin-degrees", 15);
+            getConfig().set("generator.bob", 0.06);
+        }
+        saveConfig();
         genKey = new NamespacedKey(this, "gen");
         itemsIdKey = new NamespacedKey("mediaitems", "id");
         dataFile = new File(getDataFolder(), "gens.yml");
@@ -219,8 +228,8 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
             return;
         }
         if (item == null || !item.isValid()) {
-            float sc = (float) gc.getDouble("generator.item-scale", 0.6);
-            Location at = new Location(w, g.x + 0.5, g.y + gc.getDouble("generator.item-offset", 1.35), g.z + 0.5);
+            float sc = (float) gc.getDouble("generator.item-scale", 0.35);
+            Location at = new Location(w, g.x + 0.5, g.y + gc.getDouble("generator.item-offset", 1.2), g.z + 0.5);
             ItemDisplay d = w.spawn(at, ItemDisplay.class, e -> {
                 e.setPersistent(false);
                 e.getPersistentDataContainer().set(genKey, PersistentDataType.STRING, g.name);
@@ -242,11 +251,25 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
             g.shown = null;
             text = d;
         }
+        if (g.itemEntity != null && Bukkit.getEntity(g.itemEntity) instanceof ItemDisplay d) spin(d, g);
         String s = gc.getString("generator.text", "<gray>x<aqua>{count}").replace("{count}", String.valueOf(g.count));
         if (!s.equals(g.shown) && text instanceof TextDisplay td) {
             td.text(mm(s));
             g.shown = s;
         }
+    }
+
+    /** Поворот и покачивание, как у выпавшего предмета. */
+    private void spin(ItemDisplay d, Gen g) {
+        var gc = getConfig();
+        float sc = (float) gc.getDouble("generator.item-scale", 0.35);
+        g.angle += (float) Math.toRadians(gc.getDouble("generator.spin-degrees", 15));
+        if (g.angle > Math.PI * 2) g.angle -= (float) (Math.PI * 2);
+        float bob = (float) (Math.sin(g.angle) * gc.getDouble("generator.bob", 0.06));
+        d.setInterpolationDelay(0);
+        d.setInterpolationDuration(5);
+        d.setTransformation(new Transformation(new Vector3f(0, bob, 0), new AxisAngle4f(g.angle, 0, 1, 0),
+                new Vector3f(sc, sc, sc), new AxisAngle4f()));
     }
 
     private void removeDisplays(Gen g) {
