@@ -64,6 +64,13 @@ public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
 
     private void loadAll() {
         reloadConfig();
+        // нет файла (удалили/переименовали) - кладём стандартный, иначе магазинов будет 0 и НПС не откроются
+        for (String f : new String[]{"items.yml", "shops.yml"}) {
+            if (!new File(getDataFolder(), f).exists()) {
+                saveResource(f, false);
+                getLogger().warning(f + " не найден - создан стандартный.");
+            }
+        }
         YamlConfiguration itemsYml = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "items.yml"));
         YamlConfiguration shopsYml = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "shops.yml"));
         items.load(itemsYml.getConfigurationSection("items"), getConfig().getConfigurationSection("tooltip"));
