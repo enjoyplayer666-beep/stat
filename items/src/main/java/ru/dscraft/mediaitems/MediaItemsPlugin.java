@@ -30,6 +30,7 @@ public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
         idKey = new NamespacedKey(this, "id");
         npcKey = new NamespacedKey(this, "npc");
         saveDefaultConfig();
+        migrateHealth();
         for (String f : new String[]{"items.yml", "shops.yml"}) {
             if (!new File(getDataFolder(), f).exists()) saveResource(f, false);
         }
@@ -60,6 +61,27 @@ public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
         YamlConfiguration shopsYml = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "shops.yml"));
         items.load(itemsYml.getConfigurationSection("items"), getConfig().getConfigurationSection("tooltip"));
         shops.load(shopsYml.getConfigurationSection("shops"), items);
+    }
+
+    /** Старые значения по умолчанию строки HP (сердечки, высоко над ником) меняем на новые. */
+    private void migrateHealth() {
+        var c = getConfig();
+        boolean changed = false;
+        String f = c.getString("health.format", "");
+        if (f.equals("<white>{hearts} <red>❤") || c.contains("health.below-name")) {
+            c.set("health.format", "<white>{hp} <dark_red>❤");
+            c.set("health.below-name", null);
+            changed = true;
+        }
+        if (c.getDouble("health.offset", 0.03) == 0.3) {
+            c.set("health.offset", 0.03);
+            changed = true;
+        }
+        if (!c.contains("health.disabled-worlds") || c.getStringList("health.disabled-worlds").equals(java.util.List.of("lobby", "world_lobby", "hub"))) {
+            c.set("health.disabled-worlds", java.util.List.of("world"));
+            changed = true;
+        }
+        if (changed) saveConfig();
     }
 
     Items items() {

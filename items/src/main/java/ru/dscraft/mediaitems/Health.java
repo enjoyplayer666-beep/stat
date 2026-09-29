@@ -125,19 +125,21 @@ final class Health implements Listener {
                 remove(p.getUniqueId());
                 d = spawn(p);
             }
+            int hp = (int) Math.ceil(p.getHealth() - 1e-6);
             int h = hearts(p);
+            int key = hp * 1000 + h;
             Integer was = shown.get(p.getUniqueId());
-            if (was == null || was != h) {
-                d.text(Text.mm(plugin.getConfig().getString("health.format", "<white>{hearts} <red>❤")
-                        .replace("{hearts}", String.valueOf(h))));
-                shown.put(p.getUniqueId(), h);
+            if (was == null || was != key) {
+                d.text(Text.mm(plugin.getConfig().getString("health.format", "<white>{hp} <dark_red>❤")
+                        .replace("{hp}", String.valueOf(hp)).replace("{hearts}", String.valueOf(h))));
+                shown.put(p.getUniqueId(), key);
             }
         }
         for (UUID id : Set.copyOf(labels.keySet())) if (!online.contains(id)) remove(id);
     }
 
     private TextDisplay spawn(Player p) {
-        float y = (float) plugin.getConfig().getDouble("health.offset", 0.3);
+        float y = (float) plugin.getConfig().getDouble("health.offset", 0.03);
         TextDisplay d = p.getWorld().spawn(p.getLocation(), TextDisplay.class, t -> {
             t.setPersistent(false);
             t.getPersistentDataContainer().set(tag, PersistentDataType.BYTE, (byte) 1);
