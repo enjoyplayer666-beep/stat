@@ -40,6 +40,26 @@ shops:
       - {buy: "item:lucifer_vessel:6", buy2: "item:poseidon_shard:7", result: "item:talisman_damage"}
       - {buy: "item:talisman_speed", buy2: "item:talisman_life", result: "item:talisman_super"}
 
+  # Элитры (скрин): НПС-игрок (скин со скрина) в зачарованных элитрах, с фейерверком в руке
+  elytra:
+    title: "<gold><b>Элитры"
+    name: "<gold><b>Элитры"
+    npc:
+      type: "PLAYER"
+      skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/elytra.png"
+      fallback-type: "ZOMBIE"
+      equipment:
+        chest: "item:elytra_2"
+        hand: "item:firework_3"
+    trades:
+      - {buy: "GOLD_INGOT:48", result: "item:compressed_gold"}
+      - {buy: "item:elytra", buy2: "item:compressed_gold:32", result: "item:elytra_2"}
+      - {buy: "item:compressed_gold:16", result: "item:elytra"}
+      - {buy: "item:compressed_gold", result: "item:firework_1:16"}
+      - {buy: "item:compressed_gold:2", result: "item:firework_2:32"}
+      - {buy: "item:compressed_gold:4", result: "item:firework_3:64"}
+      - {buy: "item:firework_3:64", result: "item:compressed_gold:3"}
+
   # Кожаная броня (скрин): 12 земли -> кожа [I]; кожа [I] + сжатая земля -> кожа [II]
   # НПС-игрок (скин со скрина) в кожаной броне
   leather:

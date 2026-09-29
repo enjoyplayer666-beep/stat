@@ -117,6 +117,10 @@ final class Items {
             TextColor c = Text.color(s.getString("color"), NamedTextColor.WHITE);
             leather.setColor(Color.fromRGB(c.value()));
         }
+        // фейерверк: power - длительность полёта (Flight Duration)
+        if (meta instanceof org.bukkit.inventory.meta.FireworkMeta fw && s.contains("power")) {
+            fw.setPower(Math.max(0, Math.min(127, s.getInt("power"))));
+        }
 
         List<Component> lore = new ArrayList<>();
 

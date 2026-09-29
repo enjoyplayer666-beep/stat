@@ -746,3 +746,33 @@ items:
     slot: offhand
     attributes: ["max_health:10", "movement_speed:0.1"]
     unbreakable: true
+
+  # ---------- Элитры (скрин) ----------
+  compressed_gold:
+    material: OCHRE_FROGLIGHT
+    name: "<red>Сжатое золото"
+    lore-mode: vanilla
+  elytra:
+    material: ELYTRA
+    name: "<gold>Элитры</gold> <dark_gray>[<aqua>I</aqua>]"
+    lore-mode: vanilla
+  elytra_2:
+    material: ELYTRA
+    name: "<gold>Элитры</gold> <dark_gray>[<aqua>II</aqua>]"
+    enchants: ["protection:8"]
+    lore-mode: vanilla
+  firework_1:
+    material: FIREWORK_ROCKET
+    name: "<gold>Фейерверк</gold> <dark_gray>[<aqua>I</aqua>]"
+    power: 1
+    lore-mode: vanilla
+  firework_2:
+    material: FIREWORK_ROCKET
+    name: "<gold>Фейерверк</gold> <dark_gray>[<aqua>II</aqua>]"
+    power: 2
+    lore-mode: vanilla
+  firework_3:
+    material: FIREWORK_ROCKET
+    name: "<gold>Фейерверк</gold> <dark_gray>[<aqua>III</aqua>]"
+    power: 3
+    lore-mode: vanilla
