@@ -46,7 +46,7 @@ import java.util.regex.Pattern;
  */
 final class Titles implements Listener {
 
-    record Category(String id, String name, int slot, String icon, String lockedIcon, String border, List<String[]> titles) {
+    record Category(String id, String name, int slot, String menuIcon, String icon, String lockedIcon, String border, List<String[]> titles) {
     }
 
     /** Меню - по держателю инвентаря понимаем, какое окно открыто. */
@@ -108,7 +108,7 @@ final class Titles implements Listener {
                     byId.put(tid, new String[]{id, text});
                 }
                 categories.put(id, new Category(id, c.getString("name", id), c.getInt("slot", 10),
-                        c.getString("icon", "NAME_TAG"), c.getString("locked-icon", "PURPLE_CONCRETE"),
+                        c.getString("menu-icon", c.getString("icon", "NAME_TAG")), c.getString("icon", "NAME_TAG"), c.getString("locked-icon", "PURPLE_CONCRETE"),
                         c.getString("border", "PURPLE_STAINED_GLASS_PANE"), list));
             }
         }
@@ -182,7 +182,7 @@ final class Titles implements Listener {
         Inventory inv = Bukkit.createInventory(menu, 54, Text.mm(cfg.getString("menu.title", "Выбор категорий")));
         menu.inv = inv;
         for (Category c : categories.values()) {
-            inv.setItem(c.slot(), item(c.icon(), c.name(), cfg.getStringList("menu.category-lore")));
+            inv.setItem(c.slot(), item(c.menuIcon(), c.name(), cfg.getStringList("menu.category-lore")));
         }
         inv.setItem(cfg.getInt("menu.color-slot", 48), item(cfg.getString("menu.color-icon", "WHITE_WOOL"),
                 cfg.getString("menu.color-name", "<gold>Сменить цвет"), null));

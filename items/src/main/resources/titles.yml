@@ -18,7 +18,7 @@ menu:
   remove-slot: 50
   remove-icon: "head:81873119ae884b89c086b0cc6eb44cff951a4193509d904062113b5785680c08"
   remove-name: "<red>Снять титул"
-  back-icon: "ARROW"
+  back-icon: "head:8b4b8f323a14776dd851f17003753ec4e805b9b3da31e254b4d22ccfa5eff16a"
   back-name: "<gray>Назад"
 
 # кейс в каждой категории: случайный ещё закрытый титул этой категории
@@ -76,13 +76,14 @@ messages:
   input-cancel: "<gray>Отменено."
   input-bad: "<red>Неверный формат. Пример: <white>##F1DA9C</white> или <white>##F1DA9C##9035B0"
 
-# категории: name - заголовок, slot - место в меню, icon - иконка открытых титулов, locked-icon - закрытых,
+# категории: name - заголовок, slot - место в меню, menu-icon - иконка в меню, icon - иконка открытых титулов, locked-icon - закрытых,
 # border - рамка окна категории. Титулы (id - латиницей, text - как видно после ника) - со скринов, остальные потом.
 categories:
   adult:
     name: "<#FF5555>18+"
     slot: 10
-    icon: "RED_CONCRETE"
+    menu-icon: "head:d4b3975c6d9a17131f3836f3609ba3dcc354158e6775fea9a2c96f9b02d04f00"
+    icon: "head:d4b3975c6d9a17131f3836f3609ba3dcc354158e6775fea9a2c96f9b02d04f00"
     locked-icon: "PURPLE_CONCRETE"
     titles:
       - {id: "hozyain", text: "Хозяин"}
@@ -91,14 +92,16 @@ categories:
   anime18:
     name: "<#FF55FF>Аниме 18+"
     slot: 13
-    icon: "RED_CONCRETE"
+    menu-icon: "head:485d9392e84ff85686250a7e17d6adccd6befc05c57b71b6395353fd1071ea0a"
+    icon: "head:485d9392e84ff85686250a7e17d6adccd6befc05c57b71b6395353fd1071ea0a"
     locked-icon: "PURPLE_CONCRETE"
     titles:
       - {id: "hentai", text: "Хентай"}
   memes:
     name: "<#55FF55>Мемы"
     slot: 16
-    icon: "BONE_BLOCK"
+    menu-icon: "head:4ff182f76f4dd493301940328f35eede1ca8f268a4138fede025a5991d16bd9d"
+    icon: "head:4ff182f76f4dd493301940328f35eede1ca8f268a4138fede025a5991d16bd9d"
     locked-icon: "PURPLE_CONCRETE"
     titles:
       - {id: "drun", text: "Друн"}
@@ -106,7 +109,8 @@ categories:
   emotions:
     name: "<#55FFFF>Чувства и эмоции"
     slot: 11
-    icon: "GOLD_BLOCK"
+    menu-icon: "head:f14afd24dfc0d2ba7d6456f396e48ac0155b553b9a366a0c4e217e62efff7f59"
+    icon: "head:f14afd24dfc0d2ba7d6456f396e48ac0155b553b9a366a0c4e217e62efff7f59"
     locked-icon: "PURPLE_CONCRETE"
     titles:
       - {id: "happy", text: "ヽ(*^▽^*)/"}
