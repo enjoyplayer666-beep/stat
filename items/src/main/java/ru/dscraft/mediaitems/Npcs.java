@@ -330,6 +330,27 @@ final class Npcs implements Listener {
         }
     }
 
+    /**
+     * Моб с меткой НПС, которого нет в списке (список потерялся) - возвращаем его в список:
+     * магазин - по id без хвоста "_2", "_3". Тогда он снова открывается и удаляется через /itemnpc remove.
+     */
+    private Npc adopt(Entity e) {
+        String id = e.getPersistentDataContainer().get(plugin.npcKey, PersistentDataType.STRING);
+        if (id == null || npcs.containsKey(id) || pending.containsKey(id)) return null;
+        String shopId = id.replaceFirst("_\\d+$", "");
+        if (plugin.shops().get(shopId) == null) return null;
+        Npc n = new Npc();
+        n.id = id;
+        n.shop = shopId;
+        n.loc = e.getLocation().clone();
+        n.loc.setPitch(0f);
+        n.entity = e.getUniqueId();
+        npcs.put(id, n);
+        save();
+        plugin.getLogger().info("НПС " + id + " возвращён в список (магазин " + shopId + ").");
+        return n;
+    }
+
     private Npc byEntity(Entity e) {
         String id = e.getPersistentDataContainer().get(plugin.npcKey, PersistentDataType.STRING);
         return id == null ? null : npcs.get(id);
@@ -422,6 +443,7 @@ final class Npcs implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onInteract(PlayerInteractEntityEvent e) {
         Npc n = byEntity(e.getRightClicked());
+        if (n == null) n = adopt(e.getRightClicked());
         if (n == null) {
             if (tagged(e.getRightClicked(), plugin.npcKey)) e.setCancelled(true);
             return;
@@ -436,6 +458,7 @@ final class Npcs implements Listener {
         if (!tagged(e.getRightClicked(), plugin.npcKey)) return;
         e.setCancelled(true);
         Npc n = byEntity(e.getRightClicked());
+        if (n == null) n = adopt(e.getRightClicked());
         if (n != null && e.getHand() == EquipmentSlot.HAND) clickOpen(e.getPlayer(), n);
     }
 
@@ -493,7 +516,11 @@ final class Npcs implements Listener {
         for (Entity ent : e.getEntities()) {
             if (!tagged(ent, plugin.npcKey)) continue;
             Npc n = byEntity(ent);
-            if (n != null && n.entity != null && !n.entity.equals(ent.getUniqueId()) && n.fancy == null) ent.remove();
+            if (n == null) {
+                adopt(ent);
+                continue;
+            }
+            if (n.entity != null && !n.entity.equals(ent.getUniqueId()) && n.fancy == null) ent.remove();
         }
     }
 
