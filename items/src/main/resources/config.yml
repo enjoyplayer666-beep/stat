@@ -51,14 +51,5 @@ tooltip:
     attack_speed:         {icon: "⚡", color: "#FFFF55", name: "Скорость атаки"}
     movement_speed:       {icon: "⚡", color: "#55FFFF", name: "Скорость"}
 
-# Покупки за коины (coins: в shops.yml). Коины берутся из DestroyLobby, если его нет - из Vault.
-coins:
-  # иконка в окне обмена (монета из ресурспака)
-  icon: "item:coin"
-  icon-name: "<yellow>{price} <white>коинов"
-
 messages:
-  coins-confirm: "<yellow>Нажми на обмен ещё раз, чтобы купить за <white>{price}</white> коинов."
-  coins-not-enough: "<red>Не хватает коинов: нужно <white>{price}</white>."
-  coins-bought: "<green>Куплено за <white>{price}</white> коинов!"
   wrong-ingredient: "<red>Сюда нужны обычные предметы, а не ресурсы с сервера."

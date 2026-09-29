@@ -19,7 +19,6 @@ public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
 
     NamespacedKey idKey;
     NamespacedKey npcKey;
-    NamespacedKey displayKey;
 
     private Items items;
     private Shops shops;
@@ -29,7 +28,6 @@ public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
     public void onEnable() {
         idKey = new NamespacedKey(this, "id");
         npcKey = new NamespacedKey(this, "npc");
-        displayKey = new NamespacedKey(this, "display");
         saveDefaultConfig();
         for (String f : new String[]{"items.yml", "shops.yml"}) {
             if (!new File(getDataFolder(), f).exists()) saveResource(f, false);

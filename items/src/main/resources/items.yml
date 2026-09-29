@@ -44,15 +44,12 @@ items:
     name: "<gradient:#9CD0FF:#3C6CFF>Сапфир"
     lore:
       - "<gray>Ресурс для обмена у торговцев"
-  meteor_star:
+  meteor_energy:
     material: IRON_INGOT
     model: 112
-    name: "<gradient:#FF6B4A:#C81E1E>Метеоритная звезда"
+    name: "<gradient:#FF6B4A:#C81E1E>Метеоритная энергия"
     lore:
       - "<gray>Ресурс для обмена у торговцев"
-  coin:
-    material: FLINT
-    model: 101
     name: "<yellow>Коины"
 
   # ---------- Кольчужный сет ----------

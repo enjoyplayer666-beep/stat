@@ -7,24 +7,23 @@
 #  npc.equipment - что надето: head/chest/legs/feet/hand/offhand
 #             "item:id" из items.yml, "MATERIAL" или "LEATHER_CHESTPLATE#RRGGBB" (крашеная кожа)
 #  trades - обмены: buy (+ buy2) -> result.  "item:id:кол-во" или "MATERIAL:кол-во"
-#           coins: 200 - покупка за коины (нажать на обмен 2 раза), display-lore - строки в списке обменов
 # ============================================
 shops:
 
-  # Обмен ресурсов (кожа НПС - житель-нитвит, в ресурспаке ему нарисован костюм)
+  # Обмен ресурсов (житель)
   proper:
     title: "<dark_green>Shopkeeper"
     name: "<gradient:#E8C45A:#FFA14A>Мистер Пропер"
     npc:
       type: "VILLAGER"
-      profession: "nitwit"
+      profession: "none"
       villager-type: "plains"
     trades:
       - {buy: "item:bat_head:64", result: "item:blood_crystal"}
       - {buy: "item:blood_crystal:5", result: "item:emerald_amulet"}
       - {buy: "item:emerald_amulet:2", buy2: "item:blood_crystal:10", result: "item:aqua_amulet"}
       - {buy: "item:aqua_amulet:5", buy2: "item:blood_crystal:15", result: "item:sapphire"}
-      - {buy: "item:sapphire:5", buy2: "item:blood_crystal:20", result: "item:meteor_star"}
+      - {buy: "item:sapphire:5", buy2: "item:blood_crystal:20", result: "item:meteor_energy"}
 
   # Кольчуга (скелет в кольчуге)
   chain:
@@ -193,7 +192,7 @@ shops:
       - {buy: "item:cloud_boots", buy2: "item:sapphire:4", result: "item:void_boots"}
       - {buy: "item:cloud_sword", buy2: "item:sapphire:4", result: "item:void_sword"}
 
-  # Метеоритный: вещь пустоты + 4 метеоритные звезды, меч - за 200 коинов
+  # Метеоритный: вещь пустоты + 4 метеоритной энергии (меч тоже)
   meteor:
     title: "<gradient:#FF6B4A:#C81E1E><b>Метеоритный сет"
     name: "<gradient:#FF6B4A:#C81E1E><b>Метеоритный сет"
@@ -202,8 +201,8 @@ shops:
       equipment:
         hand: "item:meteor_sword"
     trades:
-      - {buy: "item:void_helmet", buy2: "item:meteor_star:4", result: "item:meteor_helmet"}
-      - {buy: "item:void_chestplate", buy2: "item:meteor_star:4", result: "item:meteor_chestplate"}
-      - {buy: "item:void_leggings", buy2: "item:meteor_star:4", result: "item:meteor_leggings"}
-      - {buy: "item:void_boots", buy2: "item:meteor_star:4", result: "item:meteor_boots"}
-      - {coins: 200, result: "item:meteor_sword", display-lore: ["", "<white>Цена: <yellow>200</yellow> коинов"]}
+      - {buy: "item:void_helmet", buy2: "item:meteor_energy:4", result: "item:meteor_helmet"}
+      - {buy: "item:void_chestplate", buy2: "item:meteor_energy:4", result: "item:meteor_chestplate"}
+      - {buy: "item:void_leggings", buy2: "item:meteor_energy:4", result: "item:meteor_leggings"}
+      - {buy: "item:void_boots", buy2: "item:meteor_energy:4", result: "item:meteor_boots"}
+      - {buy: "item:void_sword", buy2: "item:meteor_energy:4", result: "item:meteor_sword"}

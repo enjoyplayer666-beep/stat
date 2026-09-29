@@ -4,7 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
-import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -31,7 +30,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.inventory.TradeSelectEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -68,8 +66,6 @@ final class Npcs implements Listener {
     private final File file;
     private final Map<String, Npc> npcs = new LinkedHashMap<>();
     private final Map<UUID, Shops.Shop> openShops = new HashMap<>();
-    /** Подтверждение покупки за коины: игрок -> (индекс обмена, до какого времени). */
-    private final Map<UUID, long[]> confirm = new HashMap<>();
 
     Npcs(MediaItemsPlugin plugin) {
         this.plugin = plugin;
@@ -300,34 +296,6 @@ final class Npcs implements Listener {
         openShops.put(p.getUniqueId(), shop);
     }
 
-    @EventHandler
-    public void onTradeSelect(TradeSelectEvent e) {
-        if (!(e.getWhoClicked() instanceof Player p)) return;
-        Shops.Shop shop = openShops.get(p.getUniqueId());
-        if (shop == null || e.getIndex() < 0 || e.getIndex() >= shop.trades().size()) return;
-        Shops.Trade t = shop.trades().get(e.getIndex());
-        if (t.coins() <= 0) return;
-        e.setCancelled(true);
-        long now = System.currentTimeMillis();
-        long[] c = confirm.get(p.getUniqueId());
-        if (c == null || c[0] != e.getIndex() || c[1] < now) {
-            confirm.put(p.getUniqueId(), new long[]{e.getIndex(), now + 3000});
-            p.sendMessage(Text.mm(plugin.msg("coins-confirm").replace("{price}", String.valueOf(t.coins()))));
-            return;
-        }
-        confirm.remove(p.getUniqueId());
-        if (!Coins.take(p, t.coins())) {
-            p.sendMessage(Text.mm(plugin.msg("coins-not-enough").replace("{price}", String.valueOf(t.coins()))));
-            p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_NO, 1f, 1f);
-            return;
-        }
-        for (ItemStack left : p.getInventory().addItem(t.result().clone()).values()) {
-            p.getWorld().dropItemNaturally(p.getLocation(), left);
-        }
-        p.sendMessage(Text.mm(plugin.msg("coins-bought").replace("{price}", String.valueOf(t.coins()))));
-        p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_YES, 1f, 1f);
-    }
-
     /**
      * Обмен, где нужен обычный предмет (например 16 железа), не должен съедать наши ресурсы
      * с той же основой (голова летучей мыши - это iron_ingot с моделью из пака).
@@ -369,7 +337,6 @@ final class Npcs implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
         openShops.remove(e.getPlayer().getUniqueId());
-        confirm.remove(e.getPlayer().getUniqueId());
     }
 
     // ---------- клики и защита ----------

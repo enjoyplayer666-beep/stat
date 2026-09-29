@@ -1,11 +1,8 @@
 package ru.dscraft.mediaitems;
 
-import net.kyori.adventure.text.Component;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.MerchantRecipe;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -17,8 +14,8 @@ import java.util.logging.Logger;
 /** Магазины из shops.yml: название, внешний вид НПС и список обменов. */
 final class Shops {
 
-    /** Один обмен. coins > 0 - покупка за коины (ingredients тогда только для показа). */
-    record Trade(List<ItemStack> ingredients, ItemStack result, ItemStack display, long coins) {
+    /** Один обмен: 1-2 предмета -> результат. */
+    record Trade(List<ItemStack> ingredients, ItemStack result, ItemStack display) {
     }
 
     record Shop(String id, String title, String name, ConfigurationSection npc, List<Trade> trades) {
@@ -60,37 +57,16 @@ final class Shops {
     private Trade trade(Map<?, ?> t, Items items) {
         ItemStack result = items.parse(str(t.get("result")));
         if (result == null) return null;
-        long coins = t.get("coins") instanceof Number num ? num.longValue() : 0;
         List<ItemStack> ing = new ArrayList<>();
-        if (coins > 0) {
-            ItemStack coin = items.parse(plugin.getConfig().getString("coins.icon", "FLINT"));
-            if (coin == null) return null;
-            ItemMeta m = coin.getItemMeta();
-            m.displayName(Text.mm(plugin.getConfig().getString("coins.icon-name", "<yellow>{price} коинов")
-                    .replace("{price}", String.valueOf(coins))));
-            m.getPersistentDataContainer().set(plugin.displayKey, PersistentDataType.BYTE, (byte) 1);
-            coin.setItemMeta(m);
-            ing.add(coin);
-        } else {
-            for (String k : new String[]{"buy", "buy2"}) {
-                if (t.get(k) == null) continue;
-                ItemStack it = items.parse(str(t.get(k)));
-                if (it == null) return null;
-                ing.add(it);
-            }
-            if (ing.isEmpty()) return null;
+        for (String k : new String[]{"buy", "buy2"}) {
+            if (t.get(k) == null) continue;
+            ItemStack it = items.parse(str(t.get(k)));
+            if (it == null) return null;
+            ing.add(it);
         }
-        // что видно в списке обменов: можно дописать строки (например "Цена: 200 коинов")
+        if (ing.isEmpty()) return null;
         ItemStack display = result.clone();
-        Object extra = t.get("display-lore");
-        if (extra instanceof List<?> lines && !lines.isEmpty()) {
-            ItemMeta m = display.getItemMeta();
-            List<Component> lore = m.lore() != null ? new ArrayList<>(m.lore()) : new ArrayList<>();
-            for (Object line : lines) lore.add(Text.mm(String.valueOf(line)));
-            m.lore(lore);
-            display.setItemMeta(m);
-        }
-        return new Trade(ing, result, display, coins);
+        return new Trade(ing, result, display);
     }
 
     private static String str(Object o) {
