@@ -67,7 +67,7 @@ shops:
     name: "<white><b>Обменник <aqua>1"
     npc:
       type: "PLAYER"
-      skin: ""
+      skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/exchanger1.png"
       fallback-type: "ZOMBIE"
     trades:
       - {buy: "item:compressed_gold", result: "item:compressed_coal"}
