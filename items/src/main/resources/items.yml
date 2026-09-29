@@ -504,9 +504,8 @@ items:
 
   # ---------- Обсидиановый шлем ... ----------
   obsidian_helmet:
-    material: LEATHER_HELMET
-    model: 10003
-    color: "#FFFFFF"
+    material: PLAYER_HEAD
+    head: "a372037fce634d45399926dd696946ec8442ddf1fec163ff879ab33e5a365c20"
     name: "<dark_purple><b>Обсидиановый шлем</b></dark_purple>"
     enchants: ["fire_protection:2", "protection:12", "thorns:2"]
     attributes: ["armor:3", "armor_toughness:3"]
