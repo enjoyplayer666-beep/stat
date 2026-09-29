@@ -62,8 +62,8 @@ health:
   format: "<white>{hearts} <red>❤"
   # высота надписи над игроком (под ником)
   offset: 0.3
-  # миры, где надпись не показывается (лобби) - впиши точное имя мира
-  disabled-worlds: ["lobby", "world_lobby", "hub"]
+  # миры, где надпись не показывается (world - лобби)
+  disabled-worlds: ["world"]
 
 messages:
   wrong-ingredient: "<red>Сюда нужны обычные предметы, а не ресурсы с сервера."
