@@ -22,7 +22,7 @@ tooltip:
     legs: "Когда надето:"
     feet: "Когда обуто:"
     hand: "Когда в ведущей руке:"
-    offhand: "Когда во второй руке:"
+    offhand: "Когда во второстепенной руке:"
     any: "Когда в инвентаре:"
 
   # зачарования: иконка (символ шрифта Minecraft), её цвет, название и его градиент
@@ -49,7 +49,7 @@ tooltip:
     max_health:           {icon: "❤", color: "#AA0000", name: "Максимальное здоровье"}
     attack_damage:        {icon: "⚔", color: "#FF5555", name: "Урон при атаке"}
     attack_speed:         {icon: "⚡", color: "#FFFF55", name: "Скорость атаки"}
-    movement_speed:       {icon: "⚡", color: "#55FFFF", name: "Скорость"}
+    movement_speed:       {icon: "🏃", color: "#FFFF55", name: "Скорость"}
 
 # команды, которые открывают наковальню для улучшения сетов (перехватываются раньше Essentials)
 anvil-commands: ["/anvil", "/upgrade"]

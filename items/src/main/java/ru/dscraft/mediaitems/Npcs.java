@@ -350,6 +350,13 @@ final class Npcs implements Listener {
         if (plugin.items().idOf(e.getItemInHand()) != null) e.setCancelled(true);
     }
 
+    /** Талисманы сделаны на алмазной мотыге - не даём ими вспахивать землю. */
+    @EventHandler(ignoreCancelled = true)
+    public void onTill(org.bukkit.event.player.PlayerInteractEvent e) {
+        if (e.getAction() != org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK || e.getItem() == null) return;
+        if (e.getItem().getType().name().endsWith("_HOE") && plugin.items().idOf(e.getItem()) != null) e.setCancelled(true);
+    }
+
     /** Наши ресурсы нельзя переплавить/скрафтить как обычное железо. */
     @EventHandler
     public void onCraft(PrepareItemCraftEvent e) {

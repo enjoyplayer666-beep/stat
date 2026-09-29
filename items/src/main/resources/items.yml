@@ -706,3 +706,43 @@ items:
     enchants: ["fire_aspect:10", "sharpness:43", "sweeping_edge:2"]
     attributes: ["attack_damage:70", "attack_speed:5"]
     unbreakable: true
+
+  # ---------- Талисманы (скрин): держать во второй руке ----------
+  poseidon_shard:
+    material: IRON_INGOT
+    model: 122
+    name: "<aqua>Осколок посейдона"
+    lore-mode: vanilla
+  lucifer_vessel:
+    material: IRON_INGOT
+    model: 214
+    name: "<gradient:#FF1242:#6B6B6B><b>Сосуд Люцифера"
+    lore-mode: vanilla
+  talisman_speed:
+    material: DIAMOND_HOE
+    model: 10002
+    name: "<yellow>Талисман скорости"
+    slot: offhand
+    attributes: ["movement_speed:0.1"]
+    unbreakable: true
+  talisman_life:
+    material: DIAMOND_HOE
+    model: 10003
+    name: "<red>Талисман жизни"
+    slot: offhand
+    attributes: ["max_health:10"]
+    unbreakable: true
+  talisman_damage:
+    material: DIAMOND_HOE
+    model: 10005
+    name: "<red>Талисман урона"
+    slot: offhand
+    attributes: ["attack_damage:15"]
+    unbreakable: true
+  talisman_super:
+    material: DIAMOND_HOE
+    model: 10004
+    name: "<light_purple>Супер талисман"
+    slot: offhand
+    attributes: ["max_health:10", "movement_speed:0.1"]
+    unbreakable: true

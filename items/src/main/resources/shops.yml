@@ -26,6 +26,20 @@ shops:
       - {buy: "item:booster_x2:2", buy2: "item:accel_component:10", result: "item:booster_x3"}
       - {buy: "item:booster_x3:5", buy2: "item:accel_component:15", result: "item:booster_x10"}
 
+  # Талисманы (скрин): житель
+  talismans:
+    title: "<dark_purple><b>Талисманы"
+    name: "<dark_purple><b>Талисманы"
+    npc:
+      type: "VILLAGER"
+      profession: "none"
+      villager-type: "plains"
+    trades:
+      - {buy: "item:poseidon_shard:6", buy2: "item:universe_charge:6", result: "item:talisman_speed"}
+      - {buy: "item:lucifer_vessel:4", buy2: "item:universe_charge:6", result: "item:talisman_life"}
+      - {buy: "item:lucifer_vessel:6", buy2: "item:poseidon_shard:7", result: "item:talisman_damage"}
+      - {buy: "item:talisman_speed", buy2: "item:talisman_life", result: "item:talisman_super"}
+
   # Кожаная броня (скрин): 12 земли -> кожа [I]; кожа [I] + сжатая земля -> кожа [II]
   # НПС-игрок (скин со скрина) в кожаной броне
   leather:
