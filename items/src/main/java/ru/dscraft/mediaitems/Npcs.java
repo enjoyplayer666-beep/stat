@@ -67,6 +67,10 @@ final class Npcs implements Listener {
     private final File file;
     private final Map<String, Npc> npcs = new LinkedHashMap<>();
     private final Map<UUID, Shops.Shop> openShops = new HashMap<>();
+    /** НПС из миров, которые ещё не загружены: id -> данные из npcs.yml (сохраняются как есть) */
+    private final Map<String, Map<String, Object>> pending = new LinkedHashMap<>();
+    /** защита от двойного открытия (клик по мобу приходит двумя событиями) */
+    private final Map<UUID, Long> lastOpen = new HashMap<>();
 
     Npcs(MediaItemsPlugin plugin) {
         this.plugin = plugin;
@@ -77,6 +81,7 @@ final class Npcs implements Listener {
 
     void load() {
         npcs.clear();
+        pending.clear();
         YamlConfiguration y = YamlConfiguration.loadConfiguration(file);
         ConfigurationSection sec = y.getConfigurationSection("npcs");
         if (sec == null) return;
@@ -84,7 +89,8 @@ final class Npcs implements Listener {
             ConfigurationSection s = sec.getConfigurationSection(id);
             World w = Bukkit.getWorld(s.getString("world", "world"));
             if (w == null) {
-                plugin.getLogger().warning("НПС " + id + ": мир " + s.getString("world") + " не загружен");
+                // мир ещё не загружен (Multiverse грузит миры позже) - держим НПС до загрузки мира, не теряем
+                pending.put(id, s.getValues(true));
                 continue;
             }
             Npc n = new Npc();
@@ -112,11 +118,39 @@ final class Npcs implements Listener {
             y.set(p + "entity", n.entity == null ? null : n.entity.toString());
             y.set(p + "fancy", n.fancy);
         }
+        for (var e : pending.entrySet()) {
+            for (var v : e.getValue().entrySet()) y.set("npcs." + e.getKey() + "." + v.getKey(), v.getValue());
+        }
         try {
             y.save(file);
         } catch (IOException e) {
             plugin.getLogger().warning("Не удалось сохранить npcs.yml: " + e.getMessage());
         }
+    }
+
+    @EventHandler
+    public void onWorldLoad(org.bukkit.event.world.WorldLoadEvent e) {
+        boolean any = false;
+        for (var it = pending.entrySet().iterator(); it.hasNext(); ) {
+            var en = it.next();
+            Map<String, Object> d = en.getValue();
+            if (!e.getWorld().getName().equals(String.valueOf(d.get("world")))) continue;
+            Npc n = new Npc();
+            n.id = en.getKey();
+            n.shop = String.valueOf(d.get("shop"));
+            n.loc = new Location(e.getWorld(), num(d.get("x")), num(d.get("y")), num(d.get("z")), (float) num(d.get("yaw")), 0f);
+            Object uuid = d.get("entity");
+            n.entity = uuid == null ? null : UUID.fromString(String.valueOf(uuid));
+            n.fancy = d.get("fancy") == null ? null : String.valueOf(d.get("fancy"));
+            npcs.put(n.id, n);
+            it.remove();
+            any = true;
+        }
+        if (any) plugin.getLogger().info("НПС мира " + e.getWorld().getName() + " загружены.");
+    }
+
+    private static double num(Object o) {
+        return o instanceof Number n ? n.doubleValue() : 0;
     }
 
     Map<String, Npc> all() {
@@ -394,13 +428,32 @@ final class Npcs implements Listener {
         }
         e.setCancelled(true);
         if (e.getHand() != EquipmentSlot.HAND) return;
-        Shops.Shop shop = plugin.shops().get(n.shop);
-        if (shop != null) open(e.getPlayer(), shop);
+        clickOpen(e.getPlayer(), n);
     }
 
     @EventHandler(priority = EventPriority.LOW)
     public void onInteractAt(PlayerInteractAtEntityEvent e) {
-        if (tagged(e.getRightClicked(), plugin.npcKey)) e.setCancelled(true);
+        if (!tagged(e.getRightClicked(), plugin.npcKey)) return;
+        e.setCancelled(true);
+        Npc n = byEntity(e.getRightClicked());
+        if (n != null && e.getHand() == EquipmentSlot.HAND) clickOpen(e.getPlayer(), n);
+    }
+
+    private void clickOpen(Player p, Npc n) {
+        long now = System.currentTimeMillis();
+        Long last = lastOpen.get(p.getUniqueId());
+        if (last != null && now - last < 300) return;
+        lastOpen.put(p.getUniqueId(), now);
+        Shops.Shop shop = plugin.shops().get(n.shop);
+        if (shop == null) {
+            plugin.getLogger().warning("НПС " + n.id + ": нет магазина '" + n.shop + "' в shops.yml");
+            return;
+        }
+        try {
+            open(p, shop);
+        } catch (Exception ex) {
+            plugin.getLogger().warning("НПС " + n.id + ": не удалось открыть " + shop.id() + ": " + ex);
+        }
     }
 
     @EventHandler(priority = EventPriority.LOW)
@@ -440,7 +493,7 @@ final class Npcs implements Listener {
         for (Entity ent : e.getEntities()) {
             if (!tagged(ent, plugin.npcKey)) continue;
             Npc n = byEntity(ent);
-            if (n == null || (n.entity != null && !n.entity.equals(ent.getUniqueId()))) ent.remove();
+            if (n != null && n.entity != null && !n.entity.equals(ent.getUniqueId()) && n.fancy == null) ent.remove();
         }
     }
 
