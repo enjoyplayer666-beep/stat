@@ -92,6 +92,57 @@ items:
     name: "<red>Сжатый алмаз"
     lore-mode: vanilla
 
+  # ---------- Кожаный сет [I] (скрин: Защита I, Unbreakable) и сжатая земля ----------
+  compressed_dirt:
+    material: GRANITE
+    name: "<red>Сжатая земля"
+    lore-mode: vanilla
+  leather_helmet:
+    material: LEATHER_HELMET
+    color: "#B8689F"
+    name: "<gold>Каска</gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["protection:1"]
+    lore-mode: vanilla
+    unbreakable: true
+    show-unbreakable: true
+  leather_chestplate:
+    material: LEATHER_CHESTPLATE
+    color: "#B8689F"
+    name: "<gold>Куртка</gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["protection:1"]
+    lore-mode: vanilla
+    unbreakable: true
+    show-unbreakable: true
+  leather_leggings:
+    material: LEATHER_LEGGINGS
+    color: "#B8689F"
+    name: "<gold>Штаны</gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["protection:1"]
+    lore-mode: vanilla
+    unbreakable: true
+    show-unbreakable: true
+  leather_boots:
+    material: LEATHER_BOOTS
+    color: "#B8689F"
+    name: "<gold>Ботинки</gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["protection:1"]
+    lore-mode: vanilla
+    unbreakable: true
+    show-unbreakable: true
+  # ---------- Деревянные мечи (скрин) ----------
+  wooden_sword:
+    material: WOODEN_SWORD
+    name: "<gold>Деревянный меч</gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["sharpness:1"]
+    lore-mode: vanilla
+    unbreakable: true
+    show-unbreakable: true
+  wooden_sword_2:
+    material: WOODEN_SWORD
+    name: "<gold>Деревянный меч</gold> <dark_gray>[<aqua>II</aqua>]"
+    enchants: ["sharpness:2"]
+    lore-mode: vanilla
+
   # ---------- Кожаный сет [II] (со скрина: "Каска [II]", Защита IV, +1 Armor, Unbreakable) ----------
   # его меняют у кольчужного НПС на кольчугу [I]
   leather_helmet_2:

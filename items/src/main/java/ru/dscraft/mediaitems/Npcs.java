@@ -210,6 +210,22 @@ final class Npcs implements Listener {
         creator.performCommand("npc displayname " + name + " " + shop.name());
         creator.performCommand("npc turn_to_player " + name + " true");
         creator.performCommand("npc action " + name + " any_click add console_command itemnpc open {player} " + shop.id());
+        // экипировка: FancyNpcs берёт предмет из руки (@hand) - на секунду кладём его в руку администратору
+        ConfigurationSection s = shop.npc();
+        if (s == null) return;
+        String[][] slots = {{"head", "head"}, {"chest", "chest"}, {"legs", "legs"}, {"feet", "feet"},
+                {"hand", "mainhand"}, {"offhand", "offhand"}};
+        ItemStack held = creator.getInventory().getItemInMainHand();
+        try {
+            for (String[] sl : slots) {
+                ItemStack it = plugin.items().parse(s.getString("equipment." + sl[0]));
+                if (it == null) continue;
+                creator.getInventory().setItemInMainHand(it);
+                creator.performCommand("npc equipment " + name + " set " + sl[1] + " @hand");
+            }
+        } finally {
+            creator.getInventory().setItemInMainHand(held);
+        }
     }
 
     private void setup(Entity ent, Npc n, Shops.Shop shop) {

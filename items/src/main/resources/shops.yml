@@ -26,6 +26,46 @@ shops:
       - {buy: "item:booster_x2:2", buy2: "item:accel_component:10", result: "item:booster_x3"}
       - {buy: "item:booster_x3:5", buy2: "item:accel_component:15", result: "item:booster_x10"}
 
+  # Кожаная броня (скрин): 12 земли -> кожа [I]; кожа [I] + сжатая земля -> кожа [II]
+  # НПС-игрок (скин со скрина) в кожаной броне
+  leather:
+    title: "<white><b>Кожанная броня"
+    name: "<white><b>Кожанная броня"
+    npc:
+      type: "PLAYER"
+      skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/leather.png"
+      fallback-type: "ZOMBIE"
+      equipment:
+        head: "LEATHER_HELMET"
+        chest: "LEATHER_CHESTPLATE"
+        legs: "LEATHER_LEGGINGS"
+        feet: "LEATHER_BOOTS"
+    trades:
+      - {buy: "DIRT:12", result: "item:leather_helmet"}
+      - {buy: "DIRT:12", result: "item:leather_chestplate"}
+      - {buy: "DIRT:12", result: "item:leather_leggings"}
+      - {buy: "DIRT:12", result: "item:leather_boots"}
+      - {buy: "item:separator", buy2: "item:separator", result: "item:separator"}
+      - {buy: "item:leather_helmet", buy2: "item:compressed_dirt", result: "item:leather_helmet_2"}
+      - {buy: "item:leather_chestplate", buy2: "item:compressed_dirt", result: "item:leather_chestplate_2"}
+      - {buy: "item:leather_leggings", buy2: "item:compressed_dirt", result: "item:leather_leggings_2"}
+      - {buy: "item:leather_boots", buy2: "item:compressed_dirt", result: "item:leather_boots_2"}
+
+  # Деревянные мечи (скрин): 32 земли -> меч [I]; 2 сжатой земли + меч [I] -> меч [II]
+  # НПС-игрок (девушка в синей куртке, скин со скрина)
+  wood:
+    title: "<white><b>Деревянные мечи"
+    name: "<white><b>Деревянные мечи"
+    npc:
+      type: "PLAYER"
+      skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/wood.png"
+      fallback-type: "ZOMBIE"
+      equipment:
+        hand: "item:wooden_sword"
+    trades:
+      - {buy: "DIRT:32", result: "item:wooden_sword"}
+      - {buy: "item:compressed_dirt:2", buy2: "item:wooden_sword", result: "item:wooden_sword_2"}
+
   # Кольчуга (скрин): кожаная вещь [II] + 32 угля -> кольчуга [I]; кольчуга [I] + сжатый уголь -> [II]
   chain:
     title: "<gray>Кольчужный сет"
@@ -43,7 +83,7 @@ shops:
       - {buy: "item:leather_chestplate_2", buy2: "COAL:32", result: "item:chain_chestplate"}
       - {buy: "item:leather_leggings_2", buy2: "COAL:32", result: "item:chain_leggings"}
       - {buy: "item:leather_boots_2", buy2: "COAL:32", result: "item:chain_boots"}
-      - {buy: "WOODEN_SWORD", buy2: "COAL:32", result: "item:chain_sword"}
+      - {buy: "item:wooden_sword_2", buy2: "COAL:32", result: "item:chain_sword"}
       - {buy: "item:separator", buy2: "item:separator", result: "item:separator"}
       - {buy: "item:chain_helmet", buy2: "item:compressed_coal:1", result: "item:chain_helmet_2"}
       - {buy: "item:chain_chestplate", buy2: "item:compressed_coal:2", result: "item:chain_chestplate_2"}
