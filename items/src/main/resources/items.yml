@@ -71,113 +71,213 @@ items:
     model: 187
     name: "<light_purple><b>Заряд вселенной"
 
-  # ---------- Кольчужный сет ----------
+  # ---------- Служебное ----------
+  # пустая строка-разделитель в окне обмена (светло-серое стекло без подсказки)
+  separator:
+    material: LIGHT_GRAY_STAINED_GLASS_PANE
+    name: " "
+    hide-tooltip: true
+    lore-mode: vanilla
+
+  # ---------- Сжатые ресурсы: вещь [I] + сжатый ресурс -> вещь [II] ----------
+  compressed_coal:
+    material: COAL_BLOCK
+    name: "<red>Сжатый уголь"
+    lore-mode: vanilla
+  compressed_iron:
+    material: IRON_BLOCK
+    name: "<red>Сжатое железо"
+    lore-mode: vanilla
+  compressed_diamond:
+    material: DIAMOND_BLOCK
+    name: "<red>Сжатый алмаз"
+    lore-mode: vanilla
+
+  # ---------- Кожаный сет [II] (со скрина: "Каска [II]", Защита IV, +1 Armor, Unbreakable) ----------
+  # его меняют у кольчужного НПС на кольчугу [I]
+  leather_helmet_2:
+    material: LEATHER_HELMET
+    color: "#B8689F"
+    name: "<gold>Каска</gold> <dark_gray>[<aqua>II</aqua>]"
+    enchants: ["protection:4"]
+    lore-mode: vanilla
+    unbreakable: true
+    show-unbreakable: true
+  leather_chestplate_2:
+    material: LEATHER_CHESTPLATE
+    color: "#B8689F"
+    name: "<gold>Куртка</gold> <dark_gray>[<aqua>II</aqua>]"
+    enchants: ["protection:4"]
+    lore-mode: vanilla
+    unbreakable: true
+    show-unbreakable: true
+  leather_leggings_2:
+    material: LEATHER_LEGGINGS
+    color: "#B8689F"
+    name: "<gold>Штаны</gold> <dark_gray>[<aqua>II</aqua>]"
+    enchants: ["protection:4"]
+    lore-mode: vanilla
+    unbreakable: true
+    show-unbreakable: true
+  leather_boots_2:
+    material: LEATHER_BOOTS
+    color: "#B8689F"
+    name: "<gold>Ботинки</gold> <dark_gray>[<aqua>II</aqua>]"
+    enchants: ["protection:4"]
+    lore-mode: vanilla
+    unbreakable: true
+    show-unbreakable: true
+
+  # ---------- Кольчужный сет [I] (Защита V) и [II] (Защита VI) ----------
   chain_helmet:
     material: CHAINMAIL_HELMET
-    name: "<gold><b>Кольчужная каска</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    name: "<gold>Кольчужная каска</gold> <dark_gray>[<aqua>I</aqua>]"
     enchants: ["protection:5"]
     lore-mode: vanilla
-    unbreakable: true
   chain_chestplate:
     material: CHAINMAIL_CHESTPLATE
-    name: "<gold><b>Кольчужный нагрудник</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    name: "<gold>Кольчужная куртка</gold> <dark_gray>[<aqua>I</aqua>]"
     enchants: ["protection:5"]
     lore-mode: vanilla
-    unbreakable: true
   chain_leggings:
     material: CHAINMAIL_LEGGINGS
-    name: "<gold><b>Кольчужные поножи</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    name: "<gold>Кольчужные штаны</gold> <dark_gray>[<aqua>I</aqua>]"
     enchants: ["protection:5"]
     lore-mode: vanilla
-    unbreakable: true
   chain_boots:
     material: CHAINMAIL_BOOTS
-    name: "<gold><b>Кольчужные ботинки</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    name: "<gold>Кольчужные ботинки</gold> <dark_gray>[<aqua>I</aqua>]"
     enchants: ["protection:5"]
     lore-mode: vanilla
-    unbreakable: true
   chain_sword:
     material: STONE_SWORD
-    name: "<gold><b>Кольчужный меч</b></gold> <dark_gray>[<aqua>I</aqua>]"
-    enchants: ["sharpness:5"]
+    name: "<gold>Каменный меч</gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["sharpness:3"]
     lore-mode: vanilla
-    unbreakable: true
+  chain_helmet_2:
+    material: CHAINMAIL_HELMET
+    name: "<gold>Кольчужная каска</gold> <dark_gray>[<aqua>II</aqua>]"
+    enchants: ["protection:6"]
+    lore-mode: vanilla
+  chain_chestplate_2:
+    material: CHAINMAIL_CHESTPLATE
+    name: "<gold>Кольчужная куртка</gold> <dark_gray>[<aqua>II</aqua>]"
+    enchants: ["protection:6"]
+    lore-mode: vanilla
+  chain_leggings_2:
+    material: CHAINMAIL_LEGGINGS
+    name: "<gold>Кольчужные штаны</gold> <dark_gray>[<aqua>II</aqua>]"
+    enchants: ["protection:6"]
+    lore-mode: vanilla
+  chain_boots_2:
+    material: CHAINMAIL_BOOTS
+    name: "<gold>Кольчужные ботинки</gold> <dark_gray>[<aqua>II</aqua>]"
+    enchants: ["protection:6"]
+    lore-mode: vanilla
 
-  # ---------- Железный сет ----------
+  # ---------- Железный сет [I] (Защита V) и [II] (Защита VI) ----------
   iron_helmet:
     material: IRON_HELMET
-    name: "<gold><b>Железная каска</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    name: "<gold>Железная каска</gold> <dark_gray>[<aqua>I</aqua>]"
     enchants: ["protection:5"]
     lore-mode: vanilla
-    unbreakable: true
   iron_chestplate:
     material: IRON_CHESTPLATE
-    name: "<gold><b>Железный нагрудник</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    name: "<gold>Железная куртка</gold> <dark_gray>[<aqua>I</aqua>]"
     enchants: ["protection:5"]
     lore-mode: vanilla
-    unbreakable: true
   iron_leggings:
     material: IRON_LEGGINGS
-    name: "<gold><b>Железные поножи</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    name: "<gold>Железные штаны</gold> <dark_gray>[<aqua>I</aqua>]"
     enchants: ["protection:5"]
     lore-mode: vanilla
-    unbreakable: true
   iron_boots:
     material: IRON_BOOTS
-    name: "<gold><b>Железные ботинки</b></gold> <dark_gray>[<aqua>I</aqua>]"
+    name: "<gold>Железные ботинки</gold> <dark_gray>[<aqua>I</aqua>]"
     enchants: ["protection:5"]
     lore-mode: vanilla
-    unbreakable: true
   iron_sword:
     material: IRON_SWORD
-    name: "<gold><b>Железный меч</b></gold> <dark_gray>[<aqua>I</aqua>]"
-    enchants: ["sharpness:5"]
+    name: "<gold>Железный меч</gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["sharpness:4"]
     lore-mode: vanilla
-    unbreakable: true
   iron_helmet_2:
     material: IRON_HELMET
-    name: "<gold><b>Железная каска</b></gold> <dark_gray>[<aqua>II</aqua>]"
+    name: "<gold>Железная каска</gold> <dark_gray>[<aqua>II</aqua>]"
     enchants: ["protection:6"]
     lore-mode: vanilla
-    unbreakable: true
-
-  # ---------- Алмазный сет ----------
-  diamond_helmet:
-    material: DIAMOND_HELMET
-    name: "<gold><b>Алмазная каска</b></gold> <dark_gray>[<aqua>I</aqua>]"
-    enchants: ["protection:5"]
+  iron_chestplate_2:
+    material: IRON_CHESTPLATE
+    name: "<gold>Железная куртка</gold> <dark_gray>[<aqua>II</aqua>]"
+    enchants: ["protection:6"]
     lore-mode: vanilla
-    unbreakable: true
-  diamond_chestplate:
-    material: DIAMOND_CHESTPLATE
-    name: "<gold><b>Алмазный нагрудник</b></gold> <dark_gray>[<aqua>I</aqua>]"
-    enchants: ["protection:5"]
+  iron_leggings_2:
+    material: IRON_LEGGINGS
+    name: "<gold>Железные штаны</gold> <dark_gray>[<aqua>II</aqua>]"
+    enchants: ["protection:6"]
     lore-mode: vanilla
-    unbreakable: true
-  diamond_leggings:
-    material: DIAMOND_LEGGINGS
-    name: "<gold><b>Алмазные поножи</b></gold> <dark_gray>[<aqua>I</aqua>]"
-    enchants: ["protection:5"]
+  iron_boots_2:
+    material: IRON_BOOTS
+    name: "<gold>Железные ботинки</gold> <dark_gray>[<aqua>II</aqua>]"
+    enchants: ["protection:6"]
     lore-mode: vanilla
-    unbreakable: true
-  diamond_boots:
-    material: DIAMOND_BOOTS
-    name: "<gold><b>Алмазные ботинки</b></gold> <dark_gray>[<aqua>I</aqua>]"
-    enchants: ["protection:5"]
-    lore-mode: vanilla
-    unbreakable: true
-  diamond_sword:
-    material: DIAMOND_SWORD
-    name: "<gold><b>Алмазный меч</b></gold> <dark_gray>[<aqua>I</aqua>]"
+  iron_sword_2:
+    material: IRON_SWORD
+    name: "<gold>Железный меч</gold> <dark_gray>[<aqua>II</aqua>]"
     enchants: ["sharpness:5"]
     lore-mode: vanilla
-    unbreakable: true
+
+  # ---------- Алмазный сет [I] (Защита V) и [II] (Защита VI) ----------
+  diamond_helmet:
+    material: DIAMOND_HELMET
+    name: "<gold>Алмазная каска</gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["protection:5"]
+    lore-mode: vanilla
+  diamond_chestplate:
+    material: DIAMOND_CHESTPLATE
+    name: "<gold>Алмазная куртка</gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["protection:5"]
+    lore-mode: vanilla
+  diamond_leggings:
+    material: DIAMOND_LEGGINGS
+    name: "<gold>Алмазные штаны</gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["protection:5"]
+    lore-mode: vanilla
+  diamond_boots:
+    material: DIAMOND_BOOTS
+    name: "<gold>Алмазные ботинки</gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["protection:5"]
+    lore-mode: vanilla
+  diamond_sword:
+    material: DIAMOND_SWORD
+    name: "<gold>Алмазный меч</gold> <dark_gray>[<aqua>I</aqua>]"
+    enchants: ["sharpness:5"]
+    lore-mode: vanilla
   diamond_helmet_2:
     material: DIAMOND_HELMET
-    name: "<gold><b>Алмазная каска</b></gold> <dark_gray>[<aqua>II</aqua>]"
+    name: "<gold>Алмазная каска</gold> <dark_gray>[<aqua>II</aqua>]"
     enchants: ["protection:6"]
     lore-mode: vanilla
-    unbreakable: true
+  diamond_chestplate_2:
+    material: DIAMOND_CHESTPLATE
+    name: "<gold>Алмазная куртка</gold> <dark_gray>[<aqua>II</aqua>]"
+    enchants: ["protection:6"]
+    lore-mode: vanilla
+  diamond_leggings_2:
+    material: DIAMOND_LEGGINGS
+    name: "<gold>Алмазные штаны</gold> <dark_gray>[<aqua>II</aqua>]"
+    enchants: ["protection:6"]
+    lore-mode: vanilla
+  diamond_boots_2:
+    material: DIAMOND_BOOTS
+    name: "<gold>Алмазные ботинки</gold> <dark_gray>[<aqua>II</aqua>]"
+    enchants: ["protection:6"]
+    lore-mode: vanilla
+  diamond_sword_2:
+    material: DIAMOND_SWORD
+    name: "<gold>Алмазный меч</gold> <dark_gray>[<aqua>II</aqua>]"
+    enchants: ["sharpness:6"]
+    lore-mode: vanilla
 
   # ---------- Незеритовый сет ----------
   netherite_helmet:

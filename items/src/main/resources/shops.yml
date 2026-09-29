@@ -25,7 +25,7 @@ shops:
       - {buy: "item:booster_x2:2", buy2: "item:accel_component:10", result: "item:booster_x3"}
       - {buy: "item:booster_x3:5", buy2: "item:accel_component:15", result: "item:booster_x10"}
 
-  # Кольчуга (скелет в кольчуге)
+  # Кольчуга (скрин): кожаная вещь [II] + 32 угля -> кольчуга [I]; кольчуга [I] + сжатый уголь -> [II]
   chain:
     title: "<gray>Кольчужный сет"
     name: "<gray>Кольчужный сет"
@@ -36,34 +36,44 @@ shops:
         chest: "CHAINMAIL_CHESTPLATE"
         legs: "CHAINMAIL_LEGGINGS"
         feet: "CHAINMAIL_BOOTS"
-        hand: "item:amethyst_sword"
+        hand: "NETHERITE_AXE"
     trades:
-      - {buy: "item:candy:32", result: "item:chain_helmet"}
-      - {buy: "item:candy:32", result: "item:chain_chestplate"}
-      - {buy: "item:candy:32", result: "item:chain_leggings"}
-      - {buy: "item:candy:32", result: "item:chain_boots"}
-      - {buy: "item:candy:32", result: "item:chain_sword"}
+      - {buy: "item:leather_helmet_2", buy2: "COAL:32", result: "item:chain_helmet"}
+      - {buy: "item:leather_chestplate_2", buy2: "COAL:32", result: "item:chain_chestplate"}
+      - {buy: "item:leather_leggings_2", buy2: "COAL:32", result: "item:chain_leggings"}
+      - {buy: "item:leather_boots_2", buy2: "COAL:32", result: "item:chain_boots"}
+      - {buy: "WOODEN_SWORD", buy2: "COAL:32", result: "item:chain_sword"}
+      - {buy: "item:separator", buy2: "item:separator", result: "item:separator"}
+      - {buy: "item:chain_helmet", buy2: "item:compressed_coal:1", result: "item:chain_helmet_2"}
+      - {buy: "item:chain_chestplate", buy2: "item:compressed_coal:2", result: "item:chain_chestplate_2"}
+      - {buy: "item:chain_leggings", buy2: "item:compressed_coal:2", result: "item:chain_leggings_2"}
+      - {buy: "item:chain_boots", buy2: "item:compressed_coal:1", result: "item:chain_boots_2"}
 
-  # Железо: кольчужная вещь + 16 железа (железный голем)
+  # Железо (по той же схеме, пока без скрина): кольчуга [II] + 16 железа -> [I]; [I] + сжатое железо -> [II]
   iron:
     title: "<white><b>Железный сет"
     name: "<white><b>Железный сет"
     npc:
       type: "IRON_GOLEM"
     trades:
-      - {buy: "item:chain_helmet", buy2: "IRON_INGOT:16", result: "item:iron_helmet"}
-      - {buy: "item:chain_chestplate", buy2: "IRON_INGOT:16", result: "item:iron_chestplate"}
-      - {buy: "item:chain_leggings", buy2: "IRON_INGOT:16", result: "item:iron_leggings"}
-      - {buy: "item:chain_boots", buy2: "IRON_INGOT:16", result: "item:iron_boots"}
+      - {buy: "item:chain_helmet_2", buy2: "IRON_INGOT:16", result: "item:iron_helmet"}
+      - {buy: "item:chain_chestplate_2", buy2: "IRON_INGOT:16", result: "item:iron_chestplate"}
+      - {buy: "item:chain_leggings_2", buy2: "IRON_INGOT:16", result: "item:iron_leggings"}
+      - {buy: "item:chain_boots_2", buy2: "IRON_INGOT:16", result: "item:iron_boots"}
       - {buy: "item:chain_sword", buy2: "IRON_INGOT:16", result: "item:iron_sword"}
-      - {buy: "item:iron_helmet", buy2: "IRON_BLOCK", result: "item:iron_helmet_2"}
+      - {buy: "item:separator", buy2: "item:separator", result: "item:separator"}
+      - {buy: "item:iron_helmet", buy2: "item:compressed_iron:1", result: "item:iron_helmet_2"}
+      - {buy: "item:iron_chestplate", buy2: "item:compressed_iron:2", result: "item:iron_chestplate_2"}
+      - {buy: "item:iron_leggings", buy2: "item:compressed_iron:2", result: "item:iron_leggings_2"}
+      - {buy: "item:iron_boots", buy2: "item:compressed_iron:1", result: "item:iron_boots_2"}
+      - {buy: "item:iron_sword", buy2: "item:compressed_iron:2", result: "item:iron_sword_2"}
 
-  # Алмаз: железная вещь + 16 алмазов (зомби в алмазной броне)
+  # Алмаз (скрин): железо [II] + 16 алмазов -> [I]; [I] + сжатый алмаз -> [II]
   diamond:
     title: "<aqua><b>Алмазный сет"
     name: "<aqua><b>Алмазный сет"
     npc:
-      type: "ZOMBIE"
+      type: "SKELETON"
       equipment:
         head: "DIAMOND_HELMET"
         chest: "DIAMOND_CHESTPLATE"
@@ -71,12 +81,17 @@ shops:
         feet: "DIAMOND_BOOTS"
         hand: "DIAMOND_SWORD"
     trades:
-      - {buy: "item:iron_helmet", buy2: "DIAMOND:16", result: "item:diamond_helmet"}
-      - {buy: "item:iron_chestplate", buy2: "DIAMOND:16", result: "item:diamond_chestplate"}
-      - {buy: "item:iron_leggings", buy2: "DIAMOND:16", result: "item:diamond_leggings"}
-      - {buy: "item:iron_boots", buy2: "DIAMOND:16", result: "item:diamond_boots"}
-      - {buy: "item:iron_sword", buy2: "DIAMOND:16", result: "item:diamond_sword"}
-      - {buy: "item:diamond_helmet", buy2: "DIAMOND_BLOCK", result: "item:diamond_helmet_2"}
+      - {buy: "item:iron_helmet_2", buy2: "DIAMOND:16", result: "item:diamond_helmet"}
+      - {buy: "item:iron_chestplate_2", buy2: "DIAMOND:16", result: "item:diamond_chestplate"}
+      - {buy: "item:iron_leggings_2", buy2: "DIAMOND:16", result: "item:diamond_leggings"}
+      - {buy: "item:iron_boots_2", buy2: "DIAMOND:16", result: "item:diamond_boots"}
+      - {buy: "item:iron_sword_2", buy2: "DIAMOND:16", result: "item:diamond_sword"}
+      - {buy: "item:separator", buy2: "item:separator", result: "item:separator"}
+      - {buy: "item:diamond_helmet", buy2: "item:compressed_diamond:1", result: "item:diamond_helmet_2"}
+      - {buy: "item:diamond_chestplate", buy2: "item:compressed_diamond:2", result: "item:diamond_chestplate_2"}
+      - {buy: "item:diamond_leggings", buy2: "item:compressed_diamond:2", result: "item:diamond_leggings_2"}
+      - {buy: "item:diamond_boots", buy2: "item:compressed_diamond:1", result: "item:diamond_boots_2"}
+      - {buy: "item:diamond_sword", buy2: "item:compressed_diamond:2", result: "item:diamond_sword_2"}
 
   # Незерит: алмазная вещь + 16 обломков (меч - 32)
   netherite:
@@ -87,11 +102,11 @@ shops:
       equipment:
         hand: "item:netherite_sword"
     trades:
-      - {buy: "item:diamond_helmet", buy2: "NETHERITE_SCRAP:16", result: "item:netherite_helmet"}
-      - {buy: "item:diamond_chestplate", buy2: "NETHERITE_SCRAP:16", result: "item:netherite_chestplate"}
-      - {buy: "item:diamond_leggings", buy2: "NETHERITE_SCRAP:16", result: "item:netherite_leggings"}
-      - {buy: "item:diamond_boots", buy2: "NETHERITE_SCRAP:16", result: "item:netherite_boots"}
-      - {buy: "item:diamond_sword", buy2: "NETHERITE_SCRAP:32", result: "item:netherite_sword"}
+      - {buy: "item:diamond_helmet_2", buy2: "NETHERITE_SCRAP:16", result: "item:netherite_helmet"}
+      - {buy: "item:diamond_chestplate_2", buy2: "NETHERITE_SCRAP:16", result: "item:netherite_chestplate"}
+      - {buy: "item:diamond_leggings_2", buy2: "NETHERITE_SCRAP:16", result: "item:netherite_leggings"}
+      - {buy: "item:diamond_boots_2", buy2: "NETHERITE_SCRAP:16", result: "item:netherite_boots"}
+      - {buy: "item:diamond_sword_2", buy2: "NETHERITE_SCRAP:32", result: "item:netherite_sword"}
       - {buy: "item:netherite_helmet", buy2: "NETHERITE_BLOCK", result: "item:netherite_helmet_2"}
 
   # Аметист: 20 осколков -> блок, незеритовая вещь + блок (меч - 2 блока), эндермен

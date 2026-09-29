@@ -164,8 +164,11 @@ final class Items {
         if (!lore.isEmpty()) meta.lore(lore);
 
         if (s.getBoolean("unbreakable", false)) meta.setUnbreakable(true);
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_DYE,
-                ItemFlag.HIDE_ARMOR_TRIM, ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_DYE, ItemFlag.HIDE_ARMOR_TRIM, ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+        // show-unbreakable: true - строка "Unbreakable" как у кожаного сета [II] на скринах
+        if (!s.getBoolean("show-unbreakable", false)) meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+        // hide-tooltip: true - без подсказки вообще (стекло-разделитель в окне обмена)
+        if (s.getBoolean("hide-tooltip", false)) meta.setHideTooltip(true);
         if (!vanilla && !attrs.isEmpty()) meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         if (!s.getBoolean("glint", true)) meta.setEnchantmentGlintOverride(false);
 
