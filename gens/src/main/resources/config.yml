@@ -1,0 +1,35 @@
+# ============================================
+#  MediaGens - генераторы ресурсов
+#  Поставить: встань на блок и /gen create <название> [материал]  (по умолчанию земля)
+#  Встал на генератор (или в радиусе radius) - всё накопленное уходит в инвентарь.
+# ============================================
+
+generator:
+  # сколько блоков добавляется и как часто (в тиках, 20 = 1 сек)
+  amount: 1
+  interval-ticks: 20
+  # максимум; при достижении: reset - счётчик обнуляется, stop - перестаёт копить
+  max: 512
+  on-full: reset
+  # радиус сбора вокруг блока генератора (1 = площадка 3x3)
+  radius: 1
+  # надпись над генератором
+  text: "<gray>x<aqua>{count}"
+  # высота блока-иконки и надписи над блоком генератора
+  item-offset: 1.35
+  item-scale: 0.6
+  text-offset: 2.0
+
+# бустеры (предметы из MediaItems): включаются ПКМ, действуют только на того, кто включил -
+# он забирает с генератора в multiplier раз больше
+boosters:
+  booster_x2:      {multiplier: 2,  seconds: 120}
+  booster_x2_plus: {multiplier: 2,  seconds: 240}
+  booster_x3:      {multiplier: 3,  seconds: 90}
+  booster_x10:     {multiplier: 10, seconds: 60}
+
+messages:
+  activated: "<green>• <white>Бустер <red>x{mult}</red> на <gold>{sec} сек.</gold> активирован!"
+  already: "<red>• <white>У вас уже есть активный бустер."
+  ended: "<gray>• Бустер закончился."
+  actionbar: "<gold>Бустер <gray>x{mult} <dark_gray>({left} сек.)"

@@ -13,6 +13,7 @@ jobs:
       - run: mvn -B -f ranks/pom.xml package
       - run: mvn -B -f tops/pom.xml package
       - run: mvn -B -f items/pom.xml package
+      - run: mvn -B -f gens/pom.xml package
       - uses: actions/upload-artifact@v4
         with:
           name: StatPlugin
@@ -29,3 +30,7 @@ jobs:
         with:
           name: MediaItems
           path: items/target/MediaItems.jar
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MediaGens
+          path: gens/target/MediaGens.jar
