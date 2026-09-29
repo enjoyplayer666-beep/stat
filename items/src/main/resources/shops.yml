@@ -246,6 +246,26 @@ shops:
       - {item: "item:obsidian_leggings", with: "item:purpur_cluster:4", result: "item:majestic_leggings"}
       - {item: "item:obsidian_boots", with: "item:purpur_cluster:4", result: "item:majestic_boots"}
 
+  # Джунгли (скрин): лаймовый бетон -> сжатый -> кластер; вещи - в наковальне из Majestic
+  jungle:
+    title: "<dark_green><b>Джунглевый сет"
+    name: "<dark_green><b>Джунглевый сет"
+    npc:
+      type: "PLAYER"
+      skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/jungle.png"
+      fallback-type: "ZOMBIE"
+    trades:
+      - {buy: "LIME_CONCRETE:20", result: "item:compressed_jungle"}
+      - {buy: "item:compressed_jungle:12", result: "item:jungle_cluster"}
+      - {buy: "item:separator", buy2: "item:separator", result: "item:separator"}
+    anvil:
+      - {item: "item:majestic_sword", with: "item:jungle_cluster:12", result: "item:jungle_sword"}
+      - {item: "item:majestic_elytra", with: "item:jungle_cluster:8", result: "item:jungle_elytra"}
+      - {item: "item:majestic_helmet", with: "item:jungle_cluster:4", result: "item:jungle_helmet"}
+      - {item: "item:majestic_chestplate", with: "item:jungle_cluster:4", result: "item:jungle_chestplate"}
+      - {item: "item:majestic_leggings", with: "item:jungle_cluster:4", result: "item:jungle_leggings"}
+      - {item: "item:majestic_boots", with: "item:jungle_cluster:4", result: "item:jungle_boots"}
+
   # Облачный (кит Legend): majestic-вещь + 48 компонентов
   cloud:
     title: "<white><b>Облачный сет"

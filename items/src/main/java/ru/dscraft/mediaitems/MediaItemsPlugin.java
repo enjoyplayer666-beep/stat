@@ -39,6 +39,9 @@ public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
         npcs.load();
         getServer().getPluginManager().registerEvents(npcs, this);
         getServer().getPluginManager().registerEvents(new Anvils(this), this);
+        Health health = new Health(this);
+        getServer().getPluginManager().registerEvents(health, this);
+        Bukkit.getScheduler().runTaskTimer(this, health::tick, 20L, 4L);
         getCommand("itemnpc").setTabCompleter(this);
         Bukkit.getScheduler().runTaskTimer(this, npcs::tick, 40L, 40L);
         getLogger().info("Предметов: " + items.all().size() + ", магазинов: " + shops.all().size() + ", НПС: " + npcs.all().size());

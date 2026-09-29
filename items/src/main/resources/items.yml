@@ -550,7 +550,7 @@ items:
     glint: true
     lore-mode: vanilla
   purpur_cluster:
-    material: PURPLE_CONCRETE_POWDER
+    material: PURPLE_GLAZED_TERRACOTTA
     name: "<blue><b>Пурпурный кластер"
     lore-mode: vanilla
   majestic_helmet:
@@ -768,7 +768,8 @@ items:
 
   # ---------- Элитры (скрин) ----------
   compressed_gold:
-    material: OCHRE_FROGLIGHT
+    material: GOLD_BLOCK
+    glint: true
     name: "<red>Сжатое золото"
     lore-mode: vanilla
   elytra:
@@ -794,4 +795,57 @@ items:
     material: FIREWORK_ROCKET
     name: "<gold>Фейерверк</gold> <dark_gray>[<aqua>III</aqua>]"
     power: 3
+    lore-mode: vanilla
+
+  # ---------- Джунглевый сет (скрин): после Majestic, через наковальню ----------
+  compressed_jungle:
+    material: LIME_CONCRETE
+    glint: true
+    name: "<green>Сжатый джунглевый блок"
+    lore-mode: vanilla
+  jungle_cluster:
+    material: LIME_GLAZED_TERRACOTTA
+    name: "<green><b>Джунглевый кластер"
+    lore-mode: vanilla
+  # шлем на скрине - голова: вставь в head: Value головы (minecraft-heads.com), тогда material: PLAYER_HEAD
+  jungle_helmet:
+    material: LEATHER_HELMET
+    model: 10005
+    color: "#FFFFFF"
+    name: "<green><b>Шлем джунглей"
+    enchants: ["fire_protection:2", "protection:17", "thorns:2"]
+    attributes: ["armor:3", "armor_toughness:3"]
+    unbreakable: true
+  jungle_chestplate:
+    material: LEATHER_CHESTPLATE
+    color: "#677A45"
+    name: "<green><b>Нагрудник джунглей"
+    enchants: ["fire_protection:2", "protection:17", "thorns:2"]
+    attributes: ["armor:8", "armor_toughness:3", "max_health:5"]
+    unbreakable: true
+  jungle_leggings:
+    material: LEATHER_LEGGINGS
+    color: "#677A45"
+    name: "<green><b>Поножи джунглей"
+    enchants: ["fire_protection:2", "protection:17", "thorns:2"]
+    attributes: ["armor:6", "armor_toughness:3"]
+    unbreakable: true
+  jungle_boots:
+    material: LEATHER_BOOTS
+    color: "#677A45"
+    name: "<green><b>Ботинки джунглей"
+    enchants: ["fire_protection:2", "protection:17", "thorns:2"]
+    attributes: ["armor:3", "armor_toughness:3"]
+    unbreakable: true
+  jungle_sword:
+    material: DIAMOND_SWORD
+    model: 10005
+    name: "<green><b>Меч джунглей"
+    enchants: ["fire_aspect:2", "sharpness:17"]
+    attributes: ["attack_damage:25", "attack_speed:2"]
+    unbreakable: true
+  jungle_elytra:
+    material: ELYTRA
+    name: "<green><b>Элитры джунглей"
+    enchants: ["fire_protection:2", "protection:17", "thorns:2"]
     lore-mode: vanilla

@@ -117,6 +117,20 @@ final class Items {
             TextColor c = Text.color(s.getString("color"), NamedTextColor.WHITE);
             leather.setColor(Color.fromRGB(c.value()));
         }
+        // голова с текстурой: head - Value с minecraft-heads.com (base64), ссылка textures.minecraft.net или её хеш
+        if (meta instanceof org.bukkit.inventory.meta.SkullMeta skull && s.contains("head")) {
+            String v = s.getString("head", "").trim();
+            if (!v.isEmpty()) {
+                if (!v.startsWith("ey")) {
+                    String url = v.startsWith("http") ? v : "http://textures.minecraft.net/texture/" + v;
+                    v = java.util.Base64.getEncoder().encodeToString(
+                            ("{\"textures\":{\"SKIN\":{\"url\":\"" + url + "\"}}}").getBytes(java.nio.charset.StandardCharsets.UTF_8));
+                }
+                var profile = org.bukkit.Bukkit.createProfile(java.util.UUID.nameUUIDFromBytes(v.getBytes()), "mi_head");
+                profile.setProperty(new com.destroystokyo.paper.profile.ProfileProperty("textures", v));
+                skull.setPlayerProfile(profile);
+            }
+        }
         // фейерверк: power - длительность полёта (Flight Duration)
         if (meta instanceof org.bukkit.inventory.meta.FireworkMeta fw && s.contains("power")) {
             fw.setPower(Math.max(0, Math.min(127, s.getInt("power"))));

@@ -54,6 +54,13 @@ tooltip:
 # команды, которые открывают наковальню для улучшения сетов (перехватываются раньше Essentials)
 anvil-commands: ["/anvil", "/upgrade"]
 
+# Здоровье: в хотбаре всегда hotbar-hp (20 = 10 сердечек), сколько бы HP ни давали сеты;
+# под ником у всех видно, сколько сердечек у игрока в хотбаре
+health:
+  enabled: true
+  hotbar-hp: 20
+  below-name: "<red>❤"
+
 messages:
   wrong-ingredient: "<red>Сюда нужны обычные предметы, а не ресурсы с сервера."
   use-anvil: "<yellow>Эти вещи улучшаются в наковальне: <white>/anvil</white> или <white>/upgrade</white>."
