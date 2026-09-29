@@ -87,7 +87,14 @@ final class Items {
         String[] p = spec.trim().split(":");
         int amount = 1;
         ItemStack it;
-        if (p[0].equalsIgnoreCase("item")) {
+        if (p[0].equalsIgnoreCase("head")) {
+            // head:<хеш текстуры или Value> - голова с текстурой (для иконок меню)
+            it = new ItemStack(Material.PLAYER_HEAD);
+            if (p.length > 1 && it.getItemMeta() instanceof org.bukkit.inventory.meta.SkullMeta sm) {
+                applyHead(sm, p[1]);
+                it.setItemMeta(sm);
+            }
+        } else if (p[0].equalsIgnoreCase("item")) {
             if (p.length < 2) return null;
             it = get(p[1]);
             if (p.length > 2) amount = Integer.parseInt(p[2]);
@@ -136,9 +143,7 @@ final class Items {
                     v = java.util.Base64.getEncoder().encodeToString(
                             ("{\"textures\":{\"SKIN\":{\"url\":\"" + url + "\"}}}").getBytes(java.nio.charset.StandardCharsets.UTF_8));
                 }
-                var profile = org.bukkit.Bukkit.createProfile(java.util.UUID.nameUUIDFromBytes(v.getBytes()), "mi_head");
-                profile.setProperty(new com.destroystokyo.paper.profile.ProfileProperty("textures", v));
-                skull.setPlayerProfile(profile);
+                applyHead(skull, v);
             }
         }
         // фейерверк: power - длительность полёта (Flight Duration)
@@ -203,6 +208,18 @@ final class Items {
         meta.getPersistentDataContainer().set(idKey, PersistentDataType.STRING, id.toLowerCase(Locale.ROOT));
         it.setItemMeta(meta);
         return it;
+    }
+
+    /** Текстура головы: Value (base64), ссылка textures.minecraft.net или её хеш. */
+    static void applyHead(org.bukkit.inventory.meta.SkullMeta skull, String v) {
+        if (!v.startsWith("ey")) {
+            String url = v.startsWith("http") ? v : "http://textures.minecraft.net/texture/" + v;
+            v = java.util.Base64.getEncoder().encodeToString(
+                    ("{\"textures\":{\"SKIN\":{\"url\":\"" + url + "\"}}}").getBytes(java.nio.charset.StandardCharsets.UTF_8));
+        }
+        var profile = org.bukkit.Bukkit.createProfile(java.util.UUID.nameUUIDFromBytes(v.getBytes()), "mi_head");
+        profile.setProperty(new com.destroystokyo.paper.profile.ProfileProperty("textures", v));
+        skull.setPlayerProfile(profile);
     }
 
     /** true - какая-то голова из HeadDatabase не нашлась (база HDB грузится после старта) - стоит перезагрузить позже. */

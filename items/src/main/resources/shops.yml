@@ -127,6 +127,17 @@ shops:
       - {buy: "item:compressed_gold:2", result: "REDSTONE"}
       - {buy: "item:compressed_gold:2", result: "item:resin_brick"}
 
+  # Титулы (скрин): НПС-игрок, по клику - меню титулов (не торговля)
+  titles:
+    title: "<dark_purple><u>Титулы"
+    name: "<dark_purple><u>Титулы"
+    npc:
+      type: "PLAYER"
+      menu: "titles"
+      skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/titles.png"
+      fallback-type: "ZOMBIE"
+    trades: []
+
   # Компрессор (скрин): житель, ресурсы -> сжатые блоки
   compressor:
     title: "<white><b>Компрессор"

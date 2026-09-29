@@ -16,3 +16,5 @@ commands:
 permissions:
   mediaitems.admin:
     default: op
+  mediaitems.titles.customcolor:
+    default: true

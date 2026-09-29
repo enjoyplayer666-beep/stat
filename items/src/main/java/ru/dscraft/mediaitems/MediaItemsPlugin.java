@@ -24,6 +24,7 @@ public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
     private Shops shops;
     private Npcs npcs;
     private Health health;
+    private Titles titles;
     private int hdbRetries;
 
     @Override
@@ -42,6 +43,10 @@ public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
         npcs.load();
         getServer().getPluginManager().registerEvents(npcs, this);
         getServer().getPluginManager().registerEvents(new Anvils(this), this);
+        titles = new Titles(this);
+        titles.load();
+        TitlesApi.init(titles);
+        getServer().getPluginManager().registerEvents(titles, this);
         health = new Health(this);
         getServer().getPluginManager().registerEvents(health, this);
         Bukkit.getScheduler().runTaskTimer(this, health::tick, 20L, 4L);
@@ -53,6 +58,7 @@ public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
     @Override
     public void onDisable() {
         if (npcs != null) npcs.save();
+        if (titles != null) titles.save();
         if (health != null) health.shutdown();
     }
 
@@ -93,6 +99,10 @@ public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
 
     Items items() {
         return items;
+    }
+
+    Titles titles() {
+        return titles;
     }
 
     Shops shops() {
@@ -190,6 +200,13 @@ public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
                 npcs.respawnAll();
                 sender.sendMessage(Text.mm("<green>Теперь <white>" + id + "</white> - голова. Выдать: /itemnpc give " + id));
             }
+            case "title" -> {
+                // /itemnpc title <игрок> <id титула> - открыть титул игроку
+                if (a.length < 3) return usage(sender, "/itemnpc title <игрок> <id титула>");
+                var target = Bukkit.getOfflinePlayer(a[1]);
+                if (!titles.unlock(target.getUniqueId(), a[2])) return usage(sender, "Нет титула '" + a[2] + "' в titles.yml");
+                sender.sendMessage(Text.mm("<green>Титул <white>" + a[2] + "</white> открыт игроку <white>" + a[1]));
+            }
             case "open" -> {
                 // для FancyNpcs: console_command itemnpc open {player} <магазин>
                 if (a.length < 3) return usage(sender, "/itemnpc open <игрок> <магазин>");
@@ -199,6 +216,7 @@ public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
             }
             case "reload" -> {
                 loadAll();
+                titles.load();
                 npcs.respawnAll();
                 sender.sendMessage(Text.mm("<green>Перезагружено: предметов " + items.all().size()
                         + ", магазинов " + shops.all().size() + ". НПС пересозданы."));
@@ -243,7 +261,7 @@ public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
         List<String> out = new ArrayList<>();
         if (cmd.getName().equalsIgnoreCase("upgrade")) return out;
         if (a.length == 1) {
-            out.addAll(List.of("create", "remove", "movehere", "list", "shops", "give", "sethead", "reload"));
+            out.addAll(List.of("create", "remove", "movehere", "list", "shops", "give", "sethead", "title", "reload"));
         } else if (a.length == 2) {
             switch (a[0].toLowerCase(Locale.ROOT)) {
                 case "create" -> out.addAll(shops.all().keySet());
@@ -252,6 +270,8 @@ public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
                 default -> {
                 }
             }
+        } else if (a.length == 3 && a[0].equalsIgnoreCase("title")) {
+            out.addAll(titles.ids());
         } else if (a.length == 4 && a[0].equalsIgnoreCase("give")) {
             Bukkit.getOnlinePlayers().forEach(p -> out.add(p.getName()));
         }

@@ -1,0 +1,112 @@
+# ============================================
+#  Титулы. НПС: /itemnpc create titles
+#  Выбранный титул виден после ника в табе и над головой (через MediaTab).
+#  Титулы открываются из кейса в категории - случайно, до этого закрыты.
+#  Открыть титул игроку вручную: /itemnpc title <ник> <id>
+#  Иконки: MATERIAL, item:<id> из items.yml или head:<ссылка/хеш текстуры головы>
+# ============================================
+
+# цвет титула по умолчанию (пока игрок не выбрал свой)
+default-color: "#55FF55"
+
+menu:
+  title: "Выбор категорий"
+  category-lore: ["<gray>Нажми, чтобы открыть"]
+  color-slot: 48
+  color-icon: "WHITE_WOOL"
+  color-name: "<gold>Сменить цвет"
+  remove-slot: 50
+  remove-icon: "LIME_WOOL"
+  remove-name: "<red>Снять титул"
+  back-icon: "ARROW"
+  back-name: "<gray>Назад"
+
+# кейс в каждой категории: случайный ещё закрытый титул этой категории
+case:
+  icon: "CHEST"
+  name: "<gold>Кейс с титулами"
+  lore: ["<gray>Нажми, чтобы открыть", "<gray>Выпадет случайный закрытый титул"]
+  # цена открытия предметом (item:<id>:кол-во или MATERIAL:кол-во); пусто - бесплатно
+  cost: ""
+
+title-name: "<white>Титул: <yellow>{title}"
+title-available: "<green>Доступен"
+title-selected: "<aqua>Выбран"
+title-locked: "<red>Заблокирован"
+
+colors:
+  title: "Выбор цвета"
+  lore: ["<gray>Нажми, чтобы выбрать"]
+  list:
+    white:  {slot: 20, icon: "WHITE_CONCRETE",      color: "#FFFFFF", name: "Белый"}
+    yellow: {slot: 21, icon: "YELLOW_CONCRETE",     color: "#FFFF55", name: "Жёлтый"}
+    red:    {slot: 22, icon: "RED_CONCRETE",        color: "#FF5555", name: "Красный"}
+    pink:   {slot: 23, icon: "PINK_CONCRETE",       color: "#FF8FD8", name: "Розовый"}
+    orange: {slot: 24, icon: "ORANGE_CONCRETE",     color: "#FFAA00", name: "Оранжевый"}
+    purple: {slot: 29, icon: "PURPLE_CONCRETE",     color: "#AA00AA", name: "Фиолетовый"}
+    light_blue: {slot: 30, icon: "LIGHT_BLUE_CONCRETE", color: "#55CFFF", name: "Голубой"}
+    blue:   {slot: 31, icon: "BLUE_CONCRETE",       color: "#5555FF", name: "Синий"}
+    cyan:   {slot: 32, icon: "CYAN_CONCRETE",       color: "#00AAAA", name: "Бирюзовый"}
+    lime:   {slot: 33, icon: "LIME_CONCRETE",       color: "#55FF55", name: "Салатовый"}
+  custom-slot: 49
+  custom-icon: "PAINTING"
+  custom-name: "<gradient:#F1DA9C:#9035B0><i>Свой цвет"
+  custom-lore:
+    - "<gray>Нажми, чтобы ввести свой HEX-код"
+    - "<gray>или градиент в чат."
+    - ""
+    - "<gray>Пример: <white>##F1DA9C"
+    - "<gray>Пример: <white>##F1DA9C##9035B0"
+  custom-permission: "mediaitems.titles.customcolor"
+  input-seconds: 30
+  input-title: "<aqua>{s}с."
+  input-subtitle: "<white>Ожидание текста..."
+
+messages:
+  removed: "<red>Титул снят."
+  selected: "<green>Титул выбран: "
+  locked: "<red>Этот титул ещё не открыт - он выпадает из кейса."
+  all-open: "<yellow>Все титулы этой категории уже открыты!"
+  no-key: "<red>Нечем открыть кейс."
+  dropped: "<gold>Из кейса выпал титул: <white>{title}"
+  color: "<green>Цвет титула изменён."
+  no-custom: "<red>Свой цвет недоступен."
+  input: "<gray>Напиши в чат свой цвет, например <white>##F1DA9C</white> или <white>##F1DA9C##9035B0</white>. Отмена - <white>отмена"
+  input-timeout: "<red>Время вышло."
+  input-cancel: "<gray>Отменено."
+  input-bad: "<red>Неверный формат. Пример: <white>##F1DA9C</white> или <white>##F1DA9C##9035B0"
+
+# категории: name - заголовок, slot - место в меню, icon - иконка открытых титулов, locked-icon - закрытых,
+# border - рамка окна категории. Титулы (id - латиницей, text - как видно после ника) - со скринов, остальные потом.
+categories:
+  adult:
+    name: "<#FF5555>18+"
+    slot: 10
+    icon: "RED_CONCRETE"
+    locked-icon: "PURPLE_CONCRETE"
+    titles:
+      - {id: "hozyain", text: "Хозяин"}
+      - {id: "18plus", text: "18+"}
+      - {id: "nyuhaet", text: "Нюхает трусики"}
+  anime18:
+    name: "<#FF55FF>Аниме 18+"
+    slot: 13
+    icon: "RED_CONCRETE"
+    locked-icon: "PURPLE_CONCRETE"
+    titles:
+      - {id: "hentai", text: "Хентай"}
+  memes:
+    name: "<#55FF55>Мемы"
+    slot: 16
+    icon: "BONE_BLOCK"
+    locked-icon: "PURPLE_CONCRETE"
+    titles:
+      - {id: "drun", text: "Друн"}
+      - {id: "sixseven", text: "сикс севен"}
+  emotions:
+    name: "<#55FFFF>Чувства и эмоции"
+    slot: 11
+    icon: "GOLD_BLOCK"
+    locked-icon: "PURPLE_CONCRETE"
+    titles:
+      - {id: "happy", text: "ヽ(*^▽^*)/"}

@@ -308,6 +308,11 @@ final class Npcs implements Listener {
     // ---------- магазин ----------
 
     void open(Player p, Shops.Shop shop) {
+        // НПС с меню вместо торговли (menu: titles в shops.yml)
+        if (shop.npc() != null && "titles".equalsIgnoreCase(shop.npc().getString("menu"))) {
+            plugin.titles().openMain(p);
+            return;
+        }
         Merchant m = Bukkit.createMerchant(Text.mm(shop.title()));
         m.setRecipes(Shops.recipes(shop));
         p.openMerchant(m, true);
