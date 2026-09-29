@@ -63,8 +63,8 @@ shops:
   # Обменник 1 (скрин): НПС-игрок; сжатое золото -> другие сжатые ресурсы, элитры -> золото
   # НПС-игрок; скин - в skin (пока стандартный)
   exchanger1:
-    title: "<white><b>Обменник <aqua>1"
-    name: "<white><b>Обменник <aqua>1"
+    title: "<white>Обменник <aqua>1"
+    name: "<white>Обменник <aqua>1"
     npc:
       type: "PLAYER"
       skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/exchanger1.png"
@@ -80,8 +80,8 @@ shops:
 
   # Обменник 2 (скрин): НПС-игрок; сжатые ресурсы по цепочке вверх
   exchanger2:
-    title: "<white><b>Обменник <aqua>2"
-    name: "<white><b>Обменник <aqua>2"
+    title: "<white>Обменник <aqua>2"
+    name: "<white>Обменник <aqua>2"
     npc:
       type: "PLAYER"
       skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/exchanger2.png"
@@ -96,8 +96,8 @@ shops:
 
   # Обменник 3 (скрин): НПС-игрок; сжатые ресурсы по цепочке вниз
   exchanger3:
-    title: "<white><b>Обменник <aqua>3"
-    name: "<white><b>Обменник <aqua>3"
+    title: "<white>Обменник <aqua>3"
+    name: "<white>Обменник <aqua>3"
     npc:
       type: "PLAYER"
       skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/exchanger3.png"
@@ -112,8 +112,8 @@ shops:
 
   # Мастер Оттенков (скрин): НПС-игрок; 2 сжатого золота -> ресурсы
   shades:
-    title: "<#F59230>М<#B2A144>а<#6CAF58>с<#20C267>т<#30AB84>е<#4292A3>р <#655EDF>О<#8885E0>т<#ADA8E6>т<#D9CEF0>е<#F3F3F1>н<#FDCDCA>к<#F89191>о<#FD6362>в"
-    name: "<#F59230>М<#B2A144>а<#6CAF58>с<#20C267>т<#30AB84>е<#4292A3>р <#655EDF>О<#8885E0>т<#ADA8E6>т<#D9CEF0>е<#F3F3F1>н<#FDCDCA>к<#F89191>о<#FD6362>в"
+    title: "<b><#F59230>М<#B2A144>а<#6CAF58>с<#20C267>т<#30AB84>е<#4292A3>р <#655EDF>О<#8885E0>т<#ADA8E6>т<#D9CEF0>е<#F3F3F1>н<#FDCDCA>к<#F89191>о<#FD6362>в"
+    name: "<b><#F59230>М<#B2A144>а<#6CAF58>с<#20C267>т<#30AB84>е<#4292A3>р <#655EDF>О<#8885E0>т<#ADA8E6>т<#D9CEF0>е<#F3F3F1>н<#FDCDCA>к<#F89191>о<#FD6362>в"
     npc:
       type: "PLAYER"
       skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/shades.png"
