@@ -2,11 +2,9 @@ package ru.stat;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import java.util.Map;
@@ -14,8 +12,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Убийства игроков: боевой рейтинг, убийства к рангу (с бустером), процент побед.
- * Урон между игроками: умения ранга (атака и защита).
+ * Убийства игроков: боевой рейтинг, смерти, процент побед.
+ * Убийства к рангу, бустер и умения ранга считает плагин DsRanks.
  */
 public class CombatListener implements Listener {
 
@@ -59,24 +57,11 @@ public class CombatListener implements Listener {
         lastKills.put(pair, now);
 
         String k = killer.getName();
-        Ranks.Rank before = plugin.rank(k);
 
         // ---- боевой рейтинг ----
         int min = cfg.getInt("combat.rating-min", 10);
         int max = Math.max(min, cfg.getInt("combat.rating-max", 30));
-        int rating = rnd.nextInt(min, max + 1);
-        plugin.set(k, "rating", plugin.integer(k, "rating") + rating);
-
-        // ---- убийства к рангу, бустер ----
-        int booster = plugin.booster(k);
-        int credited = 1;
-        if (booster > 1 && rnd.nextDouble(100) < cfg.getDouble("booster.chance", 30)) {
-            credited = booster;
-            killer.sendMessage(plugin.color(plugin.msg("booster")
-                    .replace("{booster}", String.valueOf(booster))
-                    .replace("{kills}", String.valueOf(credited))));
-        }
-        plugin.set(k, "kills", plugin.integer(k, "kills") + credited);
+        plugin.set(k, "rating", plugin.integer(k, "rating") + rnd.nextInt(min, max + 1));
 
         // ---- процент побед: первое убийство - сразу 100%, дальше каждые N убийств + бонус ----
         int real = plugin.integer(k, "real-kills") + 1;
@@ -90,36 +75,5 @@ public class CombatListener implements Listener {
             winrate += cfg.getInt("combat.winrate-kill-bonus", 1);
         }
         plugin.set(k, "winrate", Math.max(0, Math.min(100, winrate)));
-
-        Ranks.Rank after = plugin.rank(k);
-        if (after.index() > before.index()) {
-            killer.sendMessage(plugin.color(plugin.msg("rank-up").replace("{rank}", after.display())));
-        }
-        plugin.refreshChatRank(killer);
-    }
-
-    /** Умения ранга: атака (+% урона) у бьющего, защита (-% урона) у получающего. Только PvP. */
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    public void onDamage(EntityDamageByEntityEvent event) {
-        FileConfiguration cfg = plugin.getConfig();
-        if (!cfg.getBoolean("skills.enabled", true)) return;
-        if (!(event.getEntity() instanceof Player victim)) return;
-        Player attacker = null;
-        if (event.getDamager() instanceof Player p) attacker = p;
-        else if (event.getDamager() instanceof Projectile pr && pr.getShooter() instanceof Player p) attacker = p;
-        if (attacker == null || attacker.equals(victim)) return;
-
-        ThreadLocalRandom rnd = ThreadLocalRandom.current();
-        double damage = event.getDamage();
-
-        int atk = plugin.rank(attacker.getName()).attack();
-        if (atk > 0 && rnd.nextDouble(100) < cfg.getDouble("skills.attack-chance", 33)) damage *= 1 + atk / 100.0;
-
-        int def = plugin.rank(victim.getName()).defense();
-        if (def > 0 && rnd.nextDouble(100) < cfg.getDouble("skills.defense-chance", 33)) {
-            damage *= Math.max(0, 1 - def / 100.0);
-        }
-
-        event.setDamage(damage);
     }
 }

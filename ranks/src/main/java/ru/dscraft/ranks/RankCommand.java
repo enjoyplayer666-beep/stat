@@ -1,4 +1,4 @@
-package ru.stat;
+package ru.dscraft.ranks;
 
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -15,17 +15,18 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
-/** /rank info [ник] | list | top [страница] | on | off */
+/** /rank info [ник] | list | top [страница] | on | off; админам: set | reset | reload */
 public class RankCommand implements CommandExecutor, TabCompleter {
 
     private static final String B = "&#7B6FE0";
     private static final String LINE = B + "│ ";
     private static final String DASHES = "- - - - - - - - - - - ";
     private static final int TOP_PAGE = 10;
+    private static final String ADMIN = "ranks.admin";
 
-    private final StatPlugin plugin;
+    private final DsRanksPlugin plugin;
 
-    public RankCommand(StatPlugin plugin) {
+    public RankCommand(DsRanksPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -58,9 +59,52 @@ public class RankCommand implements CommandExecutor, TabCompleter {
                 plugin.setRankHidden(p, off);
                 send(sender, plugin.msg(off ? "rank-off" : "rank-on"));
             }
+            case "set", "reset", "reload" -> admin(sender, sub, args);
             default -> usage(sender);
         }
         return true;
+    }
+
+    private void admin(CommandSender sender, String sub, String[] args) {
+        if (!sender.hasPermission(ADMIN)) {
+            send(sender, plugin.msg("no-permission"));
+            return;
+        }
+        if (sub.equals("reload")) {
+            plugin.reload();
+            send(sender, plugin.msg("reload-ok"));
+            return;
+        }
+        if (args.length < (sub.equals("set") ? 3 : 2)) {
+            for (String s : plugin.getConfig().getStringList("messages.admin-usage")) send(sender, s);
+            return;
+        }
+        String name = args[1];
+        OfflinePlayer op = plugin.findPlayer(name);
+        if (op == null || (!op.isOnline() && !plugin.known(name))) {
+            send(sender, plugin.msg("not-found").replace("{player}", name));
+            return;
+        }
+        if (op.getName() != null) name = op.getName();
+        if (sub.equals("reset")) {
+            plugin.resetPlayer(name);
+            send(sender, plugin.msg("reset-ok").replace("{player}", name));
+        } else {
+            int kills;
+            try {
+                kills = Math.max(0, Integer.parseInt(args[2].trim()));
+            } catch (NumberFormatException e) {
+                send(sender, plugin.msg("bad-number"));
+                return;
+            }
+            plugin.set(name, "kills", kills);
+            send(sender, plugin.msg("set-ok")
+                    .replace("{player}", name)
+                    .replace("{kills}", String.valueOf(kills))
+                    .replace("{rank}", plugin.rank(name).display()));
+        }
+        plugin.saveData();
+        if (op instanceof org.bukkit.entity.Player online) plugin.refreshChatRank(online);
     }
 
     private void info(CommandSender sender, String name) {
@@ -88,7 +132,7 @@ public class RankCommand implements CommandExecutor, TabCompleter {
         send(sender, LINE + "&fПрогресс: " + (next == null
                 ? "&aМаксимальный ранг!"
                 : "&fОсталось &c" + (next.kills() - kills) + " &f"
-                        + StatPlugin.plural(next.kills() - kills, "убийство", "убийства", "убийств")));
+                        + DsRanksPlugin.plural(next.kills() - kills, "убийство", "убийства", "убийств")));
         send(sender, LINE + "&fУмения:");
         send(sender, LINE + "&7[&#3CCFC0Атака&7] &c+" + atk + "% &fурона &7(Шанс: " + atkChance + "%)");
         send(sender, LINE + "&7[&aЗащита&7] &e-" + def + "% &fурона &7(Шанс: " + defChance + "%)");
@@ -130,6 +174,9 @@ public class RankCommand implements CommandExecutor, TabCompleter {
 
     private void usage(CommandSender sender) {
         for (String s : plugin.getConfig().getStringList("messages.rank-usage")) send(sender, s);
+        if (sender.hasPermission(ADMIN)) {
+            for (String s : plugin.getConfig().getStringList("messages.admin-usage")) send(sender, s);
+        }
     }
 
     private void send(CommandSender sender, String text) {
@@ -139,8 +186,12 @@ public class RankCommand implements CommandExecutor, TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> res = new ArrayList<>();
-        if (args.length == 1) res.addAll(Arrays.asList("info", "list", "top", "on", "off"));
-        else if (args.length == 2 && args[0].equalsIgnoreCase("info")) StatPlugin.addPlayers(res);
+        if (args.length == 1) {
+            res.addAll(Arrays.asList("info", "list", "top", "on", "off"));
+            if (sender.hasPermission(ADMIN)) res.addAll(Arrays.asList("set", "reset", "reload"));
+        } else if (args.length == 2 && Arrays.asList("info", "set", "reset").contains(args[0].toLowerCase(Locale.ROOT))) {
+            DsRanksPlugin.addPlayers(res);
+        }
         String last = args[args.length - 1].toLowerCase(Locale.ROOT);
         res.removeIf(s -> !s.toLowerCase(Locale.ROOT).startsWith(last));
         return res;

@@ -2,7 +2,8 @@ name: StatPlugin
 version: 1.1
 main: ru.stat.StatPlugin
 api-version: '1.21'
-softdepend: [PlaceholderAPI, DestroyChat, LuckPerms]
+# DsRanks - ранги, убийства и бустер для /stat
+softdepend: [DsRanks, PlaceholderAPI, DestroyChat, LuckPerms]
 commands:
   stat:
     description: Статистика игрока
@@ -13,17 +14,8 @@ commands:
   statadmin:
     description: Управление статистикой
     usage: /statadmin <set|reset|reload>
-  booster:
-    description: Выдать бустер к убийствам ранга
-    usage: /booster give <ник> <x1-x15>
-  rank:
-    description: Ранги
-    usage: /rank <info|list|top|on|off>
-    aliases: [ranks, ранг]
 permissions:
   stat.use:
     default: true
   stat.admin:
-    default: op
-  stat.booster.give:
     default: op

@@ -1,0 +1,66 @@
+# DsRanks - ранги DestroyCraft. Цвета: &a, &l ... и hex вида &#RRGGBB
+# При первом запуске ранги, бустер, умения и данные игроков переносятся из StatPlugin сами.
+
+# ---------------------------------------------------------------------
+#  Ранги - по количеству убийств (с учётом бустера)
+#  color -> color2 - градиент названия, иконка цветом color.
+#  attack - +% урона по игрокам, defense - -% получаемого от игроков урона
+#  (срабатывают с шансом skills.attack-chance / skills.defense-chance, если больше 0).
+# ---------------------------------------------------------------------
+ranks:
+  - {name: 'Неофит', icon: '☘', color: '#9E9E9E', color2: '#6F6F6F', kills: 0, attack: 0, defense: 0}
+  - {name: 'Призрак', icon: '☁', color: '#D0D0DA', color2: '#9A9AAA', kills: 30, attack: 0, defense: 5}
+  - {name: 'Фантом', icon: '✦', color: '#62B0FF', color2: '#3A74FF', kills: 150, attack: 0, defense: 10}
+  - {name: 'Вампир', icon: '♆', color: '#FF6B6B', color2: '#D23434', kills: 500, attack: 5, defense: 10}
+  - {name: 'Лич', icon: '☠', color: '#E4E4E4', color2: '#A4A4B0', kills: 1000, attack: 10, defense: 15}
+  - {name: 'Демон', icon: '♗', color: '#CE94E6', color2: '#9656C2', kills: 1500, attack: 15, defense: 15}
+  - {name: 'Некромант', icon: '✝', color: '#72D6A6', color2: '#35977A', kills: 2000, attack: 20, defense: 20}
+  - {name: 'Ведьмак', icon: '✾', color: '#E6C47E', color2: '#AE864C', kills: 3000, attack: 25, defense: 20}
+  - {name: 'Барон', icon: '♚', color: '#F4AC6A', color2: '#C6763E', kills: 4000, attack: 30, defense: 25}
+  - {name: 'Архидемон', icon: '♜', color: '#F58E9E', color2: '#C4566E', kills: 5000, attack: 40, defense: 25}
+  - {name: 'Древний', icon: '♇', color: '#BCC4FF', color2: '#8490E2', kills: 6000, attack: 45, defense: 30}
+  - {name: 'Проклятый', icon: '☫', color: '#FF9E9E', color2: '#DE5268', kills: 7000, attack: 50, defense: 30}
+  - {name: 'Тёмный Владыка', icon: '♆', color: '#D688FF', color2: '#9A46E2', kills: 8000, attack: 60, defense: 35}
+  - {name: 'Повелитель', icon: '♔', color: '#BC94FF', color2: '#8656E2', kills: 15000, attack: 70, defense: 40}
+  - {name: 'Страж Небытия', icon: '☢', color: '#DCCCFF', color2: '#A88EE6', kills: 30000, attack: 80, defense: 45}
+  - {name: 'Падший', icon: '♰', color: '#F2DAB2', color2: '#C69E6C', kills: 50000, attack: 90, defense: 45}
+  - {name: 'Тень Вечности', icon: '⚜', color: '#F2DCFF', color2: '#BC9AF2', kills: 80000, attack: 100, defense: 50}
+
+skills:
+  enabled: true
+  attack-chance: 33
+  defense-chance: 33
+
+booster:
+  # шанс (в %), что бустер сработает при убийстве: тогда убийство засчитывается за xN
+  chance: 30
+  # бустер по праву: stat.booster.2 ... stat.booster.15 (берётся наибольший);
+  # выдать: /booster give <ник> x15, сбросить: /booster take <ник>
+  max: 15
+
+# повторное убийство того же игрока тем же убийцей раньше этого времени не засчитывается к рангу (защита от фарма); 0 - выкл
+anti-farm-seconds: 300
+
+# Ранг в чате DestroyChat (перед кланом). {rank} - иконка и название с градиентом
+chat-rank: '{rank} '
+
+messages:
+  not-found: '&cИгрок &f{player} &cне найден.'
+  no-permission: '&cНет прав.'
+  booster: '&6Сработал бустер &ex{booster}&6! &f+{kills} &6убийств к рангу'
+  rank-up: '&aНовый ранг: {rank}&a! Смотри умения: &f/rank info'
+  rank-on: '&aРанг снова показывается в чате.'
+  rank-off: '&7Ранг больше не показывается в чате.'
+  rank-usage:
+    - '&e/rank info [ник] &7- ранг, бустер, умения'
+    - '&e/rank list &7- все ранги'
+    - '&e/rank top [страница] &7- топ по убийствам'
+    - '&e/rank on &7/ &e/rank off &7- показывать ранг в чате'
+  admin-usage:
+    - '&e/rank set <ник> <убийства> &7- выставить убийства к рангу'
+    - '&e/rank reset <ник> &7- сбросить ранг и бустер'
+    - '&e/rank reload &7- перезагрузить конфиг'
+  set-ok: '&aУ игрока &f{player} &aтеперь &f{kills} &aубийств, ранг: {rank}'
+  reset-ok: '&aРанг игрока &f{player} &aсброшен.'
+  reload-ok: '&aКонфиг DsRanks перезагружен.'
+  bad-number: '&cЗначение должно быть числом.'

@@ -1,4 +1,4 @@
-package ru.stat;
+package ru.dscraft.ranks;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -17,9 +17,9 @@ public class BoosterCommand implements CommandExecutor, TabCompleter {
 
     public static final String PERMISSION = "stat.booster.give";
 
-    private final StatPlugin plugin;
+    private final DsRanksPlugin plugin;
 
-    public BoosterCommand(StatPlugin plugin) {
+    public BoosterCommand(DsRanksPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -90,7 +90,7 @@ public class BoosterCommand implements CommandExecutor, TabCompleter {
         List<String> res = new ArrayList<>();
         if (!sender.hasPermission(PERMISSION)) return res;
         if (args.length == 1) res.addAll(Arrays.asList("give", "take", "info"));
-        else if (args.length == 2) StatPlugin.addPlayers(res);
+        else if (args.length == 2) DsRanksPlugin.addPlayers(res);
         else if (args.length == 3 && args[0].equalsIgnoreCase("give")) {
             int max = Math.max(1, plugin.getConfig().getInt("booster.max", 15));
             for (int i = 1; i <= max; i++) res.add("x" + i);

@@ -1,4 +1,4 @@
-package ru.stat;
+package ru.dscraft.ranks;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -7,7 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-/** Ранги (по убийствам) и знаки классности (по боевому рейтингу) из config.yml. */
+/** Ранги (по убийствам) из config.yml. */
 public class Ranks {
 
     /**
@@ -22,11 +22,7 @@ public class Ranks {
         }
     }
 
-    private record ClassMark(int rating, String display) {
-    }
-
     private final List<Rank> ranks = new ArrayList<>();
-    private final List<ClassMark> classes = new ArrayList<>();
 
     public void load(FileConfiguration cfg) {
         ranks.clear();
@@ -42,12 +38,6 @@ public class Ranks {
             ranks.add(new Rank(i, r.name(), r.icon(), r.color(), r.color2(), r.kills(), r.attack(), r.defense()));
         }
         if (ranks.isEmpty()) ranks.add(new Rank(0, "Неофит", "☘", "&7", null, 0, 0, 0));
-
-        classes.clear();
-        for (Map<?, ?> m : cfg.getMapList("classes")) {
-            classes.add(new ClassMark(num(m, "rating"), str(m, "display", "")));
-        }
-        classes.sort(Comparator.comparingInt(ClassMark::rating));
     }
 
     public List<Rank> all() {
@@ -65,14 +55,6 @@ public class Ranks {
     /** Следующий ранг или null, если ранг максимальный. */
     public Rank next(Rank rank) {
         return rank.index() + 1 < ranks.size() ? ranks.get(rank.index() + 1) : null;
-    }
-
-    public String classFor(int rating) {
-        String result = classes.isEmpty() ? "&7[Нет отличительных отметок]" : classes.get(0).display();
-        for (ClassMark c : classes) {
-            if (rating >= c.rating()) result = c.display();
-        }
-        return result;
     }
 
     /** "#RRGGBB" -> "&#RRGGBB", "&c" остаётся как есть. */

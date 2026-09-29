@@ -15,7 +15,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -34,7 +33,7 @@ import java.util.regex.Pattern;
 public class StatPlugin extends JavaPlugin implements CommandExecutor, TabCompleter, Listener {
 
     private static final List<String> FIELDS =
-            Arrays.asList("privilege", "rating", "winrate", "kills", "deaths", "booster");
+            Arrays.asList("privilege", "rating", "winrate", "deaths");
     private static final Pattern HEX = Pattern.compile("&#([A-Fa-f0-9]{6})");
 
     private File dataFile;
@@ -42,13 +41,13 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
     private boolean dirty;
     private Method papiSet;
     private Method clanName;
-    private final Ranks ranks = new Ranks();
+    private final Classes classes = new Classes();
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
         migrateConfig();
-        ranks.load(getConfig());
+        classes.load(getConfig());
         loadData();
         hookPapi();
         getCommand("stat").setExecutor(this);
@@ -56,12 +55,6 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
         getCommand("mystat").setExecutor(this);
         getCommand("statadmin").setExecutor(this);
         getCommand("statadmin").setTabCompleter(this);
-        BoosterCommand boosterCommand = new BoosterCommand(this);
-        getCommand("booster").setExecutor(boosterCommand);
-        getCommand("booster").setTabCompleter(boosterCommand);
-        RankCommand rankCommand = new RankCommand(this);
-        getCommand("rank").setExecutor(rankCommand);
-        getCommand("rank").setTabCompleter(rankCommand);
         getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new CombatListener(this), this);
         for (Player p : Bukkit.getOnlinePlayers()) touch(p);
@@ -82,18 +75,29 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
     @Override
     public void onDisable() {
         saveData();
-        StatApi.clear();
     }
 
     /**
-     * Обновление старого config.yml (saveDefaultConfig не трогает уже существующий файл):
-     * рамка /stat, знаки классности и привилегии берутся из плагина один раз, по config-version.
+     * Обновление старого config.yml (saveDefaultConfig не трогает уже существующий файл) по config-version:
+     * до 8 - рамка /stat, знаки классности, привилегии и бой берутся из плагина;
+     * 9 - ранги, бустер и умения переехали в DsRanks и убираются отсюда (только когда DsRanks стоит,
+     * он уже забрал их себе при своём первом запуске).
      */
     private void migrateConfig() {
         FileConfiguration cfg = getConfig();
         int version = cfg.contains("config-version", true) ? cfg.getInt("config-version") : 1;
         int latest = cfg.getDefaults() == null ? version : cfg.getDefaults().getInt("config-version", version);
         if (version >= latest || cfg.getDefaults() == null) return;
+        if (version >= 8) {
+            if (getServer().getPluginManager().getPlugin("DsRanks") == null) return; // ранги ещё не перенесены
+            removeRankSettings(cfg);
+            cfg.set("messages.admin-usage", null);
+            cfg.set("messages.bad-field", null);
+            cfg.set("config-version", latest);
+            saveConfig();
+            getLogger().info("Ранги, бустер и умения теперь в плагине DsRanks, из config.yml они убраны.");
+            return;
+        }
         var d = cfg.getDefaults();
         cfg.set("lines", d.getStringList("lines"));
         cfg.set("classes", d.getMapList("classes"));
@@ -103,13 +107,7 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
             for (String k : priv.getKeys(false)) cfg.set("privileges." + k, priv.getString(k));
         }
         cfg.set("defaults.clan", d.getString("defaults.clan"));
-        cfg.set("ranks", d.getMapList("ranks"));
-        cfg.set("skills", null);
-        ConfigurationSection skills = d.getConfigurationSection("skills");
-        if (skills != null) {
-            for (String k : skills.getKeys(false)) cfg.set("skills." + k, skills.get(k));
-        }
-        cfg.set("chat-rank", d.getString("chat-rank"));
+        removeRankSettings(cfg);
         cfg.set("combat", null);
         ConfigurationSection combat = d.getConfigurationSection("combat");
         if (combat != null) {
@@ -125,6 +123,13 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
         cfg.set("config-version", latest);
         saveConfig();
         getLogger().info("config.yml обновлён до версии " + latest + ".");
+    }
+
+    private static void removeRankSettings(FileConfiguration cfg) {
+        for (String k : new String[]{"ranks", "skills", "booster", "chat-rank", "messages.booster", "messages.rank-up",
+                "messages.rank-on", "messages.rank-off", "messages.rank-usage"}) {
+            cfg.set(k, null);
+        }
     }
 
     // ---------------- данные ----------------
@@ -199,7 +204,6 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
         set(player.getName(), "name", player.getName());
         set(player.getName(), "uuid", player.getUniqueId().toString());
         refreshPrivilege(player);
-        refreshChatRank(player);
     }
 
     /** Запоминает группу для строки "Привилегия" (первая из privileges, которая есть у игрока). */
@@ -241,55 +245,17 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
         return prefix != null ? prefix : getConfig().getString("privileges.default", "&f⌜&3Игрок&f⌟");
     }
 
-    void refreshChatRank(Player player) {
-        if (data.getBoolean("players." + key(player.getName()) + ".rank-hidden")) {
-            StatApi.set(player.getUniqueId(), null);
-            return;
-        }
-        Ranks.Rank r = rank(player.getName());
-        String text = getConfig().getString("chat-rank", "{rank} ").replace("{rank}", r.display());
-        StatApi.set(player.getUniqueId(), color(text));
-    }
-
-    void setRankHidden(Player player, boolean hidden) {
-        set(player.getName(), "rank-hidden", hidden ? true : null);
-        refreshChatRank(player);
-    }
-
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         touch(event.getPlayer());
     }
 
-    @EventHandler
-    public void onQuit(PlayerQuitEvent event) {
-        StatApi.set(event.getPlayer().getUniqueId(), null);
-    }
+    // ---------------- ранги (плагин DsRanks) ----------------
 
-    // ---------------- ранги / бустер ----------------
-
-    Ranks ranks() {
-        return ranks;
-    }
-
-    Ranks.Rank rank(String name) {
-        return ranks.rankFor(integer(name, "kills"));
-    }
-
-    /** Бустер игрока: наибольшее из выданного вручную и права stat.booster.N. */
-    int booster(String name) {
-        int max = Math.max(1, getConfig().getInt("booster.max", 15));
-        int b = Math.max(1, integer(name, "booster"));
-        Player online = Bukkit.getPlayerExact(name);
-        if (online != null) {
-            for (int i = max; i > b; i--) {
-                if (online.hasPermission("stat.booster." + i)) {
-                    b = i;
-                    break;
-                }
-            }
-        }
-        return Math.min(b, max);
+    /** Ранг для /stat: из DsRanks, без него - прочерк. */
+    String rankDisplay(String name) {
+        String r = RanksHook.rankDisplay(name);
+        return r != null ? r : getConfig().getString("defaults.rank", "&7—");
     }
 
     // ---------------- оформление ----------------
@@ -434,14 +400,14 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
             String out = line
                     .replace("{player}", shown)
                     .replace("{privilege}", privilege)
-                    .replace("{rank}", rank(shown).display())
+                    .replace("{rank}", rankDisplay(shown))
                     .replace("{clan}", clan)
                     .replace("{rating}", String.valueOf(rating))
-                    .replace("{class}", ranks.classFor(rating))
+                    .replace("{class}", classes.classFor(rating))
                     .replace("{winrate}", percent(number(shown, "winrate")))
-                    .replace("{kills}", String.valueOf(integer(shown, "kills")))
+                    .replace("{kills}", String.valueOf(RanksHook.kills(shown)))
                     .replace("{deaths}", String.valueOf(integer(shown, "deaths")))
-                    .replace("{booster}", "x" + booster(shown))
+                    .replace("{booster}", "x" + RanksHook.booster(shown))
                     .replace("{playtime}", String.valueOf(hours))
                     .replace("{hours}", plural(hours, "час", "часа", "часов"))
                     .replace("{status}", status);
@@ -462,10 +428,9 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
             case "reload" -> {
                 saveData();
                 reloadConfig();
-                ranks.load(getConfig());
+                classes.load(getConfig());
                 loadData();
                 hookPapi();
-                for (Player p : Bukkit.getOnlinePlayers()) refreshChatRank(p);
                 sender.sendMessage(color(msg("reload-ok")));
             }
             case "reset" -> {
@@ -479,8 +444,6 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
                 if (name != null) set(name, "name", name);
                 if (uuid != null) set(args[1], "uuid", uuid);
                 saveData();
-                Player online = Bukkit.getPlayerExact(args[1]);
-                if (online != null) refreshChatRank(online);
                 sender.sendMessage(color(msg("reset-ok").replace("{player}", args[1])));
             }
             case "set" -> {
@@ -501,7 +464,6 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
                     try {
                         double d = Double.parseDouble(value.replace("%", "").replace(',', '.').trim());
                         if (f.equals("winrate")) stored = (int) Math.max(0, Math.min(100, Math.round(d)));
-                        else if (f.equals("booster")) stored = Math.max(1, Math.min(getConfig().getInt("booster.max", 15), (int) d));
                         else stored = Math.max(0, (int) d);
                     } catch (NumberFormatException e) {
                         sender.sendMessage(color(msg("bad-number")));
@@ -511,8 +473,6 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
                 set(args[1], f, stored);
                 if (f.equals("winrate")) set(args[1], "winrate-started", true); // выданный процент не сбросится на 100
                 saveData();
-                Player online = Bukkit.getPlayerExact(args[1]);
-                if (online != null) refreshChatRank(online);
                 sender.sendMessage(color(msg("set-ok")
                         .replace("{player}", args[1])
                         .replace("{field}", f)

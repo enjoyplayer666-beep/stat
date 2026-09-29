@@ -1,0 +1,23 @@
+name: DsRanks
+version: '1.0'
+main: ru.dscraft.ranks.DsRanksPlugin
+api-version: '1.21'
+author: DestroyCraft
+description: Ранги по убийствам, бустеры и умения. Работает в паре со StatPlugin и DestroyChat.
+# грузится раньше: StatPlugin берёт отсюда ранг для /stat, DestroyChat - для чата
+loadbefore: [StatPlugin, DestroyChat]
+commands:
+  rank:
+    description: Ранги
+    usage: /rank <info|list|top|on|off>
+    aliases: [ranks, ранг]
+  booster:
+    description: Выдать бустер к убийствам ранга
+    usage: /booster give <ник> <x1-x15>
+permissions:
+  ranks.admin:
+    description: /rank set|reset|reload
+    default: op
+  stat.booster.give:
+    description: /booster give|take|info (старое название права оставлено)
+    default: op
