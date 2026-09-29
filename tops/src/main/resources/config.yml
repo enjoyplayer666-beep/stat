@@ -1,8 +1,13 @@
 # =====================================================================
-#  MediaTops - голограммы-топы. Клик по голограмме переключает "за день" / "за вайп".
+#  MediaTops - голограммы-топы. Клик по голограмме переключает "за день" / "за всё время".
 #  Поставить: встань на место и /tops create <kills|clans|playtime>
-#  Тексты - MiniMessage. {mode} - "ЗА ДЕНЬ" / "ЗА ВАЙП".
+#  Тексты - MiniMessage. {mode} - "ЗА ДЕНЬ" / "ЗА ВАЙП". Цвета сняты со скринов образца.
+#  За всё время - статистика Minecraft (убийства игроков, наигранное время) и рейтинг кланов;
+#  за день - сколько прибавилось с полуночи.
 # =====================================================================
+
+# не трогать: по нему плагин обновляет старый конфиг
+config-version: 2
 
 # часовой пояс, по которому начинается новый день
 timezone: "Europe/Moscow"
@@ -10,31 +15,33 @@ timezone: "Europe/Moscow"
 update-seconds: 30
 # сколько строк в топе
 size: 10
-# убийство того же игрока тем же убийцей раньше этого времени не засчитывается (защита от фарма)
-anti-farm-seconds: 300
 # размер текста
 scale: 1.0
+# расстояние между строками (в блоках, при scale 1)
+line-spacing: 0.27
+# подложка у каждой строки (ARGB в hex), как у табличек на образце; "00000000" - без подложки
+background: "40000000"
+shadow: false
 
 mode-day: "ЗА ДЕНЬ"
 mode-wipe: "ЗА ВАЙП"
-footer-day: "<#A5E5B5>Топ за день, клик – за <b>вайп!</b></#A5E5B5>"
-footer-wipe: "<#A5E5B5>Топ за всё время, клик – за <b>день!</b></#A5E5B5>"
-empty-line: "<dark_gray>#{place} ---</dark_gray>"
+footer-day: "<#B4DCBC>Топ за день, клик – за <#A0E6B4><b>вайп</b></#A0E6B4>!</#B4DCBC>"
+footer-wipe: "<#B4DCBC>Топ за всё время, клик – за <#A0E6B4><b>день</b></#A0E6B4>!</#B4DCBC>"
 
 kills:
-  title: "<white><b>Топ</b></white> <#FF5555><b>Бойцов</b></#FF5555> <dark_gray>[</dark_gray><#9EEAB5>{mode}</#9EEAB5><dark_gray>]</dark_gray>"
+  title: "<#C8C8C8><b>Топ</b></#C8C8C8> <#EC243C><b>Бойцов</b></#EC243C> <dark_gray>[</dark_gray><#A0E6B4>{mode}</#A0E6B4><dark_gray>]</dark_gray>"
   # {place} {name} {value}
-  line: "<#E0334A>#{place}</#E0334A> <white>{name}</white> <gray>убийств:</gray> <#E0334A>{value}</#E0334A>"
+  line: "<#EC243C>#{place}</#EC243C> <white>{name}</white> <gray>убийств:</gray> <#EC243C>{value}</#EC243C>"
 
 clans:
-  title: "<white><b>Топ</b></white> <#5AB4FF><b>Кланов</b></#5AB4FF> <dark_gray>[</dark_gray><#9EEAB5>{mode}</#9EEAB5><dark_gray>]</dark_gray>"
+  title: "<#C8C8C8><b>Топ</b></#C8C8C8> <#1A4C5C><b>Кланов</b></#1A4C5C> <dark_gray>[</dark_gray><#A0E6B4>{mode}</#A0E6B4><dark_gray>]</dark_gray>"
   # {name} - название клана с его цветами
-  line: "<#5AB4FF>#{place}</#5AB4FF> {name} <gray>рейтинг:</gray> <#5ED6E0>{value}</#5ED6E0>"
+  line: "<#1A4C5C>#{place}</#1A4C5C> {name} <gray>рейтинг:</gray> <#1A4C5C>{value}</#1A4C5C>"
 
 playtime:
-  title: "<white><b>Топ</b></white> <#C77DFF><b>Активистов</b></#C77DFF> <dark_gray>[</dark_gray><#9EEAB5>{mode}</#9EEAB5><dark_gray>]</dark_gray>"
+  title: "<#C8C8C8><b>Топ</b></#C8C8C8> <#C8B0F4><b>Активистов</b></#C8B0F4> <dark_gray>[</dark_gray><#A0E6B4>{mode}</#A0E6B4><dark_gray>]</dark_gray>"
   # {value} - часы
-  line: "<#C77DFF>#{place}</#C77DFF> <white>{name}</white> <gray>наиграл:</gray> <#FFD166>{value}ч</#FFD166>"
+  line: "<#C8B0F4>#{place}</#C8B0F4> <white>{name}</white> <gray>наиграл:</gray> <#C8B0F4>{value}ч</#C8B0F4>"
 
 # голограммы (заполняется командой /tops create)
 boards: {}

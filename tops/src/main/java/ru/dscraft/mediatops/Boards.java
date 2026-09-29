@@ -11,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Interaction;
@@ -30,8 +31,9 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Голограммы-топы. На каждую - два текста (за день и за вайп) и невидимая зона клика.
- * Каждый игрок видит только текст своего режима; клик переключает режим сразу на всех топах.
+ * Голограммы-топы. Каждая строка - отдельный текст со своей подложкой (как на образце),
+ * у каждой голограммы два набора строк (за день и за всё время) и невидимая зона клика.
+ * Каждый игрок видит только набор своего режима; клик переключает режим сразу на всех топах.
  * Сущности не сохраняются в мире: создаются при запуске, чанк держится загруженным.
  */
 public final class Boards {
@@ -40,12 +42,12 @@ public final class Boards {
 
     private static final MiniMessage MM = MiniMessage.miniMessage();
 
-    private final class Board {
+    private static final class Board {
         final String id;
         final Type type;
         final Location location;
-        TextDisplay day;
-        TextDisplay wipe;
+        final List<TextDisplay> day = new ArrayList<>();
+        final List<TextDisplay> wipe = new ArrayList<>();
         Interaction click;
 
         Board(String id, Type type, Location location) {
@@ -53,13 +55,17 @@ public final class Boards {
             this.type = type;
             this.location = location;
         }
+
+        boolean valid() {
+            return click != null && click.isValid() && !day.isEmpty() && day.get(0).isValid();
+        }
     }
 
     private final JavaPlugin plugin;
     private final Stats stats;
     private final NamespacedKey key;
     private final Map<String, Board> boards = new ConcurrentHashMap<>();
-    /** true - игрок смотрит топы за вайп. */
+    /** true - игрок смотрит топы за всё время. */
     private final Map<UUID, Boolean> wipeMode = new ConcurrentHashMap<>();
     private final Map<UUID, Long> clickCooldown = new ConcurrentHashMap<>();
 
@@ -69,74 +75,108 @@ public final class Boards {
         this.key = new NamespacedKey(plugin, "board");
     }
 
+    private FileConfiguration cfg() {
+        return plugin.getConfig();
+    }
+
+    private int size() {
+        return Math.max(1, Math.min(30, cfg().getInt("size", 10)));
+    }
+
     // ---------------- загрузка / сущности ----------------
 
     public void loadAll() {
         removeAll();
-        ConfigurationSection s = plugin.getConfig().getConfigurationSection("boards");
-        if (s == null) return;
-        for (String id : s.getKeys(false)) {
-            ConfigurationSection b = s.getConfigurationSection(id);
-            if (b == null) continue;
-            World world = Bukkit.getWorld(b.getString("world", "world"));
-            if (world == null) {
-                plugin.getLogger().warning("Топ " + id + ": мир " + b.getString("world") + " не найден.");
-                continue;
+        ConfigurationSection s = cfg().getConfigurationSection("boards");
+        if (s != null) {
+            for (String id : s.getKeys(false)) {
+                ConfigurationSection b = s.getConfigurationSection(id);
+                if (b == null) continue;
+                World world = Bukkit.getWorld(b.getString("world", "world"));
+                if (world == null) {
+                    plugin.getLogger().warning("Топ " + id + ": мир " + b.getString("world") + " не найден.");
+                    continue;
+                }
+                Type type;
+                try {
+                    type = Type.valueOf(b.getString("type", "KILLS").toUpperCase());
+                } catch (IllegalArgumentException e) {
+                    continue;
+                }
+                Board board = new Board(id, type, new Location(world, b.getDouble("x"), b.getDouble("y"), b.getDouble("z")));
+                boards.put(id, board);
+                spawn(board);
             }
-            Type type;
-            try {
-                type = Type.valueOf(b.getString("type", "KILLS").toUpperCase());
-            } catch (IllegalArgumentException e) {
-                continue;
-            }
-            Location loc = new Location(world, b.getDouble("x"), b.getDouble("y"), b.getDouble("z"),
-                    (float) b.getDouble("yaw"), 0f);
-            Board board = new Board(id, type, loc);
-            boards.put(id, board);
-            spawn(board);
         }
         refresh();
     }
 
     private void spawn(Board board) {
-        Location loc = board.location;
-        Chunk chunk = loc.getChunk();
+        despawn(board);
+        Location base = board.location;
+        Chunk chunk = base.getChunk();
         chunk.addPluginChunkTicket(plugin);
         // остатки прошлого запуска (например после падения сервера)
         for (Entity e : chunk.getEntities()) {
             if (board.id.equals(e.getPersistentDataContainer().get(key, PersistentDataType.STRING))) e.remove();
         }
-        board.day = text(board, loc);
-        board.wipe = text(board, loc);
-        board.click = loc.getWorld().spawn(loc, Interaction.class, i -> {
-            i.setPersistent(false);
-            i.setResponsive(true);
-            i.getPersistentDataContainer().set(key, PersistentDataType.STRING, board.id);
+        float scale = (float) cfg().getDouble("scale", 1.0);
+        double spacing = cfg().getDouble("line-spacing", 0.27) * scale;
+        int lines = size() + 2;
+        // строки сверху вниз: первая (заголовок) - выше всех, последняя - у основания
+        for (int i = 0; i < lines; i++) {
+            Location loc = base.clone().add(0, (lines - 1 - i) * spacing, 0);
+            board.day.add(line(board, loc, scale));
+            board.wipe.add(line(board, loc, scale));
+        }
+        board.click = base.getWorld().spawn(base, Interaction.class, it -> {
+            it.setPersistent(false);
+            it.setResponsive(true);
+            it.setInteractionWidth(4.0f * scale);
+            it.setInteractionHeight((float) (lines * spacing + 0.1));
+            it.getPersistentDataContainer().set(key, PersistentDataType.STRING, board.id);
         });
         for (Player p : Bukkit.getOnlinePlayers()) applyVisibility(p, board);
     }
 
-    private TextDisplay text(Board board, Location loc) {
-        float scale = (float) plugin.getConfig().getDouble("scale", 1.0);
+    private TextDisplay line(Board board, Location loc, float scale) {
+        int argb = parseArgb(cfg().getString("background", "40000000"));
+        boolean shadow = cfg().getBoolean("shadow", false);
         return loc.getWorld().spawn(loc, TextDisplay.class, t -> {
             t.setPersistent(false);
             t.setVisibleByDefault(false);
             t.setBillboard(Display.Billboard.CENTER);
             t.setAlignment(TextDisplay.TextAlignment.CENTER);
-            t.setShadowed(true);
-            t.setBackgroundColor(Color.fromARGB(0, 0, 0, 0));
-            t.setLineWidth(400);
+            t.setShadowed(shadow);
+            t.setBackgroundColor(Color.fromARGB(argb));
+            t.setLineWidth(1000);
             t.setBrightness(new Display.Brightness(15, 15));
-            t.setTransformation(new Transformation(new Vector3f(), new AxisAngle4f(), new Vector3f(scale, scale, scale), new AxisAngle4f()));
+            t.setTransformation(new Transformation(new Vector3f(), new AxisAngle4f(),
+                    new Vector3f(scale, scale, scale), new AxisAngle4f()));
             t.getPersistentDataContainer().set(key, PersistentDataType.STRING, board.id);
         });
     }
 
+    private static int parseArgb(String hex) {
+        try {
+            return (int) Long.parseLong(hex.replace("#", ""), 16);
+        } catch (Exception e) {
+            return 0x40000000;
+        }
+    }
+
+    private void despawn(Board b) {
+        b.day.forEach(Entity::remove);
+        b.wipe.forEach(Entity::remove);
+        b.day.clear();
+        b.wipe.clear();
+        if (b.click != null) b.click.remove();
+        b.click = null;
+    }
+
     public void removeAll() {
         for (Board b : boards.values()) {
-            if (b.day != null) b.day.remove();
-            if (b.wipe != null) b.wipe.remove();
-            if (b.click != null) b.click.remove();
+            despawn(b);
             b.location.getChunk().removePluginChunkTicket(plugin);
         }
         boards.clear();
@@ -150,14 +190,8 @@ public final class Boards {
 
     private void applyVisibility(Player player, Board b) {
         boolean wipe = wipeMode.getOrDefault(player.getUniqueId(), false);
-        if (b.day == null || b.wipe == null) return;
-        if (wipe) {
-            player.hideEntity(plugin, b.day);
-            player.showEntity(plugin, b.wipe);
-        } else {
-            player.hideEntity(plugin, b.wipe);
-            player.showEntity(plugin, b.day);
-        }
+        for (TextDisplay t : wipe ? b.day : b.wipe) player.hideEntity(plugin, t);
+        for (TextDisplay t : wipe ? b.wipe : b.day) player.showEntity(plugin, t);
     }
 
     /** Клик по зоне топа: переключить режим игрока. */
@@ -181,67 +215,74 @@ public final class Boards {
     // ---------------- текст ----------------
 
     public void refresh() {
-        int size = Math.max(1, plugin.getConfig().getInt("size", 10));
         List<Object[]> clans = clans();
         for (Board b : boards.values()) {
-            if (b.day == null || !b.day.isValid()) {
-                spawn(b);
-            }
-            Component day = render(b.type, false, size, clans);
-            Component wipe = render(b.type, true, size, clans);
-            b.day.text(day);
-            b.wipe.text(wipe);
-            int lines = size + 2;
-            float scale = (float) plugin.getConfig().getDouble("scale", 1.0);
-            b.click.setInteractionWidth(3.5f * scale);
-            b.click.setInteractionHeight(lines * 0.27f * scale);
+            if (!b.valid()) spawn(b);
+            int argb = parseArgb(cfg().getString("background", "40000000"));
+            fill(b.day, render(b.type, false, clans), argb);
+            fill(b.wipe, render(b.type, true, clans), argb);
         }
     }
 
-    private Component render(Type type, boolean wipe, int size, List<Object[]> clans) {
-        var cfg = plugin.getConfig();
+    /** Пустые строки (игроков меньше, чем мест) - без подложки, чтобы не висели пустые плашки. */
+    private static void fill(List<TextDisplay> displays, List<Component> lines, int argb) {
+        for (int i = 0; i < displays.size(); i++) {
+            TextDisplay t = displays.get(i);
+            Component c = i < lines.size() ? lines.get(i) : Component.empty();
+            if (!c.equals(t.text())) t.text(c);
+            Color bg = Color.fromARGB(c.equals(Component.empty()) ? 0 : argb);
+            if (!bg.equals(t.getBackgroundColor())) t.setBackgroundColor(bg);
+        }
+    }
+
+    private List<Component> render(Type type, boolean wipe, List<Object[]> clans) {
+        int size = size();
         String section = type.name().toLowerCase();
-        String mode = cfg.getString(wipe ? "mode-wipe" : "mode-day", wipe ? "ЗА ВАЙП" : "ЗА ДЕНЬ");
+        String mode = cfg().getString(wipe ? "mode-wipe" : "mode-day", wipe ? "ЗА ВАЙП" : "ЗА ДЕНЬ");
         List<Component> out = new ArrayList<>();
-        out.add(MM.deserialize(cfg.getString(section + ".title", "").replace("{mode}", mode)));
+        out.add(MM.deserialize(cfg().getString(section + ".title", "").replace("{mode}", mode)));
 
         List<Component> names = new ArrayList<>();
         List<Long> values = new ArrayList<>();
         switch (type) {
-            case KILLS -> stats.top(e -> wipe ? e.killsWipe : e.killsDay, size).forEach(r -> {
+            case KILLS -> stats.top(e -> wipe ? e.kills : stats.killsDay(e), size).forEach(r -> {
                 names.add(Component.text(r.name()));
                 values.add(r.value());
             });
-            case PLAYTIME -> stats.top(e -> (wipe ? e.minutesWipe : e.minutesDay) / 60, size).forEach(r -> {
+            case PLAYTIME -> stats.top(e -> wipe ? e.minutes / 60 : stats.hoursDay(e), size).forEach(r -> {
                 names.add(Component.text(r.name()));
                 values.add(r.value());
             });
             case CLANS -> {
+                // все кланы: по значению, при равенстве - по общему рейтингу (список всегда полный)
                 List<Object[]> rows = new ArrayList<>();
                 for (Object[] c : clans) {
                     int rating = (Integer) c[2];
                     long v = wipe ? rating : stats.clanToday((String) c[0], rating);
-                    if (v > 0) rows.add(new Object[]{c[1], v});
+                    rows.add(new Object[]{c[1], v, rating});
                 }
-                rows.sort((a, b) -> Long.compare((Long) b[1], (Long) a[1]));
+                rows.sort((a, b) -> {
+                    int byValue = Long.compare((Long) b[1], (Long) a[1]);
+                    return byValue != 0 ? byValue : Integer.compare((Integer) b[2], (Integer) a[2]);
+                });
                 for (int i = 0; i < rows.size() && i < size; i++) {
                     names.add(LegacyComponentSerializer.legacySection().deserialize((String) rows.get(i)[0]));
                     values.add((Long) rows.get(i)[1]);
                 }
             }
         }
-        String line = cfg.getString(section + ".line", "#{place} {name} {value}");
+        String line = cfg().getString(section + ".line", "#{place} {name} {value}");
         for (int i = 0; i < size; i++) {
-            String place = String.valueOf(i + 1);
             if (i < names.size()) {
-                String l = line.replace("{place}", place).replace("{value}", String.valueOf(values.get(i))).replace("{name}", "<n>");
+                String l = line.replace("{place}", String.valueOf(i + 1))
+                        .replace("{value}", String.valueOf(values.get(i))).replace("{name}", "<n>");
                 out.add(MM.deserialize(l, Placeholder.component("n", names.get(i))));
             } else {
-                out.add(MM.deserialize(cfg.getString("empty-line", "<dark_gray>#{place} ---</dark_gray>").replace("{place}", place)));
+                out.add(Component.empty());
             }
         }
-        out.add(MM.deserialize(cfg.getString(wipe ? "footer-wipe" : "footer-day", "")));
-        return Component.join(net.kyori.adventure.text.JoinConfiguration.newlines(), out);
+        out.add(MM.deserialize(cfg().getString(wipe ? "footer-wipe" : "footer-day", "")));
+        return out;
     }
 
     /** Кланы из MediaClans: {ID, название с §-цветами, рейтинг}. */
@@ -256,8 +297,6 @@ public final class Boards {
             return List.of();
         }
     }
-
-    // ---------------- для команд ----------------
 
     public List<String> ids() {
         return new ArrayList<>(boards.keySet());

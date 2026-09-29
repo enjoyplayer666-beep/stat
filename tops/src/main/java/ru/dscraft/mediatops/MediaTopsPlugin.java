@@ -8,10 +8,8 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Interaction;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -20,19 +18,21 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /** MediaTops: голограммы "Топ бойцов / кланов / активистов" за день и за вайп. */
 public class MediaTopsPlugin extends JavaPlugin implements Listener, TabCompleter {
 
+    /** Оформление, которое обновляется из плагина при смене config-version (голограммы boards не трогаются). */
+    private static final String[] STYLE_KEYS = {"background", "shadow", "line-spacing", "mode-day", "mode-wipe",
+            "footer-day", "footer-wipe", "kills", "clans", "playtime"};
+
     private Stats stats;
     private Boards boards;
-    private final Map<String, Long> lastKills = new ConcurrentHashMap<>();
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
+        migrateConfig();
         stats = new Stats(this);
         stats.load();
         boards = new Boards(this, stats);
@@ -44,14 +44,22 @@ public class MediaTopsPlugin extends JavaPlugin implements Listener, TabComplete
         Bukkit.getScheduler().runTask(this, boards::loadAll);
         long update = Math.max(5, getConfig().getLong("update-seconds", 30)) * 20L;
         Bukkit.getScheduler().runTaskTimer(this, () -> {
-            stats.checkDay();
+            for (Player p : Bukkit.getOnlinePlayers()) stats.update(p);
             boards.refresh();
-        }, update, update);
-        // наигранное время: каждую минуту +1 минута всем в сети
-        Bukkit.getScheduler().runTaskTimer(this, () -> {
-            for (Player p : Bukkit.getOnlinePlayers()) stats.addMinute(p.getUniqueId(), p.getName());
-            stats.saveIfDirty();
-        }, 1200L, 1200L);
+        }, 20L, update);
+        Bukkit.getScheduler().runTaskTimer(this, stats::saveIfDirty, 1200L, 1200L);
+    }
+
+    private void migrateConfig() {
+        var cfg = getConfig();
+        var d = cfg.getDefaults();
+        if (d == null || cfg.getInt("config-version", 1) >= d.getInt("config-version", 1)) return;
+        for (String k : STYLE_KEYS) cfg.set(k, d.get(k));
+        cfg.set("anti-farm-seconds", null);
+        cfg.set("empty-line", null);
+        cfg.set("config-version", d.getInt("config-version"));
+        saveConfig();
+        getLogger().info("Оформление топов в config.yml обновлено.");
     }
 
     @Override
@@ -62,31 +70,15 @@ public class MediaTopsPlugin extends JavaPlugin implements Listener, TabComplete
 
     // ---------------- события ----------------
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onDeath(PlayerDeathEvent event) {
-        Player victim = event.getEntity();
-        Player killer = victim.getKiller();
-        if (killer == null || killer.equals(victim)) return;
-        long cooldown = getConfig().getLong("anti-farm-seconds", 300) * 1000L;
-        long now = System.currentTimeMillis();
-        String pair = killer.getUniqueId() + ":" + victim.getUniqueId();
-        if (cooldown > 0) {
-            Long last = lastKills.get(pair);
-            if (last != null && now - last < cooldown) return;
-            lastKills.entrySet().removeIf(e -> now - e.getValue() >= cooldown);
-        }
-        lastKills.put(pair, now);
-        stats.addKill(killer.getUniqueId(), killer.getName());
-    }
-
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        stats.entry(event.getPlayer().getUniqueId(), event.getPlayer().getName());
+        stats.update(event.getPlayer());
         boards.applyVisibility(event.getPlayer());
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
+        stats.update(event.getPlayer());
         boards.forget(event.getPlayer());
     }
 
@@ -160,22 +152,12 @@ public class MediaTopsPlugin extends JavaPlugin implements Listener, TabComplete
                 boards.loadAll();
                 sender.sendMessage("§aMediaTops перезагружен.");
             }
-            case "resetwipe" -> {
-                if (args.length < 2 || !args[1].equalsIgnoreCase("confirm")) {
-                    sender.sendMessage("§cОбнулит топы за вайп и за день у всех. Подтверди: /tops resetwipe confirm");
-                    return true;
-                }
-                stats.resetWipe();
-                boards.refresh();
-                sender.sendMessage("§aТопы за вайп обнулены.");
-            }
             default -> {
                 sender.sendMessage("§e/tops create <kills|clans|playtime> [id] §7- поставить топ");
                 sender.sendMessage("§e/tops move <id> §7- перенести сюда");
                 sender.sendMessage("§e/tops remove <id> §7- удалить");
                 sender.sendMessage("§e/tops list §7- список");
                 sender.sendMessage("§e/tops reload §7- перезагрузить конфиг");
-                sender.sendMessage("§e/tops resetwipe confirm §7- новый вайп: обнулить топы");
             }
         }
         return true;
@@ -206,10 +188,9 @@ public class MediaTopsPlugin extends JavaPlugin implements Listener, TabComplete
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> out = new ArrayList<>();
-        if (args.length == 1) out.addAll(List.of("create", "move", "remove", "list", "reload", "resetwipe"));
+        if (args.length == 1) out.addAll(List.of("create", "move", "remove", "list", "reload"));
         else if (args.length == 2 && args[0].equalsIgnoreCase("create")) out.addAll(List.of("kills", "clans", "playtime"));
         else if (args.length == 2 && (args[0].equalsIgnoreCase("move") || args[0].equalsIgnoreCase("remove"))) out.addAll(boards.ids());
-        else if (args.length == 2 && args[0].equalsIgnoreCase("resetwipe")) out.add("confirm");
         String last = args[args.length - 1].toLowerCase(Locale.ROOT);
         out.removeIf(s -> !s.toLowerCase(Locale.ROOT).startsWith(last));
         return out;

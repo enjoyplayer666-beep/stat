@@ -8,7 +8,7 @@ softdepend: [MediaClans, StatPlugin]
 commands:
   tops:
     description: Голограммы-топы
-    usage: /tops <create|move|remove|list|reload|resetwipe>
+    usage: /tops <create|move|remove|list|reload>
     permission: mediatops.admin
 permissions:
   mediatops.admin:
