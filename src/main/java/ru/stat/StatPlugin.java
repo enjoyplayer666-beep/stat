@@ -41,6 +41,7 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
     private boolean dirty;
     private Method papiSet;
     private Method clanName;
+    private ClassLoader clanLoader;
     private final Classes classes = new Classes();
 
     @Override
@@ -296,18 +297,25 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
         }
     }
 
-    /** Клан из DestroyChat (§-цвета) или null. */
+    /** Клан из MediaClans (раньше - из DestroyChat), §-цвета, или null. */
     private String clan(UUID uuid) {
         if (uuid == null) return null;
         try {
-            if (clanName == null) {
-                Plugin chat = getServer().getPluginManager().getPlugin("DestroyChat");
-                if (chat == null) return null;
-                Class<?> api = Class.forName("ru.dscraft.destroychat.clan.ClanApi", true, chat.getClass().getClassLoader());
-                clanName = api.getMethod("clanName", UUID.class);
+            Plugin clans = getServer().getPluginManager().getPlugin("MediaClans");
+            String api = "ru.dscraft.mediaclans.ClanApi";
+            if (clans == null || !clans.isEnabled()) {
+                clans = getServer().getPluginManager().getPlugin("DestroyChat");
+                api = "ru.dscraft.destroychat.clan.ClanApi";
+            }
+            if (clans == null || !clans.isEnabled()) return null;
+            ClassLoader cl = clans.getClass().getClassLoader();
+            if (clanName == null || clanLoader != cl) {
+                clanName = Class.forName(api, true, cl).getMethod("clanName", UUID.class);
+                clanLoader = cl;
             }
             return (String) clanName.invoke(null, uuid);
         } catch (Exception e) {
+            clanName = null;
             return null;
         }
     }

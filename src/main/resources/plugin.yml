@@ -3,7 +3,7 @@ version: 1.1
 main: ru.stat.StatPlugin
 api-version: '1.21'
 # DsRanks - ранги, убийства и бустер для /stat
-softdepend: [DsRanks, PlaceholderAPI, DestroyChat, LuckPerms]
+softdepend: [DsRanks, MediaClans, PlaceholderAPI, DestroyChat, LuckPerms]
 commands:
   stat:
     description: Статистика игрока
