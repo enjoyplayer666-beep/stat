@@ -23,6 +23,7 @@ public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
     private Items items;
     private Shops shops;
     private Npcs npcs;
+    private Health health;
 
     @Override
     public void onEnable() {
@@ -39,7 +40,7 @@ public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
         npcs.load();
         getServer().getPluginManager().registerEvents(npcs, this);
         getServer().getPluginManager().registerEvents(new Anvils(this), this);
-        Health health = new Health(this);
+        health = new Health(this);
         getServer().getPluginManager().registerEvents(health, this);
         Bukkit.getScheduler().runTaskTimer(this, health::tick, 20L, 4L);
         getCommand("itemnpc").setTabCompleter(this);
@@ -50,6 +51,7 @@ public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
     @Override
     public void onDisable() {
         if (npcs != null) npcs.save();
+        if (health != null) health.shutdown();
     }
 
     private void loadAll() {
