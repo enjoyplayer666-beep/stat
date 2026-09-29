@@ -807,11 +807,10 @@ items:
     material: LIME_GLAZED_TERRACOTTA
     name: "<green><b>Джунглевый кластер"
     lore-mode: vanilla
-  # шлем на скрине - голова: вставь в head: Value головы (minecraft-heads.com), тогда material: PLAYER_HEAD
+  # шлем - голова из HeadDatabase (/hdb search id:129353)
   jungle_helmet:
-    material: LEATHER_HELMET
-    model: 10005
-    color: "#FFFFFF"
+    material: PLAYER_HEAD
+    head: "hdb:129353"
     name: "<green><b>Шлем джунглей"
     enchants: ["fire_protection:2", "protection:17", "thorns:2"]
     attributes: ["armor:3", "armor_toughness:3"]

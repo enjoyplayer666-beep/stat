@@ -24,6 +24,7 @@ public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
     private Shops shops;
     private Npcs npcs;
     private Health health;
+    private int hdbRetries;
 
     @Override
     public void onEnable() {
@@ -61,6 +62,12 @@ public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
         YamlConfiguration shopsYml = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "shops.yml"));
         items.load(itemsYml.getConfigurationSection("items"), getConfig().getConfigurationSection("tooltip"));
         shops.load(shopsYml.getConfigurationSection("shops"), items);
+        // головы из HeadDatabase: её база грузится после старта - перечитываем, пока все не найдутся
+        if (items.hdbMissing && hdbRetries++ < 30) {
+            Bukkit.getScheduler().runTaskLater(this, this::loadAll, 200L);
+        } else if (!items.hdbMissing) {
+            hdbRetries = 0;
+        }
     }
 
     /** Старые значения по умолчанию строки HP (сердечки, высоко над ником) меняем на новые. */

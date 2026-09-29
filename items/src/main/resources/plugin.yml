@@ -4,7 +4,7 @@ main: ru.dscraft.mediaitems.MediaItemsPlugin
 api-version: '1.21'
 author: DestroyCraft
 description: НПС-торговцы сетами и мечами с бафами (обмен ресурсов), /itemnpc create <магазин>
-softdepend: [FancyNpcs]
+softdepend: [FancyNpcs, HeadDatabase]
 commands:
   itemnpc:
     description: НПС-торговцы предметами

@@ -44,6 +44,7 @@ final class Items {
 
     void load(ConfigurationSection itemsSec, ConfigurationSection tooltip) {
         this.tooltip = tooltip;
+        this.hdbMissing = false;
         items.clear();
         if (itemsSec == null) return;
         for (String id : itemsSec.getKeys(false)) {
@@ -120,6 +121,15 @@ final class Items {
         // голова с текстурой: head - Value с minecraft-heads.com (base64), ссылка textures.minecraft.net или её хеш
         if (meta instanceof org.bukkit.inventory.meta.SkullMeta skull && s.contains("head")) {
             String v = s.getString("head", "").trim();
+            if (v.toLowerCase(java.util.Locale.ROOT).startsWith("hdb:")) {
+                // голова из HeadDatabase по номеру (/hdb search id:...)
+                v = hdbTexture(v.substring(4).trim());
+                if (v == null) {
+                    hdbMissing = true;
+                    log.warning(id + ": голова " + s.getString("head") + " пока не найдена в HeadDatabase (база ещё грузится?)");
+                    v = "";
+                }
+            }
             if (!v.isEmpty()) {
                 if (!v.startsWith("ey")) {
                     String url = v.startsWith("http") ? v : "http://textures.minecraft.net/texture/" + v;
@@ -193,6 +203,35 @@ final class Items {
         meta.getPersistentDataContainer().set(idKey, PersistentDataType.STRING, id.toLowerCase(Locale.ROOT));
         it.setItemMeta(meta);
         return it;
+    }
+
+    /** true - какая-то голова из HeadDatabase не нашлась (база HDB грузится после старта) - стоит перезагрузить позже. */
+    boolean hdbMissing;
+
+    /** Текстура (base64) головы HeadDatabase по номеру - через API плагина, без зависимости при сборке. */
+    private static String hdbTexture(String hdbId) {
+        var plugin = org.bukkit.Bukkit.getPluginManager().getPlugin("HeadDatabase");
+        if (plugin == null || !plugin.isEnabled()) return null;
+        try {
+            Class<?> api = Class.forName("me.arcaniax.hdb.api.HeadDatabaseAPI", true, plugin.getClass().getClassLoader());
+            Object inst = api.getConstructor().newInstance();
+            try {
+                Object b64 = api.getMethod("getBase64", String.class).invoke(inst, hdbId);
+                if (b64 instanceof String str && !str.isBlank()) return str;
+            } catch (NoSuchMethodException ignored) {
+                // старые версии HDB - берём из предмета
+            }
+            Object item = api.getMethod("getItemHead", String.class).invoke(inst, hdbId);
+            if (item instanceof ItemStack is && is.getItemMeta() instanceof org.bukkit.inventory.meta.SkullMeta sm
+                    && sm.getPlayerProfile() != null) {
+                for (var prop : sm.getPlayerProfile().getProperties()) {
+                    if (prop.getName().equals("textures")) return prop.getValue();
+                }
+            }
+        } catch (Exception ignored) {
+            // нет такой головы или база HDB ещё не загружена
+        }
+        return null;
     }
 
     /** [иконка] Название УРОВЕНЬ */
