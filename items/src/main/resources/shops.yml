@@ -78,6 +78,22 @@ shops:
       - {buy: "item:elytra", result: "item:compressed_gold:8"}
       - {buy: "item:elytra_2", result: "item:compressed_gold:32"}
 
+  # Обменник 2 (скрин): НПС-игрок; сжатые ресурсы по цепочке вверх
+  exchanger2:
+    title: "<white><b>Обменник <aqua>2"
+    name: "<white><b>Обменник <aqua>2"
+    npc:
+      type: "PLAYER"
+      skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/exchanger2.png"
+      fallback-type: "ZOMBIE"
+    trades:
+      - {buy: "item:compressed_dirt:2", result: "item:compressed_stone"}
+      - {buy: "item:compressed_stone:2", result: "item:compressed_coal"}
+      - {buy: "item:compressed_coal:2", result: "item:compressed_iron"}
+      - {buy: "item:compressed_iron:2", result: "item:compressed_diamond"}
+      - {buy: "item:compressed_diamond:2", result: "item:compressed_gunpowder"}
+      - {buy: "item:compressed_gunpowder:5", result: "item:compressed_cluster"}
+
   # Компрессор (скрин): житель, ресурсы -> сжатые блоки
   compressor:
     title: "<white><b>Компрессор"
