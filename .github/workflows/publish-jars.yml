@@ -1,6 +1,9 @@
-# Запуск вручную: собирает StatPlugin.jar и DsRanks.jar и кладёт их в ветку jars (для скачивания через git).
+# Запуск вручную или при пуше в рабочую ветку: собирает StatPlugin.jar и DsRanks.jar и кладёт их в ветку jars (для скачивания через git).
 name: publish-jars
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+  push:
+    branches: [claude/sharp-brahmagupta-ptif54]
 permissions:
   contents: write
 jobs:
