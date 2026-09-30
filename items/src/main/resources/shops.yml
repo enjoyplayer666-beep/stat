@@ -6,6 +6,7 @@
 #             пока скин не указан или нет FancyNpcs - ставится моб из fallback-type.
 #  npc.equipment - что надето: head/chest/legs/feet/hand/offhand
 #             "item:id" из items.yml, "MATERIAL" или "LEATHER_CHESTPLATE#RRGGBB" (крашеная кожа)
+#  npc.turn: false - НПС-игрок стоит статично, не поворачивается к игроку
 #  trades - обмены: buy (+ buy2) -> result.  "item:id:кол-во" или "MATERIAL:кол-во"
 # ============================================
 shops:
@@ -435,3 +436,21 @@ shops:
       - {buy: "item:void_helmet", buy2: "item:universe_charge:4", result: "item:meteor_helmet"}
       - {buy: "item:void_chestplate", buy2: "item:universe_charge:4", result: "item:meteor_chestplate"}
       - {buy: "item:void_leggings", buy2: "item:universe_charge:4", result: "item:meteor_leggings"}
+
+  # Еда (скрин): НПС-игрок со скином, стоит статично (не поворачивается)
+  food:
+    title: "Trades"
+    name: "<yellow><b>Еда"
+    npc:
+      type: "PLAYER"
+      skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/food.png"
+      fallback-type: "ZOMBIE"
+      turn: false
+    trades:
+      - {buy: "DIRT:16", result: "BAKED_POTATO:16"}
+      - {buy: "DIRT:32", result: "BEEF:16"}
+      - {buy: "STONE:16", result: "BREAD:32"}
+      - {buy: "COAL:16", result: "COOKED_BEEF:64"}
+      - {buy: "item:compressed_dirt:3", result: "GOLDEN_CARROT:64"}
+      - {buy: "item:compressed_gold:2", result: "GOLDEN_APPLE:16"}
+      - {buy: "item:compressed_gold:12", result: "ENCHANTED_GOLDEN_APPLE:3"}

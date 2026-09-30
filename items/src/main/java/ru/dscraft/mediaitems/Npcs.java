@@ -242,7 +242,8 @@ final class Npcs implements Listener {
         creator.performCommand("npc create " + name);
         if (!skin.isBlank()) creator.performCommand("npc skin " + name + " " + skin);
         creator.performCommand("npc displayname " + name + " " + shop.name());
-        creator.performCommand("npc turn_to_player " + name + " true");
+        boolean turn = shop.npc() == null || shop.npc().getBoolean("turn", true);
+        creator.performCommand("npc turn_to_player " + name + " " + turn);
         creator.performCommand("npc action " + name + " any_click add console_command itemnpc open {player} " + shop.id());
         // экипировка: FancyNpcs берёт предмет из руки (@hand) - на секунду кладём его в руку администратору
         ConfigurationSection s = shop.npc();
