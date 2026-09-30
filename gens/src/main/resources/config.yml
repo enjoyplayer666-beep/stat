@@ -29,6 +29,14 @@ generator:
   text-offset: 1.45
   text-background: "#40000000"
 
+# свой размер и высота для отдельных групп (что не указано - берётся из generator)
+# после изменения - /gen reload
+sizes:
+  # dirt:
+  #   item-scale: 0.4
+  #   item-offset: 1.3
+  #   text-offset: 1.6
+
 # бустеры (предметы из MediaItems): включаются ПКМ, действуют только на того, кто включил -
 # его генераторы копят в multiplier раз быстрее (amount x multiplier за интервал)
 boosters:

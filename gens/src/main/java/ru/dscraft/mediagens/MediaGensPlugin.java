@@ -289,6 +289,13 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
         return w != null && w.isChunkLoaded(g.x >> 4, g.z >> 4) && w.getChunkAt(g.x >> 4, g.z >> 4).isEntitiesLoaded();
     }
 
+    /** Настройка из sizes.<группа>.<ключ>, если есть, иначе из generator.<ключ>. */
+    private double opt(Gen g, String key, double def) {
+        var c = getConfig();
+        String own = "sizes." + g.group + "." + key;
+        return c.isSet(own) ? c.getDouble(own) : c.getDouble("generator." + key, def);
+    }
+
     private void updateDisplays(Gen g) {
         World w = Bukkit.getWorld(g.world);
         double vd = getConfig().getDouble("generator.view-distance", 5);
@@ -314,7 +321,7 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
         }
         if (near.isEmpty()) return;
         var gc = getConfig();
-        float sc = (float) gc.getDouble("generator.item-scale", 0.25);
+        float sc = (float) opt(g, "item-scale", 0.25);
         double step = Math.toRadians(gc.getDouble("generator.spin-degrees", 15));
         float angle = (float) (((tickCounter / 5) * step) % (Math.PI * 2));
         float bob = (float) (Math.sin(angle) * gc.getDouble("generator.bob", 0.06));
@@ -323,7 +330,7 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
             Entity item = v[0] == null ? null : Bukkit.getEntity(v[0]);
             Entity text = v[1] == null ? null : Bukkit.getEntity(v[1]);
             if (item == null || !item.isValid()) {
-                Location at = new Location(w, g.x + 0.5, g.y + gc.getDouble("generator.item-offset", 1.2), g.z + 0.5);
+                Location at = new Location(w, g.x + 0.5, g.y + opt(g, "item-offset", 1.2), g.z + 0.5);
                 ItemDisplay d = w.spawn(at, ItemDisplay.class, e -> {
                     e.setPersistent(false);
                     e.setVisibleByDefault(false);
@@ -337,7 +344,7 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
                 item = d;
             }
             if (text == null || !text.isValid()) {
-                Location at = new Location(w, g.x + 0.5, g.y + gc.getDouble("generator.text-offset", 1.45), g.z + 0.5);
+                Location at = new Location(w, g.x + 0.5, g.y + opt(g, "text-offset", 1.45), g.z + 0.5);
                 TextDisplay d = w.spawn(at, TextDisplay.class, e -> {
                     e.setPersistent(false);
                     e.setVisibleByDefault(false);
