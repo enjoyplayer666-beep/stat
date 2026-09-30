@@ -26,7 +26,7 @@ import org.bukkit.inventory.meta.ItemMeta;
  * /menu items - меню для стаффа: ресурсы обменников, сеты, мечи, талисманы, прочее.
  * Доступ: право mediaitems.staffmenu или группа из staff-menu.groups (LuckPerms: group.<имя>).
  */
-final class StaffMenu implements Listener, CommandExecutor {
+final class StaffMenu implements Listener, CommandExecutor, org.bukkit.command.TabCompleter {
 
     /** порядок сетов - как идут улучшения */
     private static final String[] SETS = {"leather", "chain", "iron", "diamond", "netherite", "amethyst", "obsidian",
@@ -84,11 +84,25 @@ final class StaffMenu implements Listener, CommandExecutor {
             return true;
         }
         if (!allowed(p)) {
-            p.sendMessage(Text.mm(cfg().getString("no-access", "<red>• <white>Меню доступно только стаффу.")));
+            // для не-стаффа команды будто нет
+            p.sendMessage(net.kyori.adventure.text.Component.translatable("command.unknown.command")
+                    .color(net.kyori.adventure.text.format.NamedTextColor.RED));
             return true;
         }
         openMain(p);
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] a) {
+        return allowed(sender) && a.length == 1 && "items".startsWith(a[0].toLowerCase(Locale.ROOT)) ? List.of("items") : List.of();
+    }
+
+    /** Не-стафф не видит /menu в подсказках команд. */
+    @EventHandler
+    public void onCommandsSend(org.bukkit.event.player.PlayerCommandSendEvent e) {
+        if (allowed(e.getPlayer())) return;
+        e.getCommands().removeIf(c -> c.equals("menu") || c.equals("mediaitems:menu"));
     }
 
     // ---------- что куда ----------
