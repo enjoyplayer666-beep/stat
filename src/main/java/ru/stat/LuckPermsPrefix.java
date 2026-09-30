@@ -19,9 +19,27 @@ final class LuckPermsPrefix {
      * с наибольшим весом, у которой есть свой префикс.
      */
     static String get(Player player) {
-        var lp = LuckPermsProvider.get();
-        User user = lp.getUserManager().getUser(player.getUniqueId());
-        if (user == null) return null;
+        User user = LuckPermsProvider.get().getUserManager().getUser(player.getUniqueId());
+        return user == null ? null : groupPrefix(user);
+    }
+
+    /** Игрок не в сети: данные из LuckPerms (группу могли сменить, пока его не было). null - не удалось. */
+    static User load(java.util.UUID uuid) {
+        try {
+            return LuckPermsProvider.get().getUserManager().loadUser(uuid).get(3, java.util.concurrent.TimeUnit.SECONDS);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /** Все группы игрока с наследованием (имена в нижнем регистре). */
+    static java.util.Set<String> groups(User user) {
+        java.util.Set<String> out = new java.util.HashSet<>();
+        for (Group g : user.getInheritedGroups(user.getQueryOptions())) out.add(g.getName().toLowerCase(java.util.Locale.ROOT));
+        return out;
+    }
+
+    static String groupPrefix(User user) {
         Group best = null;
         String bestPrefix = null;
         for (Group g : user.getInheritedGroups(user.getQueryOptions())) {

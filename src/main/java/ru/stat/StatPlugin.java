@@ -89,6 +89,29 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
         int version = cfg.contains("config-version", true) ? cfg.getInt("config-version") : 1;
         int latest = cfg.getDefaults() == null ? version : cfg.getDefaults().getInt("config-version", version);
         if (version >= latest || cfg.getDefaults() == null) return;
+        if (version < 12) {
+            // 12: серые подписи, часы &3, мечи у LEGENDARY, куратор выше админа
+            cfg.set("lines", cfg.getDefaults().getStringList("lines"));
+            List<java.util.Map<?, ?>> cls = new ArrayList<>(cfg.getMapList("classes"));
+            List<java.util.Map<String, Object>> fixed = new ArrayList<>();
+            for (java.util.Map<?, ?> c : cls) {
+                java.util.Map<String, Object> copy = new java.util.LinkedHashMap<>();
+                for (var e : c.entrySet()) copy.put(String.valueOf(e.getKey()), e.getValue());
+                Object d = copy.get("display");
+                if (d != null && String.valueOf(d).contains("LEGENDARY")) copy.put("display", String.valueOf(d).replace("✘", "⚔"));
+                fixed.add(copy);
+            }
+            cfg.set("classes", fixed);
+            ConfigurationSection priv = cfg.getConfigurationSection("privileges");
+            if (priv != null && priv.contains("curator")) {
+                java.util.Map<String, Object> order = new java.util.LinkedHashMap<>();
+                order.put("curator", priv.get("curator"));
+                for (String k : priv.getKeys(false)) if (!k.equals("curator")) order.put(k, priv.get(k));
+                cfg.set("privileges", null);
+                for (var e : order.entrySet()) cfg.set("privileges." + e.getKey(), e.getValue());
+            }
+            saveConfig();
+        }
         if (version < 11) {
             // 11: лайки убраны - строка с {likes} снова обычная нижняя рамка
             List<String> lines = new ArrayList<>(cfg.getStringList("lines"));
@@ -222,20 +245,6 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
 
     /** Запоминает группу для строки "Привилегия" (первая из privileges, которая есть у игрока). */
     void refreshPrivilege(Player player) {
-        String found = null;
-        ConfigurationSection s = getConfig().getConfigurationSection("privileges");
-        if (s != null) {
-            for (String group : s.getKeys(false)) {
-                if (!group.equalsIgnoreCase("default") && player.hasPermission("group." + group)) {
-                    found = group;
-                    break;
-                }
-            }
-        }
-        if (!Objects.equals(found, string(player.getName(), "privilege-group"))) {
-            set(player.getName(), "privilege-group", found);
-        }
-        // обычный префикс LuckPerms - для всех остальных групп (⌜Luxe⌟ и т.п.)
         String prefix = null;
         if (getServer().getPluginManager().getPlugin("LuckPerms") != null) {
             try {
@@ -243,9 +252,35 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
             } catch (Throwable ignored) {
             }
         }
-        if (!Objects.equals(prefix, string(player.getName(), "privilege-prefix"))) {
-            set(player.getName(), "privilege-prefix", prefix);
+        storePrivilege(player.getName(), g -> player.hasPermission("group." + g), prefix);
+    }
+
+    /** Игрок не в сети: группа из LuckPerms - если его понизили, пока его не было, в /stat сразу новая привилегия. */
+    void refreshOffline(String name, UUID uuid) {
+        if (uuid == null || getServer().getPluginManager().getPlugin("LuckPerms") == null) return;
+        try {
+            var user = LuckPermsPrefix.load(uuid);
+            if (user == null) return;
+            var groups = LuckPermsPrefix.groups(user);
+            storePrivilege(name, g -> groups.contains(g.toLowerCase(Locale.ROOT)), LuckPermsPrefix.groupPrefix(user));
+        } catch (Throwable ignored) {
         }
+    }
+
+    /** Привилегия - только по группе: из списка privileges, иначе префикс самой группы (не личный префикс игрока). */
+    private void storePrivilege(String name, java.util.function.Predicate<String> hasGroup, String groupPrefix) {
+        String found = null;
+        ConfigurationSection s = getConfig().getConfigurationSection("privileges");
+        if (s != null) {
+            for (String group : s.getKeys(false)) {
+                if (!group.equalsIgnoreCase("default") && hasGroup.test(group)) {
+                    found = group;
+                    break;
+                }
+            }
+        }
+        if (!Objects.equals(found, string(name, "privilege-group"))) set(name, "privilege-group", found);
+        if (!Objects.equals(groupPrefix, string(name, "privilege-prefix"))) set(name, "privilege-prefix", groupPrefix);
     }
 
     /** Привилегия для /stat: выданная вручную -> по группе из privileges -> префикс LuckPerms -> default. */
@@ -274,7 +309,38 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
 
     // ---------------- оформление ----------------
 
+    private static final Pattern GRADIENT = Pattern.compile("<gradient:#([A-Fa-f0-9]{6}):#([A-Fa-f0-9]{6})>(.*?)</gradient>");
+
+    /** <gradient:#AAAAAA:#BBBBBB>текст</gradient> -> цвет на каждую букву; &l &o и т.п. в начале текста сохраняются. */
+    static String gradients(String s) {
+        Matcher m = GRADIENT.matcher(s);
+        StringBuilder sb = new StringBuilder();
+        while (m.find()) {
+            int a = Integer.parseInt(m.group(1), 16), b = Integer.parseInt(m.group(2), 16);
+            String text = m.group(3);
+            StringBuilder fmt = new StringBuilder();
+            while (text.length() >= 2 && text.charAt(0) == '&' && "lomnkLOMNK".indexOf(text.charAt(1)) >= 0) {
+                fmt.append(text, 0, 2);
+                text = text.substring(2);
+            }
+            int[] cps = text.codePoints().toArray();
+            int n = Math.max(1, cps.length - 1);
+            StringBuilder out = new StringBuilder();
+            for (int i = 0; i < cps.length; i++) {
+                double t = cps.length == 1 ? 0 : (double) i / n;
+                int r = (int) Math.round(((a >> 16) & 255) + t * (((b >> 16) & 255) - ((a >> 16) & 255)));
+                int g = (int) Math.round(((a >> 8) & 255) + t * (((b >> 8) & 255) - ((a >> 8) & 255)));
+                int bl = (int) Math.round((a & 255) + t * ((b & 255) - (a & 255)));
+                out.append(String.format("&#%02X%02X%02X", r, g, bl)).append(fmt).appendCodePoint(cps[i]);
+            }
+            m.appendReplacement(sb, Matcher.quoteReplacement(out.toString()));
+        }
+        m.appendTail(sb);
+        return sb.toString();
+    }
+
     String color(String s) {
+        s = gradients(s);
         Matcher m = HEX.matcher(s);
         StringBuilder sb = new StringBuilder();
         while (m.find()) {
@@ -400,6 +466,7 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
         }
         String shown = op.getName() != null ? op.getName() : name;
         if (op instanceof Player online) refreshPrivilege(online); // группу могли только что сменить
+        else refreshOffline(shown, op.getUniqueId());
 
         long ticks = 0;
         try {

@@ -6,19 +6,19 @@
 # Цвета: &a, &l ... и hex вида &#RRGGBB
 
 # не трогать: по нему плагин обновляет старый config.yml
-config-version: 11
+config-version: 12
 
 lines:
   - '&#7B6FE0╭- - - - - - - - - - - - - - - - - - - - - - - -╮'
-  - '&#7B6FE0│ &fНикнейм: &b{player}'
-  - '&#7B6FE0│ &fПривилегия: {privilege}'
-  - '&#7B6FE0│ &fРанг: {rank}'
-  - '&#7B6FE0│ &fКлан: {clan}'
-  - '&#7B6FE0│ &fБоевой рейтинг: &a{rating}'
-  - '&#7B6FE0│ &fЗнак классности: {class}'
-  - '&#7B6FE0│ &fПроцент побед на пвп: &d{winrate}'
-  - '&#7B6FE0│ &fНаиграно: &#3CCFC0{playtime} {hours}'
-  - '&#7B6FE0│ &fСтатус: {status}'
+  - '&#7B6FE0│ &7Никнейм: &b{player}'
+  - '&#7B6FE0│ &7Привилегия: {privilege}'
+  - '&#7B6FE0│ &7Ранг: {rank}'
+  - '&#7B6FE0│ &7Клан: {clan}'
+  - '&#7B6FE0│ &7Боевой рейтинг: &a{rating}'
+  - '&#7B6FE0│ &7Знак классности: {class}'
+  - '&#7B6FE0│ &7Процент побед на пвп: &d{winrate}'
+  - '&#7B6FE0│ &7Наиграно: &3{playtime} {hours}'
+  - '&#7B6FE0│ &7Статус: {status}'
   - '&#7B6FE0╰- - - - - - - - - - - - - - - - - - - - - - - -╯'
 
 # Значения по умолчанию
@@ -31,10 +31,11 @@ defaults:
 # берётся первая группа, которая есть у игрока. Остальным - их обычный префикс из LuckPerms,
 # default - если префикса нет.
 # Запоминается, когда игрок в сети, поэтому у оффлайн-игроков тоже показывается.
-# Вручную: /statadmin set <ник> privilege <текст> (перекрывает это), вернуть авто: privilege reset.
+# Вручную (только оп): /statadmin set <ник> privilege <текст> - перекрывает это, вернуть авто: privilege reset.
+# В тексте работают &-коды, &#RRGGBB и градиент: <gradient:#FF0000:#0000FF>&lТекст</gradient>
 privileges:
-  admin: '&7[&#D40000&lᴀᴅᴍɪɴ&7] [&#FFC477&lᴅs&a&l✔&7]'
   curator: '&f⌜&#E5305F&l&oᴄᴜʀᴀᴛᴏʀ&f⌟ &f⌜&#95FFD7&l&osᴘ&#33F5A8&l&o✔&f⌟'
+  admin: '&7[&#D40000&lᴀᴅᴍɪɴ&7] [&#FFC477&lᴅs&a&l✔&7]'
   manager: '&f⌜&#7AF0E6&lᴍᴀɴᴀɢᴇʀ&f⌟ &f⌜&#E0606F&lᴅs&a&l✔&f⌟'
   moderator: '&7[&#D4123A&lᴍᴏᴅᴇʀᴀᴛᴏʀ&7] [&#E8D83A&lᴅs&a&l✔&7]'
   mediajr: '&f⌜&#88799C&l&oM&#8A71AF&l&oe&#8D69C2&l&od&#9061D4&l&oi&#9259E7&l&oa&#9061D4&l&o &#8D69C2&l&oJ&#8A71AF&l&or&#88799C&l&o.&f⌟'
@@ -76,7 +77,7 @@ classes:
   - {rating: 1, display: '&a«Мастер»'}
   - {rating: 100000, display: '&b«EXCLUSIVE»'}
   - {rating: 250000, display: '&0«&6虎&bTIGR&6虎&0»'}
-  - {rating: 500000, display: '&c✘&3&oLEGENDARY&c✘'}
+  - {rating: 500000, display: '&c⚔&3&oLEGENDARY&c⚔'}
   - {rating: 1000000, display: '&4➶&e&oImmortal&4➶'}
   - {rating: 2000000, display: '&e↟&c&oNephilim&e↟'}
 
