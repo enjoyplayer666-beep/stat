@@ -116,6 +116,11 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
             if ("<gray>x<aqua>{count}".equals(c.getString("generator.text"))) c.set("generator.text", "<#7A7A7A>x<aqua>{count}");
             c.set("config-version", 5);
         }
+        // видно и обновляется с 7 блоков
+        if (c.getInt("config-version", 1) < 6) {
+            c.set("generator.view-distance", 7);
+            c.set("config-version", 6);
+        }
         saveConfig();
         genKey = new NamespacedKey(this, "gen");
         itemsIdKey = new NamespacedKey("mediaitems", "id");
@@ -340,7 +345,7 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
 
     private void updateDisplays(Gen g) {
         World w = Bukkit.getWorld(g.world);
-        double vd = getConfig().getDouble("generator.view-distance", 5);
+        double vd = getConfig().getDouble("generator.view-distance", 7);
         Location c = w == null ? null : new Location(w, g.x + 0.5, g.y + 1, g.z + 0.5);
         // кто рядом и у кого есть что забрать
         Map<UUID, Player> near = new HashMap<>();
@@ -418,7 +423,7 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
 
     /** Дальность видимости в блоках -> множитель Minecraft (1.0 = 64 блока). */
     private float viewRange() {
-        return (float) (getConfig().getDouble("generator.view-distance", 5) / 64.0);
+        return (float) (getConfig().getDouble("generator.view-distance", 7) / 64.0);
     }
 
     private void removeDisplays(Gen g) {
