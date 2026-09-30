@@ -75,6 +75,9 @@ messages:
   bad-number: '&cЗначение должно быть числом.'
   give-done: '&c◆ &fВы выдали &a{kills} &fубийств игроку &b{player}&f.'
   give-got: '&c◆ &fИгрок &b{player} &fвыдал вам &a{kills} &fубийств.'
-  give-cooldown: '&cЕщё рано. Снова можно через &f{time}'
+  give-self: '&c◆ &fВы успешно получили &a{kills} &fубийств!'
+  give-wait:
+    - '&c◆ &fЭту команду можно использовать только раз в сутки!'
+    - '&c◆ &fОсталось: &c{h} &fч. &c{m} &fмин. &c{s} &fсек.'
   give-no-access: '&cКоманда доступна с привилегии &fULTRA&c.'
 

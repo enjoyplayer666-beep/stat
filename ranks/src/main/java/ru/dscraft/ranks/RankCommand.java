@@ -129,7 +129,11 @@ public class RankCommand implements CommandExecutor, TabCompleter {
         long last = (long) plugin.number(p.getName(), "give-last");
         long now = System.currentTimeMillis();
         if (now - last < cooldown) {
-            send(p, plugin.msg("give-cooldown").replace("{time}", left(cooldown - (now - last))));
+            long sec = Math.max(1, (cooldown - (now - last)) / 1000L);
+            for (String line : plugin.getConfig().getStringList("messages.give-wait")) {
+                send(p, line.replace("{h}", String.valueOf(sec / 3600)).replace("{m}", String.valueOf(sec % 3600 / 60))
+                        .replace("{s}", String.valueOf(sec % 60)));
+            }
             return;
         }
         String name = p.getName();
@@ -148,7 +152,8 @@ public class RankCommand implements CommandExecutor, TabCompleter {
         plugin.set(name, "kills", plugin.integer(name, "kills") + amount);
         plugin.set(p.getName(), "give-last", now);
         plugin.saveData();
-        send(p, plugin.msg("give-done").replace("{kills}", String.valueOf(amount)).replace("{player}", name));
+        if (name.equalsIgnoreCase(p.getName())) send(p, plugin.msg("give-self").replace("{kills}", String.valueOf(amount)));
+        else send(p, plugin.msg("give-done").replace("{kills}", String.valueOf(amount)).replace("{player}", name));
         Player online = target instanceof Player t ? t : null;
         if (online != null && !online.equals(p)) {
             send(online, plugin.msg("give-got").replace("{kills}", String.valueOf(amount)).replace("{player}", p.getName()));
@@ -156,12 +161,6 @@ public class RankCommand implements CommandExecutor, TabCompleter {
         Ranks.Rank after = plugin.rank(name);
         if (online != null && after.index() > before.index()) send(online, plugin.msg("rank-up").replace("{rank}", after.display()));
         if (online != null) plugin.refreshChatRank(online);
-    }
-
-    /** "5 ч. 12 мин." */
-    static String left(long millis) {
-        long min = Math.max(1, millis / 60_000L);
-        return min >= 60 ? (min / 60) + " ч. " + (min % 60) + " мин." : min + " мин.";
     }
 
     private void info(CommandSender sender, String name) {
