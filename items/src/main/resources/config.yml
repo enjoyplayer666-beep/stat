@@ -64,6 +64,27 @@ health:
   # миры, где надпись не показывается (world - лобби)
   disabled-worlds: ["world"]
 
+# Меню НПС "Текстуры" (menu: textures в shops.yml)
+textures:
+  title: "<#8A6DC1>Текстуры"
+  # ссылка для ручной установки
+  link: "https://goo.su/07BDasw"
+  # прямая ссылка на zip для автоматической установки; пусто - берётся resource-pack из server.properties
+  auto-url: ""
+  auto-sha1: ""
+  auto:
+    slot: 11
+    icon: "PLAYER_HEAD"
+    name: "<green>Автоматическая установка"
+    lore: ["<white>Нажми для автоматической установки"]
+  manual:
+    slot: 15
+    icon: "PLAYER_HEAD"
+    name: "<white>Ручная установка"
+    lore: ["<white>Нажми для получения ссылки"]
+    message: "<red>◆ <gray><u>Переходи:</u></gray> <white><u><click:open_url:'{link}'>{link}</click></u>"
+  no-pack: "<red>• <white>Ресурспак не настроен на сервере."
+
 messages:
   wrong-ingredient: "<red>Сюда нужны обычные предметы, а не ресурсы с сервера."
   use-anvil: "<yellow>Эти вещи улучшаются в наковальне: <white>/anvil</white> или <white>/upgrade</white>."

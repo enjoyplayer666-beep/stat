@@ -369,6 +369,10 @@ final class Npcs implements Listener {
             plugin.titles().openMain(p);
             return;
         }
+        if (shop.npc() != null && "textures".equalsIgnoreCase(shop.npc().getString("menu"))) {
+            plugin.textures().open(p);
+            return;
+        }
         Merchant m = Bukkit.createMerchant(Text.mm(shop.title()));
         m.setRecipes(Shops.recipes(shop));
         p.openMerchant(m, true);

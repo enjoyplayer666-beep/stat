@@ -454,3 +454,13 @@ shops:
       - {buy: "item:compressed_dirt:3", result: "GOLDEN_CARROT:64"}
       - {buy: "item:compressed_gold:2", result: "GOLDEN_APPLE:16"}
       - {buy: "item:compressed_gold:12", result: "ENCHANTED_GOLDEN_APPLE:3"}
+
+  # Текстуры (скрин): НПС-игрок, по клику - меню установки ресурспака (не торговля)
+  textures:
+    title: "<#8A6DC1>Текстуры"
+    name: "<#3AADAD><b><u>Текстуры"
+    npc:
+      type: "PLAYER"
+      menu: "textures"
+      fallback-type: "ZOMBIE"
+    trades: []
