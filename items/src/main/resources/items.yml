@@ -890,5 +890,57 @@ items:
   compressed_magma:
     material: MAGMA_BLOCK
     glint: true
-    name: "<red>Сжатая магма"
+    name: "<red><b>Сжатая магма"
     lore-mode: vanilla
+
+  # ---------- Магмовый сет ----------
+  magma_piece:
+    material: DEEPSLATE_REDSTONE_ORE
+    name: "<red>Кусок магмы"
+    lore-mode: vanilla
+  magma_shard:
+    material: CRIMSON_NYLIUM
+    name: "<red><b>Осколок магмы"
+    lore-mode: vanilla
+  # шлем - голова (текстуру пришлёт владелец), пока кожаный; остальное - модель hell из пака
+  magma_helmet:
+    material: LEATHER_HELMET
+    color: "#8B0000"
+    name: "<dark_red><b>Магмовый шлем"
+    enchants: ["fire_protection:8", "protection:25", "thorns:8"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.3", "max_health:6"]
+    unbreakable: true
+  magma_chestplate:
+    material: LEATHER_CHESTPLATE
+    model: 10014
+    name: "<dark_red><b>Магмовый нагрудник"
+    enchants: ["fire_protection:8", "protection:25", "thorns:8"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.3", "max_health:6"]
+    unbreakable: true
+  magma_leggings:
+    material: LEATHER_LEGGINGS
+    model: 10014
+    name: "<dark_red><b>Магмовые поножи"
+    enchants: ["fire_protection:8", "protection:25", "thorns:8"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.3", "max_health:6"]
+    unbreakable: true
+  # ботинки, меч, элитры - скринов нет, пока по аналогии
+  magma_boots:
+    material: LEATHER_BOOTS
+    model: 10014
+    name: "<dark_red><b>Магмовые ботинки"
+    enchants: ["fire_protection:8", "protection:25", "thorns:8"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.3", "max_health:6"]
+    unbreakable: true
+  magma_sword:
+    material: DIAMOND_SWORD
+    model: 10007
+    name: "<dark_red><b>Магмовый клинок"
+    enchants: ["fire_aspect:2", "sharpness:25"]
+    attributes: ["attack_damage:35", "attack_speed:2"]
+    unbreakable: true
+  magma_elytra:
+    material: ELYTRA
+    name: "<dark_red><b>Магмовые элитры"
+    enchants: ["fire_protection:8", "protection:20", "thorns:8"]
+    attributes: ["max_health:6"]

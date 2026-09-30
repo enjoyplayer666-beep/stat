@@ -494,3 +494,23 @@ shops:
       - {buy: "item:compressed_beacon:10", result: "item:jungle_cluster"}
       - {buy: "item:compressed_beacon:32", result: "item:cloud_drop"}
       - {buy: "item:compressed_beacon:16", result: "item:compressed_magma"}
+
+  # Магмовый сет (скрин): НПС-игрок со скином; улучшение облачных вещей - в наковальне
+  magma:
+    title: "<red><b>Магмовый сет"
+    name: "<red><b>Магмовый сет"
+    npc:
+      type: "PLAYER"
+      skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/magma.png"
+      fallback-type: "ZOMBIE"
+    trades:
+      - {buy: "item:magma_piece:32", result: "item:magma_shard"}
+      - {buy: "item:magma_shard:15", result: "item:compressed_magma"}
+      - {buy: "item:separator", buy2: "item:separator", result: "item:separator"}
+    anvil:
+      - {item: "item:cloud_sword", with: "item:compressed_magma:8", result: "item:magma_sword"}
+      - {item: "item:cloud_elytra", with: "item:compressed_magma:4", result: "item:magma_elytra"}
+      - {item: "item:cloud_helmet", with: "item:compressed_magma:4", result: "item:magma_helmet"}
+      - {item: "item:cloud_chestplate", with: "item:compressed_magma:4", result: "item:magma_chestplate"}
+      - {item: "item:cloud_leggings", with: "item:compressed_magma:4", result: "item:magma_leggings"}
+      - {item: "item:cloud_boots", with: "item:compressed_magma:4", result: "item:magma_boots"}
