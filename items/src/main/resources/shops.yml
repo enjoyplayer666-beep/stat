@@ -503,6 +503,12 @@ shops:
       type: "PLAYER"
       skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/magma.png"
       fallback-type: "ZOMBIE"
+      equipment:
+        head: "item:magma_helmet"
+        chest: "item:magma_chestplate"
+        legs: "item:magma_leggings"
+        feet: "item:magma_boots"
+        hand: "item:magma_sword"
     trades:
       - {buy: "item:magma_piece:32", result: "item:magma_shard"}
       - {buy: "item:magma_shard:15", result: "item:compressed_magma"}

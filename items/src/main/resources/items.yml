@@ -902,10 +902,10 @@ items:
     material: CRIMSON_NYLIUM
     name: "<red><b>Осколок магмы"
     lore-mode: vanilla
-  # шлем - голова (текстуру пришлёт владелец), пока кожаный; остальное - модель hell из пака
+  # шлем - голова, остальное - модель hell из пака
   magma_helmet:
-    material: LEATHER_HELMET
-    color: "#8B0000"
+    material: PLAYER_HEAD
+    head: "1b43cb7faa3dc121019e217cf68b12cb727b8260e7b6530675cdd3bef79f571d"
     name: "<dark_red><b>Магмовый шлем"
     enchants: ["fire_protection:8", "protection:25", "thorns:8"]
     attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.3", "max_health:6"]
