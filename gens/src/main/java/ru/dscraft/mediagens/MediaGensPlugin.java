@@ -107,6 +107,11 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
             c.set("generator.text-offset", 1.45);
             c.set("config-version", 4);
         }
+        // серый "x", как на скрине
+        if (c.getInt("config-version", 1) < 5) {
+            if ("<gray>x<aqua>{count}".equals(c.getString("generator.text"))) c.set("generator.text", "<#7A7A7A>x<aqua>{count}");
+            c.set("config-version", 5);
+        }
         saveConfig();
         genKey = new NamespacedKey(this, "gen");
         itemsIdKey = new NamespacedKey("mediaitems", "id");
@@ -354,7 +359,7 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
                         new Vector3f(sc, sc, sc), new AxisAngle4f()));
             }
             int count = counts.getOrDefault(g.group, Map.of()).getOrDefault(p.getUniqueId(), 0);
-            String s = gc.getString("generator.text", "<gray>x<aqua>{count}").replace("{count}", String.valueOf(count));
+            String s = gc.getString("generator.text", "<#7A7A7A>x<aqua>{count}").replace("{count}", String.valueOf(count));
             if (!s.equals(g.shown.get(p.getUniqueId())) && text instanceof TextDisplay td) {
                 td.text(mm(s));
                 g.shown.put(p.getUniqueId(), s);

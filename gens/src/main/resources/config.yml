@@ -16,7 +16,7 @@ generator:
   # радиус сбора вокруг блока генератора (1 = площадка 3x3)
   radius: 1
   # надпись над генератором
-  text: "<gray>x<aqua>{count}"
+  text: "<#7A7A7A>x<aqua>{count}"
   # высота блока-иконки и надписи над блоком генератора
   item-offset: 1.2
   item-scale: 0.25
@@ -43,4 +43,4 @@ messages:
   ended: "<gray>• Бустер закончился."
   actionbar: "<gold>Бустер <gray>x{mult} <dark_gray>({left} сек.)"
 
-config-version: 4
+config-version: 5
