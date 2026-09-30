@@ -569,3 +569,24 @@ shops:
       - {item: "item:void_chestplate", with: "item:doge_cluster:4", result: "item:doge_chestplate"}
       - {item: "item:void_leggings", with: "item:doge_cluster:4", result: "item:doge_leggings"}
       - {item: "item:void_boots", with: "item:doge_cluster:4", result: "item:doge_boots"}
+
+  # Космический сет (скрин): НПС-игрок без брони; улучшение Doge-вещей - в наковальне
+  space:
+    title: "<gray><b>Космический сет"
+    name: "<gray><b>Космический сет"
+    npc:
+      type: "PLAYER"
+      skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/space.png"
+      fallback-type: "ZOMBIE"
+    trades:
+      - {buy: "item:space_shard:26", result: "item:space_block"}
+      - {buy: "item:space_block:8", result: "item:compressed_space"}
+      - {buy: "item:separator", buy2: "item:separator", result: "item:separator"}
+      - {buy: "item:magma_elytra_trade", buy2: "item:compressed_space:2", result: "item:space_elytra_trade"}
+    anvil:
+      - {item: "item:doge_sword", with: "item:compressed_space:12", result: "item:space_sword"}
+      - {item: "item:doge_elytra", with: "item:compressed_space:8", result: "item:space_elytra"}
+      - {item: "item:doge_helmet", with: "item:compressed_space:4", result: "item:space_helmet"}
+      - {item: "item:doge_chestplate", with: "item:compressed_space:4", result: "item:space_chestplate"}
+      - {item: "item:doge_leggings", with: "item:compressed_space:4", result: "item:space_leggings"}
+      - {item: "item:doge_boots", with: "item:compressed_space:4", result: "item:space_boots"}

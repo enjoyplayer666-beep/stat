@@ -1083,3 +1083,64 @@ items:
     enchants: ["fire_aspect:5", "sharpness:30"]
     attributes: ["attack_damage:40", "attack_speed:4"]
     unbreakable: true
+
+  # ---------- Космический сет (характеристики временные: сильнее Doge) ----------
+  space_shard:
+    material: LIGHT_GRAY_DYE
+    name: "<dark_aqua>Космический осколок"
+    lore-mode: vanilla
+  space_block:
+    material: SMOOTH_QUARTZ
+    name: "<dark_aqua><b>Космический блок"
+    lore-mode: vanilla
+  compressed_space:
+    material: SMOOTH_QUARTZ
+    glint: true
+    name: "<dark_aqua><b>Сжатый космичекий блок"
+    lore-mode: vanilla
+  # элитры за 2 сжатых космических блока у НПС (из огненных, как у облака)
+  space_elytra_trade:
+    material: ELYTRA
+    name: "<dark_aqua><b>Звёздные элитры"
+    enchants: ["fire_protection:5", "protection:17", "thorns:5"]
+    attributes: ["max_health:2.5"]
+  space_helmet:
+    material: PLAYER_HEAD
+    head: "c0ecfa821d596a6b8b5c64ad3d909fd4bdf0b8d59abb6796ed47080c1ada1b2d"
+    name: "<dark_aqua><b>Космический шлем"
+    enchants: ["fire_protection:11", "protection:38", "thorns:11"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:30"]
+    unbreakable: true
+  space_chestplate:
+    material: LEATHER_CHESTPLATE
+    color: "#D8D8E0"
+    name: "<dark_aqua><b>Космический нагрудник"
+    enchants: ["fire_protection:11", "protection:38", "thorns:11"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:30"]
+    unbreakable: true
+  space_leggings:
+    material: LEATHER_LEGGINGS
+    color: "#D8D8E0"
+    name: "<dark_aqua><b>Космические поножи"
+    enchants: ["fire_protection:11", "protection:38", "thorns:11"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:30"]
+    unbreakable: true
+  space_boots:
+    material: LEATHER_BOOTS
+    color: "#D8D8E0"
+    name: "<dark_aqua><b>Космические ботинки"
+    enchants: ["fire_protection:11", "protection:38", "thorns:11"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:30"]
+    unbreakable: true
+  space_elytra:
+    material: ELYTRA
+    name: "<dark_aqua><b>Космические элитры"
+    enchants: ["fire_protection:11", "protection:38", "thorns:11"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:30"]
+  space_sword:
+    material: DIAMOND_SWORD
+    model: 10011
+    name: "<dark_aqua><b>Космический меч"
+    enchants: ["fire_aspect:5", "sharpness:32"]
+    attributes: ["attack_damage:45", "attack_speed:4"]
+    unbreakable: true
