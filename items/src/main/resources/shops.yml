@@ -521,3 +521,29 @@ shops:
       - {item: "item:cloud_chestplate", with: "item:compressed_magma:4", result: "item:magma_chestplate"}
       - {item: "item:cloud_leggings", with: "item:compressed_magma:4", result: "item:magma_leggings"}
       - {item: "item:cloud_boots", with: "item:compressed_magma:4", result: "item:magma_boots"}
+
+  # Ледяной сет (скрин): НПС-игрок в ледяном сете; улучшение магмовых вещей - в наковальне
+  ice:
+    title: "<dark_aqua><b>Ледяной сет"
+    name: "<dark_aqua><b>Ледяной сет"
+    npc:
+      type: "PLAYER"
+      skin: ""
+      fallback-type: "ZOMBIE"
+      equipment:
+        head: "item:ice_helmet"
+        chest: "item:ice_chestplate"
+        legs: "item:ice_leggings"
+        feet: "item:ice_boots"
+        hand: "item:ice_sword"
+    trades:
+      - {buy: "item:ice_shard:24", result: "item:compressed_ice"}
+      - {buy: "item:compressed_ice:8", result: "item:ice_cluster"}
+      - {buy: "item:separator", buy2: "item:separator", result: "item:separator"}
+    anvil:
+      - {item: "item:magma_sword", with: "item:ice_cluster:12", result: "item:ice_sword"}
+      - {item: "item:magma_elytra", with: "item:ice_cluster:8", result: "item:ice_elytra"}
+      - {item: "item:magma_helmet", with: "item:ice_cluster:4", result: "item:ice_helmet"}
+      - {item: "item:magma_chestplate", with: "item:ice_cluster:4", result: "item:ice_chestplate"}
+      - {item: "item:magma_leggings", with: "item:ice_cluster:4", result: "item:ice_leggings"}
+      - {item: "item:magma_boots", with: "item:ice_cluster:4", result: "item:ice_boots"}

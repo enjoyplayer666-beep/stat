@@ -949,3 +949,58 @@ items:
     name: "<dark_red><b>Магмовые элитры"
     enchants: ["fire_protection:8", "protection:20", "thorns:8"]
     attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.3", "max_health:6"]
+
+  # ---------- Ледяной сет ----------
+  ice_shard:
+    material: LIGHT_BLUE_DYE
+    name: "<aqua>Ледяной осколок"
+    lore-mode: vanilla
+  compressed_ice:
+    material: PACKED_ICE
+    glint: true
+    name: "<aqua>Сжатый лёд"
+    lore-mode: vanilla
+  ice_cluster:
+    material: BLUE_ICE
+    name: "<aqua><b>Ледяной кластер"
+    lore-mode: vanilla
+  ice_helmet:
+    material: PLAYER_HEAD
+    head: "5f912e3beb5be525d1ca7e1ac8d84e9d07e4aa340d0e51d8b2d5705457ee4ce7"
+    name: "<aqua><b>Ледяной шлем"
+    enchants: ["fire_protection:8", "protection:28", "thorns:8"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:10"]
+    unbreakable: true
+  ice_chestplate:
+    material: LEATHER_CHESTPLATE
+    color: "#2257C8"
+    name: "<aqua><b>Ледяной нагрудник"
+    enchants: ["fire_protection:8", "protection:28", "thorns:8"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:10"]
+    unbreakable: true
+  ice_leggings:
+    material: LEATHER_LEGGINGS
+    color: "#2257C8"
+    name: "<aqua><b>Ледяные поножи"
+    enchants: ["fire_protection:8", "protection:28", "thorns:8"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:10"]
+    unbreakable: true
+  ice_boots:
+    material: LEATHER_BOOTS
+    color: "#2257C8"
+    name: "<aqua><b>Ледяные ботинки"
+    enchants: ["fire_protection:8", "protection:28", "thorns:8"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:10"]
+    unbreakable: true
+  ice_elytra:
+    material: ELYTRA
+    name: "<aqua><b>Ледяные элитры"
+    enchants: ["fire_protection:8", "protection:28", "thorns:8"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:10"]
+  ice_sword:
+    material: DIAMOND_SWORD
+    model: 10008
+    name: "<aqua><b>Ледяной кинжал"
+    enchants: ["fire_aspect:3", "sharpness:25"]
+    attributes: ["attack_damage:35", "attack_speed:2"]
+    unbreakable: true
