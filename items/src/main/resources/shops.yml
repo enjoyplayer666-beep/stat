@@ -418,22 +418,24 @@ shops:
       - {item: "item:ice_leggings", with: "item:void_block:4", result: "item:void_leggings"}
       - {item: "item:ice_boots", with: "item:void_block:4", result: "item:void_boots"}
 
-  # Метеоритный (чёрный скелет): 32 скрапа -> энергия, 20 энергии -> заряд вселенной, вещь пустоты + заряды -> метеоритная вещь
+  # Метеоритный сет (скрин): статичный визер-скелет; улучшение планетарных вещей - в наковальне
   meteor:
-    title: "<gradient:#FF6B4A:#C81E1E><b>Метеоритный сет"
-    name: "<gradient:#FF6B4A:#C81E1E><b>Метеоритный сет"
+    title: "<light_purple><b>Метеоритный сет"
+    name: "<light_purple><b>Метеоритный сет"
     npc:
       type: "WITHER_SKELETON"
-      equipment:
-        hand: "item:meteor_sword"
     trades:
       - {buy: "item:meteor_scrap:32", result: "item:meteor_energy"}
       - {buy: "item:meteor_energy:20", result: "item:universe_charge"}
-      - {buy: "item:void_sword", buy2: "item:universe_charge:8", result: "item:meteor_sword"}
-      - {buy: "item:void_boots", buy2: "item:universe_charge:8", result: "item:meteor_boots"}
-      - {buy: "item:void_helmet", buy2: "item:universe_charge:4", result: "item:meteor_helmet"}
-      - {buy: "item:void_chestplate", buy2: "item:universe_charge:4", result: "item:meteor_chestplate"}
-      - {buy: "item:void_leggings", buy2: "item:universe_charge:4", result: "item:meteor_leggings"}
+      - {buy: "item:separator", buy2: "item:separator", result: "item:separator"}
+      - {buy: "item:space_elytra_trade", buy2: "item:universe_charge:2", result: "item:meteor_elytra_trade"}
+    anvil:
+      - {item: "item:planet_sword", with: "item:universe_charge:8", result: "item:meteor_sword"}
+      - {item: "item:planet_elytra", with: "item:universe_charge:8", result: "item:meteor_elytra"}
+      - {item: "item:planet_helmet", with: "item:universe_charge:4", result: "item:meteor_helmet"}
+      - {item: "item:planet_chestplate", with: "item:universe_charge:4", result: "item:meteor_chestplate"}
+      - {item: "item:planet_leggings", with: "item:universe_charge:4", result: "item:meteor_leggings"}
+      - {item: "item:planet_boots", with: "item:universe_charge:4", result: "item:meteor_boots"}
 
   # Еда (скрин): НПС-игрок со скином, стоит статично (не поворачивается)
   food:
