@@ -686,3 +686,27 @@ shops:
     trades:
       - {buy: "item:hell_piece:56", result: "item:hell_clot"}
       - {buy: "item:hell_clot:8", result: "item:hell_energy"}
+
+  # Планетарный сет (скрин): статичный зомби-гигант в планетарной броне; энергии -> планетарная энергия
+  planet:
+    title: "<dark_aqua><b>Планетарный сет"
+    name: "<dark_aqua><b>Планетарный сет"
+    npc:
+      type: "ZOMBIE"
+      scale: 3
+      equipment:
+        head: "item:planet_helmet"
+        chest: "item:planet_chestplate"
+        legs: "item:planet_leggings"
+        feet: "item:planet_boots"
+    trades:
+      - {buy: "item:earth_energy", buy2: "item:purpur_energy", result: "item:combined_energy"}
+      - {buy: "item:hell_energy", buy2: "item:combined_energy", result: "item:planet_energy"}
+      - {buy: "item:separator", buy2: "item:separator", result: "item:separator"}
+    anvil:
+      - {item: "item:comet_sword", with: "item:planet_energy:8", result: "item:planet_sword"}
+      - {item: "item:comet_elytra", with: "item:planet_energy:8", result: "item:planet_elytra"}
+      - {item: "item:comet_helmet", with: "item:planet_energy:4", result: "item:planet_helmet"}
+      - {item: "item:comet_chestplate", with: "item:planet_energy:4", result: "item:planet_chestplate"}
+      - {item: "item:comet_leggings", with: "item:planet_energy:4", result: "item:planet_leggings"}
+      - {item: "item:comet_boots", with: "item:planet_energy:4", result: "item:planet_boots"}

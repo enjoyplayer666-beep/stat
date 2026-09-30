@@ -1313,3 +1313,55 @@ items:
     model: 175
     name: "<red>Сгусток адской земли"
     lore-mode: vanilla
+
+  # ---------- Планетарный сет (характеристики временные: сильнее кометного) ----------
+  combined_energy:
+    material: IRON_INGOT
+    model: 183
+    name: "<white><b>Комбинированная энергия"
+    lore-mode: vanilla
+  planet_energy:
+    material: IRON_INGOT
+    model: 184
+    name: "<dark_aqua><b>Планетарная энергия"
+    lore-mode: vanilla
+  planet_helmet:
+    material: PLAYER_HEAD
+    head: "c1077e871d91b7fea24b1f6808e088d7b842da516f6356ce91613494431ae8a0"
+    name: "<dark_aqua><b>Планетарный шлем"
+    enchants: ["fire_protection:14", "protection:47", "thorns:14"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:37.5"]
+    unbreakable: true
+  planet_chestplate:
+    material: LEATHER_CHESTPLATE
+    color: "#9E1B1B"
+    name: "<dark_aqua><b>Планетарный нагрудник"
+    enchants: ["fire_protection:14", "protection:47", "thorns:14"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:37.5"]
+    unbreakable: true
+  planet_leggings:
+    material: LEATHER_LEGGINGS
+    color: "#6B1060"
+    name: "<dark_aqua><b>Планетарные поножи"
+    enchants: ["fire_protection:14", "protection:47", "thorns:14"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:37.5"]
+    unbreakable: true
+  planet_boots:
+    material: LEATHER_BOOTS
+    color: "#6B1060"
+    name: "<dark_aqua><b>Планетарные ботинки"
+    enchants: ["fire_protection:14", "protection:47", "thorns:14"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:37.5"]
+    unbreakable: true
+  planet_elytra:
+    material: ELYTRA
+    name: "<dark_aqua><b>Планетарные элитры"
+    enchants: ["fire_protection:14", "protection:47", "thorns:14"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:37.5"]
+  planet_sword:
+    material: DIAMOND_SWORD
+    model: 10014
+    name: "<dark_aqua><b>Планетарный меч"
+    enchants: ["fire_aspect:5", "sharpness:38"]
+    attributes: ["attack_damage:60", "attack_speed:4"]
+    unbreakable: true
