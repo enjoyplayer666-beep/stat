@@ -864,3 +864,19 @@ items:
     material: BRICK
     name: "<white>Смоляной кирпич"
     lore-mode: vanilla
+
+  # ---------- Обмен маяков ----------
+  compressed_beacon:
+    material: BEACON
+    glint: true
+    name: "<aqua><b>Сжатый маяк"
+    lore-mode: vanilla
+  cloud_drop:
+    material: PRISMARINE_CRYSTALS
+    name: "<white>Капля облака"
+    lore-mode: vanilla
+  compressed_magma:
+    material: MAGMA_BLOCK
+    glint: true
+    name: "<red>Сжатая магма"
+    lore-mode: vanilla

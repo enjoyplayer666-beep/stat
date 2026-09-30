@@ -478,3 +478,22 @@ shops:
       skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/auction.png"
       fallback-type: "ZOMBIE"
     trades: []
+
+  # Обмен маяков (скрин): НПС-игрок со скином
+  beacons:
+    title: "<light_purple><b>Обмен маяков"
+    name: "<light_purple><b>Обмен маяков"
+    npc:
+      type: "PLAYER"
+      skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/beacons.png"
+      fallback-type: "ZOMBIE"
+    trades:
+      - {buy: "BEACON:64", result: "item:compressed_beacon"}
+      - {buy: "item:compressed_beacon", result: "BEACON:64"}
+      - {buy: "item:compressed_gold:15", result: "item:compressed_beacon"}
+      - {buy: "item:compressed_beacon", result: "item:compressed_gold:4"}
+      - {buy: "item:compressed_beacon:4", result: "item:obsidian_cluster"}
+      - {buy: "item:compressed_beacon:6", result: "item:purpur_cluster"}
+      - {buy: "item:compressed_beacon:10", result: "item:jungle_cluster"}
+      - {buy: "item:compressed_beacon:32", result: "item:cloud_drop"}
+      - {buy: "item:compressed_beacon:16", result: "item:compressed_magma"}
