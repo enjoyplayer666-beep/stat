@@ -73,7 +73,7 @@ messages:
   reset-ok: '&aРанг игрока &f{player} &aсброшен.'
   reload-ok: '&aКонфиг DsRanks перезагружен.'
   bad-number: '&cЗначение должно быть числом.'
-  give-ok: '&c◆ &fВы выдали &a{kills} &fубийств игроку &b{player}&f.'
+  give-done: '&c◆ &fВы выдали &a{kills} &fубийств игроку &b{player}&f.'
   give-got: '&c◆ &fИгрок &b{player} &fвыдал вам &a{kills} &fубийств.'
   give-cooldown: '&cЕщё рано. Снова можно через &f{time}'
   give-no-access: '&cКоманда доступна с привилегии &fULTRA&c.'

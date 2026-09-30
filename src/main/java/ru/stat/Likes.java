@@ -103,7 +103,7 @@ final class Likes implements CommandExecutor, TabCompleter {
         plugin.set(name, "likes", plugin.integer(name, "likes") + amount);
         plugin.set(p.getName(), "likegive-last", now);
         plugin.saveData();
-        send(p, "give-ok", "{likes}", String.valueOf(amount), "{player}", name);
+        send(p, "give-done", "{likes}", String.valueOf(amount), "{player}", name);
         if (target instanceof Player online && !online.equals(p)) {
             send(online, "give-got", "{likes}", String.valueOf(amount), "{player}", p.getName());
         }

@@ -96,7 +96,7 @@ likes:
     already: '&cТы уже ставил лайк игроку &f{player}&c.'
     liked: '&aТы поставил &c♥ &aлайк игроку &f{player}&a!'
     got-like: '&fИгрок &b{player} &fпоставил тебе &c♥ &eлайк&f!'
-    give-ok: '&c◆ &fВы выдали &a{likes} &c♥ &fлайков игроку &b{player}&f.'
+    give-done: '&c◆ &fВы выдали &a{likes} &c♥ &fлайков игроку &b{player}&f.'
     give-got: '&c◆ &fИгрок &b{player} &fвыдал вам &a{likes} &c♥ &fлайков.'
     give-cooldown: '&cЕщё рано. Снова можно через &f{time}'
     give-no-access: '&cКоманда доступна с привилегии &fULTRA&c.'

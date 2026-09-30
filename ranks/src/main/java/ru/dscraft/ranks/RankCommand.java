@@ -148,7 +148,7 @@ public class RankCommand implements CommandExecutor, TabCompleter {
         plugin.set(name, "kills", plugin.integer(name, "kills") + amount);
         plugin.set(p.getName(), "give-last", now);
         plugin.saveData();
-        send(p, plugin.msg("give-ok").replace("{kills}", String.valueOf(amount)).replace("{player}", name));
+        send(p, plugin.msg("give-done").replace("{kills}", String.valueOf(amount)).replace("{player}", name));
         Player online = target instanceof Player t ? t : null;
         if (online != null && !online.equals(p)) {
             send(online, plugin.msg("give-got").replace("{kills}", String.valueOf(amount)).replace("{player}", p.getName()));
