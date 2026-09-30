@@ -23,8 +23,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.world.EntitiesLoadEvent;
-import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
@@ -37,6 +37,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -44,15 +45,15 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Генераторы: копят блоки (+amount раз в interval), над генератором - блок-иконка и "x{count}".
- * Игрок на площадке генератора забирает всё в инвентарь; с активным бустером - в N раз больше.
- * Бустеры - предметы MediaItems (по метке mediaitems:id), включаются ПКМ.
+ * Генераторы. У каждого игрока в группе свой счётчик: +amount раз в interval (с бустером - в N раз больше),
+ * до max, дальше стоит, пока игрок не заберёт. Точки одной группы (dirt p1, dirt p2...) - общий счётчик игрока.
+ * Над точкой каждый игрок видит свой блок-иконку и "x{count}" (только в радиусе view-distance).
+ * Бустеры - предметы MediaItems (метка mediaitems:id), включаются ПКМ.
  */
 public final class MediaGensPlugin extends JavaPlugin implements Listener {
 
     private static final MiniMessage MM = MiniMessage.miniMessage();
 
-    /** Точка генератора. Точки одной группы работают синхронно: общий счётчик. */
     static final class Gen {
         String name;   // "группа:точка"
         String group;
@@ -60,18 +61,17 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
         String world;
         int x, y, z;
         Material material;
-        UUID itemEntity, textEntity;
-        String shown;
-        /** угол поворота иконки (как у выпавшего предмета) */
-        float angle;
+        /** надписи этой точки для каждого игрока рядом: игрок -> [иконка, текст] */
+        final Map<UUID, UUID[]> views = new HashMap<>();
+        final Map<UUID, String> shown = new HashMap<>();
     }
 
     private record Boost(int multiplier, long until) {
     }
 
     private final Map<String, Gen> gens = new LinkedHashMap<>();
-    /** общий счётчик группы */
-    private final Map<String, Integer> counts = new LinkedHashMap<>();
+    /** группа -> игрок -> накоплено */
+    private final Map<String, Map<UUID, Integer>> counts = new LinkedHashMap<>();
     private final Map<String, Material> materials = new LinkedHashMap<>();
     private final Map<UUID, Boost> boosts = new HashMap<>();
     private NamespacedKey genKey;
@@ -82,12 +82,18 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         saveDefaultConfig();
-        if (getConfig().getDouble("generator.item-scale") == 0.6) getConfig().set("generator.item-scale", 0.35);
-        if (getConfig().getDouble("generator.item-offset") == 1.35) getConfig().set("generator.item-offset", 1.2);
-        if (!getConfig().contains("generator.view-distance")) getConfig().set("generator.view-distance", 5);
-        if (!getConfig().contains("generator.spin-degrees")) {
-            getConfig().set("generator.spin-degrees", 15);
-            getConfig().set("generator.bob", 0.06);
+        var c = getConfig();
+        if (c.getDouble("generator.item-scale") == 0.6) c.set("generator.item-scale", 0.35);
+        if (c.getDouble("generator.item-offset") == 1.35) c.set("generator.item-offset", 1.2);
+        if (!c.contains("generator.view-distance")) c.set("generator.view-distance", 5);
+        if (!c.contains("generator.spin-degrees")) {
+            c.set("generator.spin-degrees", 15);
+            c.set("generator.bob", 0.06);
+        }
+        // на максимуме генератор теперь ждёт, пока заберут
+        if (c.getInt("config-version", 1) < 2) {
+            c.set("generator.on-full", "stop");
+            c.set("config-version", 2);
         }
         saveConfig();
         genKey = new NamespacedKey(this, "gen");
@@ -96,7 +102,7 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
         load();
         getServer().getPluginManager().registerEvents(this, this);
         Bukkit.getScheduler().runTaskTimer(this, this::tick, 20L, 1L);
-        getLogger().info("Генераторов: " + gens.size());
+        getLogger().info("Точек генераторов: " + gens.size());
     }
 
     @Override
@@ -126,7 +132,17 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
                 ConfigurationSection gs = groups.getConfigurationSection(group);
                 Material m = Material.matchMaterial(gs.getString("material", "DIRT"));
                 materials.put(group, m == null ? Material.DIRT : m);
-                counts.put(group, gs.getInt("count"));
+                Map<UUID, Integer> pc = new HashMap<>();
+                ConfigurationSection cs = gs.getConfigurationSection("players");
+                if (cs != null) {
+                    for (String u : cs.getKeys(false)) {
+                        try {
+                            pc.put(UUID.fromString(u), cs.getInt(u));
+                        } catch (IllegalArgumentException ignored) {
+                        }
+                    }
+                }
+                counts.put(group, pc);
                 ConfigurationSection pts = gs.getConfigurationSection("points");
                 if (pts == null) continue;
                 for (String point : pts.getKeys(false)) {
@@ -135,14 +151,14 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
                 }
             }
         }
-        // старый формат (одиночные генераторы) -> группа с точкой p1
+        // самый первый формат (одиночные генераторы) -> группа с точкой p1
         ConfigurationSection old = y.getConfigurationSection("gens");
         if (old != null) {
             for (String name : old.getKeys(false)) {
                 ConfigurationSection s = old.getConfigurationSection(name);
                 Material m = Material.matchMaterial(s.getString("material", "DIRT"));
                 materials.putIfAbsent(name, m == null ? Material.DIRT : m);
-                counts.putIfAbsent(name, s.getInt("count"));
+                counts.putIfAbsent(name, new HashMap<>());
                 addPoint(name, "p1", s.getString("world"), s.getInt("x"), s.getInt("y"), s.getInt("z"));
             }
         }
@@ -166,7 +182,9 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
         YamlConfiguration y = new YamlConfiguration();
         for (var e : materials.entrySet()) {
             y.set("groups." + e.getKey() + ".material", e.getValue().name());
-            y.set("groups." + e.getKey() + ".count", counts.getOrDefault(e.getKey(), 0));
+            for (var pc : counts.getOrDefault(e.getKey(), Map.of()).entrySet()) {
+                if (pc.getValue() > 0) y.set("groups." + e.getKey() + ".players." + pc.getKey(), pc.getValue());
+            }
         }
         for (Gen g : gens.values()) {
             String p = "groups." + g.group + ".points." + g.point + ".";
@@ -188,46 +206,50 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
         tickCounter++;
         var gc = getConfig();
         int interval = Math.max(1, gc.getInt("generator.interval-ticks", 20));
-        boolean grow = tickCounter % interval == 0;
-        boolean check = tickCounter % 5 == 0;
-        if (grow) {
-            int max = gc.getInt("generator.max", 512);
-            boolean reset = "reset".equalsIgnoreCase(gc.getString("generator.on-full", "reset"));
-            for (var e : counts.entrySet()) {
-                int c = e.getValue();
-                if (c >= max) {
-                    if (reset) e.setValue(0);
-                    continue;
-                }
-                e.setValue(Math.min(max, c + gc.getInt("generator.amount", 1)));
-            }
-        }
-        if (check) {
+        if (tickCounter % interval == 0) grow();
+        if (tickCounter % 5 == 0) {
             collect();
-            for (Gen g : gens.values()) updateDisplay(g);
+            for (Gen g : gens.values()) updateDisplays(g);
             boostBar();
         }
         if (tickCounter % 1200 == 0) save();
     }
 
-    /** Игроки на площадке генератора забирают накопленное. */
+    /** Каждому игроку в сети: +amount (с бустером - x множитель), до max. */
+    private void grow() {
+        var gc = getConfig();
+        int max = gc.getInt("generator.max", 512);
+        boolean reset = "reset".equalsIgnoreCase(gc.getString("generator.on-full", "stop"));
+        int amount = gc.getInt("generator.amount", 1);
+        for (Map<UUID, Integer> pc : counts.values()) {
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                int c = pc.getOrDefault(p.getUniqueId(), 0);
+                if (c >= max) {
+                    if (reset) pc.put(p.getUniqueId(), 0);
+                    continue;
+                }
+                pc.put(p.getUniqueId(), Math.min(max, c + amount * multiplier(p)));
+            }
+        }
+    }
+
+    /** Игрок на площадке точки забирает своё накопленное в группе. */
     private void collect() {
         int r = getConfig().getInt("generator.radius", 1);
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
             Location l = p.getLocation();
             for (Gen g : gens.values()) {
-                int count = counts.getOrDefault(g.group, 0);
-                if (count <= 0 || !l.getWorld().getName().equals(g.world)) continue;
+                if (!l.getWorld().getName().equals(g.world)) continue;
                 if (Math.abs(l.getBlockX() - g.x) > r || Math.abs(l.getBlockZ() - g.z) > r) continue;
                 double dy = l.getY() - (g.y + 1);
                 if (dy < -0.5 || dy > 2.5) continue;
-                int mult = multiplier(p);
-                int total = count * mult;
-                int left = give(p, g.material, total);
-                // что не влезло - остаётся в генераторе (в пересчёте без бустера); счётчик общий для всей группы
-                counts.put(g.group, mult > 1 ? (left + mult - 1) / mult : left);
-                if (total - left > 0) p.playSound(p.getLocation(), org.bukkit.Sound.ENTITY_ITEM_PICKUP, 0.4f, 1.4f);
+                Map<UUID, Integer> pc = counts.computeIfAbsent(g.group, k -> new HashMap<>());
+                int count = pc.getOrDefault(p.getUniqueId(), 0);
+                if (count <= 0) continue;
+                int left = give(p, g.material, count);
+                pc.put(p.getUniqueId(), left);
+                if (count - left > 0) p.playSound(p.getLocation(), org.bukkit.Sound.ENTITY_ITEM_PICKUP, 0.4f, 1.4f);
             }
         }
     }
@@ -243,59 +265,88 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
         return left;
     }
 
-    // ---------- отображение ----------
+    // ---------- отображение: у каждого игрока рядом свои блок и число ----------
 
     private boolean loaded(Gen g) {
         World w = Bukkit.getWorld(g.world);
         return w != null && w.isChunkLoaded(g.x >> 4, g.z >> 4) && w.getChunkAt(g.x >> 4, g.z >> 4).isEntitiesLoaded();
     }
 
-    private void updateDisplay(Gen g) {
-        if (!loaded(g)) return;
+    private void updateDisplays(Gen g) {
         World w = Bukkit.getWorld(g.world);
+        double vd = getConfig().getDouble("generator.view-distance", 5);
+        Location c = w == null ? null : new Location(w, g.x + 0.5, g.y + 1, g.z + 0.5);
+        // кто рядом и у кого есть что забрать
+        Map<UUID, Player> near = new HashMap<>();
+        if (c != null && loaded(g)) {
+            for (Player p : w.getPlayers()) {
+                if (p.getLocation().distanceSquared(c) > (vd + 1) * (vd + 1)) continue;
+                if (counts.getOrDefault(g.group, Map.of()).getOrDefault(p.getUniqueId(), 0) > 0) near.put(p.getUniqueId(), p);
+            }
+        }
+        // убрать лишние
+        for (Iterator<Map.Entry<UUID, UUID[]>> it = g.views.entrySet().iterator(); it.hasNext(); ) {
+            var e = it.next();
+            if (near.containsKey(e.getKey())) continue;
+            for (UUID id : e.getValue()) {
+                Entity ent = id == null ? null : Bukkit.getEntity(id);
+                if (ent != null) ent.remove();
+            }
+            g.shown.remove(e.getKey());
+            it.remove();
+        }
+        if (near.isEmpty()) return;
         var gc = getConfig();
-        Entity item = g.itemEntity == null ? null : Bukkit.getEntity(g.itemEntity);
-        Entity text = g.textEntity == null ? null : Bukkit.getEntity(g.textEntity);
-        int count = counts.getOrDefault(g.group, 0);
-        if (count <= 0) {
-            // пусто - блока-иконки нет, надпись тоже убираем
-            if (item != null) item.remove();
-            if (text != null) text.remove();
-            g.itemEntity = g.textEntity = null;
-            g.shown = null;
-            return;
-        }
-        if (item == null || !item.isValid()) {
-            float sc = (float) gc.getDouble("generator.item-scale", 0.35);
-            Location at = new Location(w, g.x + 0.5, g.y + gc.getDouble("generator.item-offset", 1.2), g.z + 0.5);
-            ItemDisplay d = w.spawn(at, ItemDisplay.class, e -> {
-                e.setPersistent(false);
-                e.getPersistentDataContainer().set(genKey, PersistentDataType.STRING, g.name);
-                e.setItemStack(new ItemStack(g.material));
-                e.setViewRange(viewRange());
-                e.setTransformation(new Transformation(new Vector3f(), new AxisAngle4f(), new Vector3f(sc, sc, sc), new AxisAngle4f()));
-            });
-            g.itemEntity = d.getUniqueId();
-        }
-        if (text == null || !text.isValid()) {
-            Location at = new Location(w, g.x + 0.5, g.y + gc.getDouble("generator.text-offset", 2.0), g.z + 0.5);
-            TextDisplay d = w.spawn(at, TextDisplay.class, e -> {
-                e.setPersistent(false);
-                e.getPersistentDataContainer().set(genKey, PersistentDataType.STRING, g.name);
-                e.setBillboard(Display.Billboard.CENTER);
-                e.setViewRange(viewRange());
-                e.setBackgroundColor(org.bukkit.Color.fromARGB(0, 0, 0, 0));
-                e.setShadowed(true);
-            });
-            g.textEntity = d.getUniqueId();
-            g.shown = null;
-            text = d;
-        }
-        if (g.itemEntity != null && Bukkit.getEntity(g.itemEntity) instanceof ItemDisplay d && someoneNear(g)) spin(d, g);
-        String s = gc.getString("generator.text", "<gray>x<aqua>{count}").replace("{count}", String.valueOf(count));
-        if (!s.equals(g.shown) && text instanceof TextDisplay td) {
-            td.text(mm(s));
-            g.shown = s;
+        float sc = (float) gc.getDouble("generator.item-scale", 0.35);
+        double step = Math.toRadians(gc.getDouble("generator.spin-degrees", 15));
+        float angle = (float) (((tickCounter / 5) * step) % (Math.PI * 2));
+        float bob = (float) (Math.sin(angle) * gc.getDouble("generator.bob", 0.06));
+        for (Player p : near.values()) {
+            UUID[] v = g.views.computeIfAbsent(p.getUniqueId(), k -> new UUID[2]);
+            Entity item = v[0] == null ? null : Bukkit.getEntity(v[0]);
+            Entity text = v[1] == null ? null : Bukkit.getEntity(v[1]);
+            if (item == null || !item.isValid()) {
+                Location at = new Location(w, g.x + 0.5, g.y + gc.getDouble("generator.item-offset", 1.2), g.z + 0.5);
+                ItemDisplay d = w.spawn(at, ItemDisplay.class, e -> {
+                    e.setPersistent(false);
+                    e.setVisibleByDefault(false);
+                    e.getPersistentDataContainer().set(genKey, PersistentDataType.STRING, g.name);
+                    e.setItemStack(new ItemStack(g.material));
+                    e.setViewRange(viewRange());
+                    e.setTransformation(new Transformation(new Vector3f(), new AxisAngle4f(), new Vector3f(sc, sc, sc), new AxisAngle4f()));
+                });
+                p.showEntity(this, d);
+                v[0] = d.getUniqueId();
+                item = d;
+            }
+            if (text == null || !text.isValid()) {
+                Location at = new Location(w, g.x + 0.5, g.y + gc.getDouble("generator.text-offset", 2.0), g.z + 0.5);
+                TextDisplay d = w.spawn(at, TextDisplay.class, e -> {
+                    e.setPersistent(false);
+                    e.setVisibleByDefault(false);
+                    e.getPersistentDataContainer().set(genKey, PersistentDataType.STRING, g.name);
+                    e.setBillboard(Display.Billboard.CENTER);
+                    e.setViewRange(viewRange());
+                    e.setBackgroundColor(org.bukkit.Color.fromARGB(0, 0, 0, 0));
+                    e.setShadowed(true);
+                });
+                p.showEntity(this, d);
+                v[1] = d.getUniqueId();
+                g.shown.remove(p.getUniqueId());
+                text = d;
+            }
+            if (item instanceof ItemDisplay d) {
+                d.setInterpolationDelay(0);
+                d.setInterpolationDuration(5);
+                d.setTransformation(new Transformation(new Vector3f(0, bob, 0), new AxisAngle4f(angle, 0, 1, 0),
+                        new Vector3f(sc, sc, sc), new AxisAngle4f()));
+            }
+            int count = counts.getOrDefault(g.group, Map.of()).getOrDefault(p.getUniqueId(), 0);
+            String s = gc.getString("generator.text", "<gray>x<aqua>{count}").replace("{count}", String.valueOf(count));
+            if (!s.equals(g.shown.get(p.getUniqueId())) && text instanceof TextDisplay td) {
+                td.text(mm(s));
+                g.shown.put(p.getUniqueId(), s);
+            }
         }
     }
 
@@ -304,57 +355,43 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
         return (float) (getConfig().getDouble("generator.view-distance", 5) / 64.0);
     }
 
-    private boolean someoneNear(Gen g) {
-        double r = getConfig().getDouble("generator.view-distance", 5) + 2;
-        World w = Bukkit.getWorld(g.world);
-        if (w == null) return false;
-        Location c = new Location(w, g.x + 0.5, g.y + 1, g.z + 0.5);
-        for (Player p : w.getPlayers()) {
-            if (p.getLocation().distanceSquared(c) <= r * r) return true;
-        }
-        return false;
-    }
-
-    /** Поворот и покачивание, как у выпавшего предмета. */
-    private void spin(ItemDisplay d, Gen g) {
-        var gc = getConfig();
-        float sc = (float) gc.getDouble("generator.item-scale", 0.35);
-        // угол от общего времени - все точки крутятся одинаково (синхронно)
-        double step = Math.toRadians(gc.getDouble("generator.spin-degrees", 15));
-        g.angle = (float) (((tickCounter / 5) * step) % (Math.PI * 2));
-        float bob = (float) (Math.sin(g.angle) * gc.getDouble("generator.bob", 0.06));
-        d.setInterpolationDelay(0);
-        d.setInterpolationDuration(5);
-        d.setTransformation(new Transformation(new Vector3f(0, bob, 0), new AxisAngle4f(g.angle, 0, 1, 0),
-                new Vector3f(sc, sc, sc), new AxisAngle4f()));
-    }
-
     private void removeDisplays(Gen g) {
-        for (UUID id : new UUID[]{g.itemEntity, g.textEntity}) {
-            if (id == null) continue;
-            Entity e = Bukkit.getEntity(id);
-            if (e != null) e.remove();
+        for (UUID[] v : g.views.values()) {
+            for (UUID id : v) {
+                Entity e = id == null ? null : Bukkit.getEntity(id);
+                if (e != null) e.remove();
+            }
         }
-        g.itemEntity = g.textEntity = null;
+        g.views.clear();
+        g.shown.clear();
+    }
+
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e) {
+        for (Gen g : gens.values()) {
+            UUID[] v = g.views.remove(e.getPlayer().getUniqueId());
+            g.shown.remove(e.getPlayer().getUniqueId());
+            if (v == null) continue;
+            for (UUID id : v) {
+                Entity ent = id == null ? null : Bukkit.getEntity(id);
+                if (ent != null) ent.remove();
+            }
+        }
     }
 
     /** Иконки, оставшиеся после краша, убираем - поставим заново. */
     @EventHandler
     public void onEntitiesLoad(EntitiesLoadEvent e) {
         for (Entity ent : e.getEntities()) {
-            if (ent.getPersistentDataContainer().has(genKey, PersistentDataType.STRING)) {
-                boolean ours = false;
-                for (Gen g : gens.values()) {
-                    if (ent.getUniqueId().equals(g.itemEntity) || ent.getUniqueId().equals(g.textEntity)) ours = true;
+            if (!ent.getPersistentDataContainer().has(genKey, PersistentDataType.STRING)) continue;
+            boolean ours = false;
+            for (Gen g : gens.values()) {
+                for (UUID[] v : g.views.values()) {
+                    if (ent.getUniqueId().equals(v[0]) || ent.getUniqueId().equals(v[1])) ours = true;
                 }
-                if (!ours) ent.remove();
             }
+            if (!ours) ent.remove();
         }
-    }
-
-    @EventHandler
-    public void onWorldLoad(WorldLoadEvent e) {
-        // генераторы в мирах Multiverse появятся сами в следующем тике
     }
 
     // ---------- бустеры ----------
@@ -446,7 +483,7 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
                     return true;
                 }
                 materials.put(group, m);
-                counts.putIfAbsent(group, 0);
+                counts.putIfAbsent(group, new HashMap<>());
                 Block under = p.getLocation().subtract(0, 0.2, 0).getBlock();
                 Gen g = addPoint(group, point, under.getWorld().getName(), under.getX(), under.getY(), under.getZ());
                 for (Gen x : gens.values()) if (x.group.equals(group)) x.material = m;
@@ -494,7 +531,7 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
                 if (gens.isEmpty()) sender.sendMessage(mm("<gray>Генераторов нет."));
                 for (var e : materials.entrySet()) {
                     sender.sendMessage(mm("<white>" + e.getKey() + "</white> <gray>(" + e.getValue().name().toLowerCase(Locale.ROOT)
-                            + ") <aqua>x" + counts.getOrDefault(e.getKey(), 0)));
+                            + ") <gray>копят игроков: <aqua>" + counts.getOrDefault(e.getKey(), Map.of()).size()));
                     for (Gen g : gens.values()) {
                         if (g.group.equals(e.getKey())) sender.sendMessage(mm("<gray>  - " + g.point + ": " + g.world + " " + g.x + " " + g.y + " " + g.z));
                     }
