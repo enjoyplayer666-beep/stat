@@ -52,7 +52,7 @@ public class MediaClearPlugin extends JavaPlugin {
             if (excluded(w)) continue;
             for (Item item : w.getEntitiesByClass(Item.class)) item.remove();
         }
-        broadcast(getConfig().getString("done", "&#E51510◆ &fОчистка завершена!"));
+        broadcast(getConfig().getString("done", "&#FF130D◆ &fОчистка завершена!"));
     }
 
     /** Только игрокам не в лобби. */
