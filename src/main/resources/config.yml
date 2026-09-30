@@ -6,7 +6,7 @@
 # Цвета: &a, &l ... и hex вида &#RRGGBB
 
 # не трогать: по нему плагин обновляет старый config.yml
-config-version: 13
+config-version: 14
 
 lines:
   - '&#7B6FE0╭- - - - - - - - - - - - - - - - - - - - - - - -╮'
@@ -82,8 +82,8 @@ classes:
   - {rating: 90000, display: '&b«EXCLUSIVE»'}
   - {rating: 200000, display: '&0«&6虎&bTIGR&6虎&0»'}
   - {rating: 500000, display: '&c⚔&3&oLEGENDARY&c⚔'}
-  - {rating: 1000000, display: '&4➶&e&oImmortal&4➶'}
-  - {rating: 2000000, display: '&e↟&c&oNephilim&e↟'}
+  - {rating: 1000000, display: '&c웃&f&oImmortal&c웃'}
+  - {rating: 2000000, display: '&7Ψ&c&oNephilim&7Ψ'}
 
 messages:
   usage: '&cИспользование: /stat <ник игрока>'

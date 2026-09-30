@@ -89,6 +89,20 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
         int version = cfg.contains("config-version", true) ? cfg.getInt("config-version") : 1;
         int latest = cfg.getDefaults() == null ? version : cfg.getDefaults().getInt("config-version", version);
         if (version >= latest || cfg.getDefaults() == null) return;
+        if (version < 14) {
+            // 14: Immortal и Nephilim как на скринах
+            List<java.util.Map<String, Object>> out = new ArrayList<>();
+            for (java.util.Map<?, ?> c : cfg.getMapList("classes")) {
+                java.util.Map<String, Object> copy = new java.util.LinkedHashMap<>();
+                for (var e : c.entrySet()) copy.put(String.valueOf(e.getKey()), e.getValue());
+                String d = String.valueOf(copy.get("display"));
+                if (d.contains("Immortal")) copy.put("display", "&c웃&f&oImmortal&c웃");
+                if (d.contains("Nephilim")) copy.put("display", "&7Ψ&c&oNephilim&7Ψ");
+                out.add(copy);
+            }
+            cfg.set("classes", out);
+            saveConfig();
+        }
         if (version < 13) {
             // 13: новые знаки классности (1-3 Степень, пороги Мастер/EXCLUSIVE/TIGR); LEGENDARY и выше - как были
             List<java.util.Map<?, ?>> def = cfg.getDefaults().getMapList("classes");
