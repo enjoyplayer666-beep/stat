@@ -379,26 +379,23 @@ shops:
       - {item: "item:majestic_leggings", with: "item:jungle_cluster:4", result: "item:jungle_leggings"}
       - {item: "item:majestic_boots", with: "item:jungle_cluster:4", result: "item:jungle_boots"}
 
-  # Облачный (кит Legend): majestic-вещь + 48 компонентов
+  # Облачный сет (скрин): статичная белая овца; улучшение джунглевых вещей - в наковальне
   cloud:
     title: "<white><b>Облачный сет"
     name: "<white><b>Облачный сет"
     npc:
-      type: "PLAYER"
-      skin: ""
-      fallback-type: "SKELETON"
-      equipment:
-        head: "WHITE_WOOL"
-        chest: "LEATHER_CHESTPLATE#FFFFFF"
-        legs: "LEATHER_LEGGINGS#FFFFFF"
-        feet: "LEATHER_BOOTS#FFFFFF"
-        hand: "item:cloud_sword"
+      type: "SHEEP"
     trades:
-      - {buy: "item:majestic_helmet", buy2: "item:accel_component:48", result: "item:cloud_helmet"}
-      - {buy: "item:majestic_chestplate", buy2: "item:accel_component:48", result: "item:cloud_chestplate"}
-      - {buy: "item:majestic_leggings", buy2: "item:accel_component:48", result: "item:cloud_leggings"}
-      - {buy: "item:majestic_boots", buy2: "item:accel_component:48", result: "item:cloud_boots"}
-      - {buy: "item:majestic_sword", buy2: "item:accel_component:48", result: "item:cloud_sword"}
+      - {buy: "item:killer_token:32", result: "item:cloud_drop"}
+      - {buy: "item:cloud_drop:24", result: "item:cloud_fluff"}
+      - {buy: "item:separator", buy2: "item:separator", result: "item:separator"}
+    anvil:
+      - {item: "item:jungle_sword", with: "item:cloud_fluff:8", result: "item:cloud_sword"}
+      - {item: "item:jungle_elytra", with: "item:cloud_fluff:4", result: "item:cloud_elytra"}
+      - {item: "item:jungle_helmet", with: "item:cloud_fluff:4", result: "item:cloud_helmet"}
+      - {item: "item:jungle_chestplate", with: "item:cloud_fluff:4", result: "item:cloud_chestplate"}
+      - {item: "item:jungle_leggings", with: "item:cloud_fluff:4", result: "item:cloud_leggings"}
+      - {item: "item:jungle_boots", with: "item:cloud_fluff:4", result: "item:cloud_boots"}
 
   # Пустота: облачная вещь + 64 компонента
   void:

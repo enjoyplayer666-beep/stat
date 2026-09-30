@@ -613,6 +613,22 @@ items:
     enchants: ["fire_protection:2", "protection:15", "thorns:2"]
     lore-mode: vanilla
 
+  # Облачный сет: ресурсы и элитры
+  killer_token:
+    material: LIGHT_GRAY_DYE
+    name: "<dark_aqua><b>Жетон убийцы"
+    lore-mode: vanilla
+  cloud_fluff:
+    material: IRON_INGOT
+    model: 200
+    name: "<white><b>Облачный пух"
+    lore-mode: vanilla
+  cloud_elytra:
+    material: ELYTRA
+    name: "<white><b>Облачные элитры"
+    enchants: ["fire_protection:3", "protection:19", "thorns:3"]
+    lore-mode: vanilla
+
   cloud_helmet:
     material: LEATHER_HELMET
     model: 10001
