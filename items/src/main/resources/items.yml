@@ -1023,10 +1023,9 @@ items:
     material: YELLOW_GLAZED_TERRACOTTA
     name: "<gold><b>Doge Cluster"
     lore-mode: vanilla
-  # шлем - голова (текстуру пришлёт владелец), пока кожаный
   doge_helmet:
-    material: LEATHER_HELMET
-    color: "#F5C518"
+    material: PLAYER_HEAD
+    head: "8250a4dba45c2b0680f74aefcef9c1960a34c5225a98dd45fb27f04d60d295a"
     name: "<gold><b>Doge Helmet"
     enchants: ["fire_protection:10", "protection:35", "thorns:10"]
     attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:27.5"]

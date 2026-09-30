@@ -554,7 +554,7 @@ shops:
     name: "<yellow><b>Doge Set"
     npc:
       type: "PLAYER"
-      skin: ""
+      skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/doge.png"
       fallback-type: "ZOMBIE"
     trades:
       - {buy: "item:doge_coin:32", result: "item:doge_bone"}
