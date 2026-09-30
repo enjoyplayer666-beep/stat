@@ -626,45 +626,42 @@ items:
   cloud_elytra:
     material: ELYTRA
     name: "<white><b>Облачные элитры"
-    enchants: ["fire_protection:3", "protection:19", "thorns:3"]
-    lore-mode: vanilla
+    enchants: ["fire_protection:5", "protection:17", "thorns:5"]
+    attributes: ["max_health:2.5"]
 
+  # шлем - голова (текстуру пришлёт владелец), пока кожаный
   cloud_helmet:
     material: LEATHER_HELMET
-    model: 10001
     color: "#FFFFFF"
-    name: "<white><b>Облачный шлем</b></white>"
+    name: "<white><b>Облачный шлем"
     enchants: ["fire_protection:5", "protection:20", "thorns:5"]
     attributes: ["armor:3", "armor_toughness:3", "max_health:2.5"]
     unbreakable: true
   cloud_chestplate:
     material: LEATHER_CHESTPLATE
-    model: 10001
     color: "#FFFFFF"
-    name: "<white><b>Облачный нагрудник</b></white>"
+    name: "<white><b>Облачный нагрудник"
     enchants: ["fire_protection:5", "protection:20", "thorns:5"]
-    attributes: ["armor:8", "armor_toughness:3", "max_health:2.5"]
+    attributes: ["armor:8", "armor_toughness:3", "max_health:5"]
     unbreakable: true
   cloud_leggings:
     material: LEATHER_LEGGINGS
-    model: 10001
     color: "#FFFFFF"
-    name: "<white><b>Облачные поножи</b></white>"
+    name: "<white><b>Облачные поножи"
     enchants: ["fire_protection:5", "protection:20", "thorns:5"]
     attributes: ["armor:6", "armor_toughness:3", "max_health:2.5"]
     unbreakable: true
   cloud_boots:
     material: LEATHER_BOOTS
-    model: 10001
     color: "#FFFFFF"
-    name: "<white><b>Облачные ботинки</b></white>"
+    name: "<white><b>Облачные ботинки"
     enchants: ["fire_protection:5", "protection:20", "thorns:5"]
     attributes: ["armor:3", "armor_toughness:3", "max_health:2.5"]
     unbreakable: true
   cloud_sword:
     material: DIAMOND_SWORD
     model: 10006
-    name: "<white><b>Облачный клинок</b></white>"
+    name: "<white><b>Облачный клинок"
     enchants: ["fire_aspect:2", "sharpness:20"]
     attributes: ["attack_damage:30", "attack_speed:2"]
     unbreakable: true
