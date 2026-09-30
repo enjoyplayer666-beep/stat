@@ -547,3 +547,24 @@ shops:
       - {item: "item:magma_chestplate", with: "item:ice_cluster:4", result: "item:ice_chestplate"}
       - {item: "item:magma_leggings", with: "item:ice_cluster:4", result: "item:ice_leggings"}
       - {item: "item:magma_boots", with: "item:ice_cluster:4", result: "item:ice_boots"}
+
+  # Doge Set (скрин): НПС-игрок; улучшение ледяных вещей - в наковальне
+  doge:
+    title: "<yellow><b>Doge Set"
+    name: "<yellow><b>Doge Set"
+    npc:
+      type: "PLAYER"
+      skin: ""
+      fallback-type: "ZOMBIE"
+    trades:
+      - {buy: "item:doge_coin:32", result: "item:doge_bone"}
+      - {buy: "item:doge_bone:2", result: "item:doge_block"}
+      - {buy: "item:doge_block:6", result: "item:doge_cluster"}
+      - {buy: "item:separator", buy2: "item:separator", result: "item:separator"}
+    anvil:
+      - {item: "item:ice_sword", with: "item:doge_cluster:8", result: "item:doge_sword"}
+      - {item: "item:ice_elytra", with: "item:doge_cluster:4", result: "item:doge_elytra"}
+      - {item: "item:ice_helmet", with: "item:doge_cluster:4", result: "item:doge_helmet"}
+      - {item: "item:ice_chestplate", with: "item:doge_cluster:4", result: "item:doge_chestplate"}
+      - {item: "item:ice_leggings", with: "item:doge_cluster:4", result: "item:doge_leggings"}
+      - {item: "item:ice_boots", with: "item:doge_cluster:4", result: "item:doge_boots"}

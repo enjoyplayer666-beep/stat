@@ -1004,3 +1004,63 @@ items:
     enchants: ["fire_aspect:3", "sharpness:25"]
     attributes: ["attack_damage:35", "attack_speed:2"]
     unbreakable: true
+
+  # ---------- Doge Set ----------
+  doge_coin:
+    material: FLINT
+    model: 101
+    name: "<yellow>Doge Coin"
+    lore-mode: vanilla
+  doge_bone:
+    material: BONE
+    name: "<yellow>Doge Bone"
+    lore-mode: vanilla
+  doge_block:
+    material: YELLOW_CONCRETE
+    name: "<yellow>Doge Block"
+    lore-mode: vanilla
+  doge_cluster:
+    material: YELLOW_GLAZED_TERRACOTTA
+    name: "<gold><b>Doge Cluster"
+    lore-mode: vanilla
+  # шлем - голова (текстуру пришлёт владелец), пока кожаный
+  doge_helmet:
+    material: LEATHER_HELMET
+    color: "#E8A317"
+    name: "<gold><b>Doge Helmet"
+    enchants: ["fire_protection:10", "protection:35", "thorns:10"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:27.5"]
+    unbreakable: true
+  doge_chestplate:
+    material: LEATHER_CHESTPLATE
+    color: "#E8A317"
+    name: "<gold><b>Doge Chestplate"
+    enchants: ["fire_protection:10", "protection:35", "thorns:10"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:27.5"]
+    unbreakable: true
+  doge_leggings:
+    material: LEATHER_LEGGINGS
+    color: "#E8A317"
+    name: "<gold><b>Doge Leggings"
+    enchants: ["fire_protection:10", "protection:35", "thorns:10"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:27.5"]
+    unbreakable: true
+  doge_boots:
+    material: LEATHER_BOOTS
+    color: "#E8A317"
+    name: "<gold><b>Doge Boots"
+    enchants: ["fire_protection:10", "protection:35", "thorns:10"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:27.5"]
+    unbreakable: true
+  doge_elytra:
+    material: ELYTRA
+    name: "<gold><b>Doge Elytra"
+    enchants: ["fire_protection:10", "protection:35", "thorns:10"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:27.5"]
+  doge_sword:
+    material: DIAMOND_SWORD
+    model: 10010
+    name: "<gold><b>Doge Sword"
+    enchants: ["fire_aspect:5", "sharpness:30"]
+    attributes: ["attack_damage:40", "attack_speed:4"]
+    unbreakable: true
