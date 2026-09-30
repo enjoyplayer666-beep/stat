@@ -105,6 +105,12 @@ auction:
     - {slot: 49, item: "CYAN_BED"}
     - {slot: 53, item: "EMERALD"}
 
+# /menu items - меню предметов для стаффа (ресурсы, сеты, мечи, талисманы, бустеры)
+# доступ: группы LuckPerms из списка (право group.<имя>) или право mediaitems.staffmenu
+staff-menu:
+  groups: [admin, moderator, curator, media, mediajr]
+  no-access: "<red>• <white>Меню доступно только стаффу."
+
 messages:
   wrong-ingredient: "<red>Сюда нужны обычные предметы, а не ресурсы с сервера."
   use-anvil: "<yellow>Эти вещи улучшаются в наковальне: <white>/anvil</white> или <white>/upgrade</white>."

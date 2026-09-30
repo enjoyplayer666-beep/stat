@@ -47,6 +47,9 @@ public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
         getServer().getPluginManager().registerEvents(npcs, this);
         getServer().getPluginManager().registerEvents(new Anvils(this), this);
         getServer().getPluginManager().registerEvents(new HeadWear(this), this);
+        StaffMenu staffMenu = new StaffMenu(this);
+        getServer().getPluginManager().registerEvents(staffMenu, this);
+        getCommand("menu").setExecutor(staffMenu);
         titles = new Titles(this);
         titles.load();
         TitlesApi.init(titles);
