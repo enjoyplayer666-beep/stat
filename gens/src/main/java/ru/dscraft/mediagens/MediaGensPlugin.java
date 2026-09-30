@@ -546,8 +546,10 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
                 String custom = null;
                 // candy / item:<id> - предмет из MediaItems
                 String spec = a.length > 3 ? a[3] : customs.containsKey(group) || materials.containsKey(group) ? null : group;
-                if (spec != null && (spec.startsWith("item:") || spec.equalsIgnoreCase("candy"))) {
-                    custom = spec.startsWith("item:") ? spec.substring(5) : "candy";
+                // группа названа по предмету MediaItems (candy, magma_piece...), а не по блоку
+                if (spec != null && !spec.startsWith("item:") && Material.matchMaterial(spec) == null && mediaItem(spec) != null) spec = "item:" + spec;
+                if (spec != null && spec.startsWith("item:")) {
+                    custom = spec.substring(5);
                     ItemStack it = mediaItem(custom);
                     if (it == null) {
                         sender.sendMessage(mm("<red>Нет предмета '" + custom + "' в MediaItems."));
@@ -677,7 +679,7 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
         else if (a.length == 2 && (a[0].equalsIgnoreCase("remove") || a[0].equalsIgnoreCase("create") || a[0].equalsIgnoreCase("size"))) {
             out.addAll(materials.keySet());
             if (a[0].equalsIgnoreCase("create")) out.addAll(List.of("dirt", "stone", "coal", "iron_ingot", "diamond", "gunpowder", "gold_ingot",
-                    "candy", "amethyst_shard", "crying_obsidian", "magenta_concrete", "lime_concrete", "beacon"));
+                    "candy", "amethyst_shard", "crying_obsidian", "magenta_concrete", "lime_concrete", "beacon", "magma_piece"));
         } else if (a.length == 3) {
             for (Gen g : gens.values()) if (g.group.equals(a[1].toLowerCase(Locale.ROOT))) out.add(g.point);
             if (a[0].equalsIgnoreCase("create")) out.add("p" + (out.size() + 1));
