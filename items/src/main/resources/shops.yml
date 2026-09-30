@@ -528,7 +528,7 @@ shops:
     name: "<dark_aqua><b>Ледяной сет"
     npc:
       type: "PLAYER"
-      skin: ""
+      skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/ice.png"
       fallback-type: "ZOMBIE"
       equipment:
         head: "item:ice_helmet"
