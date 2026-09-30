@@ -101,6 +101,12 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
             c.set("generator.text-background", "#40000000");
             c.set("config-version", 3);
         }
+        // блок размером с выкинутый предмет, надпись ниже
+        if (c.getInt("config-version", 1) < 4) {
+            c.set("generator.item-scale", 0.25);
+            c.set("generator.text-offset", 1.45);
+            c.set("config-version", 4);
+        }
         saveConfig();
         genKey = new NamespacedKey(this, "gen");
         itemsIdKey = new NamespacedKey("mediaitems", "id");
@@ -303,7 +309,7 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
         }
         if (near.isEmpty()) return;
         var gc = getConfig();
-        float sc = (float) gc.getDouble("generator.item-scale", 0.35);
+        float sc = (float) gc.getDouble("generator.item-scale", 0.25);
         double step = Math.toRadians(gc.getDouble("generator.spin-degrees", 15));
         float angle = (float) (((tickCounter / 5) * step) % (Math.PI * 2));
         float bob = (float) (Math.sin(angle) * gc.getDouble("generator.bob", 0.06));
@@ -326,7 +332,7 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
                 item = d;
             }
             if (text == null || !text.isValid()) {
-                Location at = new Location(w, g.x + 0.5, g.y + gc.getDouble("generator.text-offset", 1.55), g.z + 0.5);
+                Location at = new Location(w, g.x + 0.5, g.y + gc.getDouble("generator.text-offset", 1.45), g.z + 0.5);
                 TextDisplay d = w.spawn(at, TextDisplay.class, e -> {
                     e.setPersistent(false);
                     e.setVisibleByDefault(false);
