@@ -61,6 +61,8 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
         String world;
         int x, y, z;
         Material material;
+        /** свой размер блока (/gen size), 0 - как у всех */
+        double scale;
         /** надписи этой точки для каждого игрока рядом: игрок -> [иконка, текст] */
         final Map<UUID, UUID[]> views = new HashMap<>();
         final Map<UUID, String> shown = new HashMap<>();
@@ -164,7 +166,8 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
                 if (pts == null) continue;
                 for (String point : pts.getKeys(false)) {
                     ConfigurationSection s = pts.getConfigurationSection(point);
-                    addPoint(group, point, s.getString("world"), s.getInt("x"), s.getInt("y"), s.getInt("z"));
+                    Gen g = addPoint(group, point, s.getString("world"), s.getInt("x"), s.getInt("y"), s.getInt("z"));
+                    g.scale = s.getDouble("scale", 0);
                 }
             }
         }
@@ -209,6 +212,7 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
             y.set(p + "x", g.x);
             y.set(p + "y", g.y);
             y.set(p + "z", g.z);
+            if (g.scale > 0) y.set(p + "scale", g.scale);
         }
         try {
             y.save(dataFile);
@@ -289,11 +293,19 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
         return w != null && w.isChunkLoaded(g.x >> 4, g.z >> 4) && w.getChunkAt(g.x >> 4, g.z >> 4).isEntitiesLoaded();
     }
 
-    /** Настройка из sizes.<группа>.<ключ>, если есть, иначе из generator.<ключ>. */
+    /** Размер/высота точки: свой размер из /gen size, иначе generator.<ключ>. */
     private double opt(Gen g, String key, double def) {
-        var c = getConfig();
-        String own = "sizes." + g.group + "." + key;
-        return c.isSet(own) ? c.getDouble(own) : c.getDouble("generator." + key, def);
+        // свой размер точки: высоты подстраиваются, чтобы блок не лез в генератор, а надпись была прямо над ним
+        if (g.scale > 0) {
+            double item = 1.075 + g.scale / 2;
+            return switch (key) {
+                case "item-scale" -> g.scale;
+                case "item-offset" -> item;
+                case "text-offset" -> item + g.scale / 2 + 0.125;
+                default -> def;
+            };
+        }
+        return getConfig().getDouble("generator." + key, def);
     }
 
     private void updateDisplays(Gen g) {
@@ -477,6 +489,7 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
         if (a.length == 0) {
             sender.sendMessage(mm("<gold>/gen create <группа> <точка> [материал]</gold> <gray>- точка генератора на блоке под тобой (dirt p1, dirt p2...)\n"
                     + "<gold>/gen remove [группа] [точка]</gold> <gray>- удалить точку/группу (без аргументов - ближайшую точку)\n"
+                    + "<gold>/gen size <группа> <точка|all> <размер|default></gold> <gray>- размер блока (0.25 - как выкинутый)\n"
                     + "<gold>/gen list</gold>, <gold>/gen reload"));
             return true;
         }
@@ -557,9 +570,46 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
                     sender.sendMessage(mm("<white>" + e.getKey() + "</white> <gray>(" + e.getValue().name().toLowerCase(Locale.ROOT)
                             + ") <gray>копят игроков: <aqua>" + counts.getOrDefault(e.getKey(), Map.of()).size()));
                     for (Gen g : gens.values()) {
-                        if (g.group.equals(e.getKey())) sender.sendMessage(mm("<gray>  - " + g.point + ": " + g.world + " " + g.x + " " + g.y + " " + g.z));
+                        if (g.group.equals(e.getKey())) sender.sendMessage(mm("<gray>  - " + g.point + ": " + g.world + " " + g.x + " " + g.y + " " + g.z
+                                + (g.scale > 0 ? " <aqua>размер " + g.scale : "")));
                     }
                 }
+            }
+            case "size" -> {
+                // /gen size <группа> <точка|all> <размер|default>
+                if (a.length < 4) {
+                    sender.sendMessage(mm("<red>/gen size <группа> <точка|all> <размер|default>  <gray>например: /gen size dirt p1 0.4"));
+                    return true;
+                }
+                String group = a[1].toLowerCase(Locale.ROOT);
+                String point = a[2].toLowerCase(Locale.ROOT);
+                double v;
+                if (a[3].equalsIgnoreCase("default")) v = 0;
+                else {
+                    try {
+                        v = Double.parseDouble(a[3].replace(',', '.'));
+                    } catch (NumberFormatException e) {
+                        sender.sendMessage(mm("<red>Размер - число, например 0.4, или default."));
+                        return true;
+                    }
+                    if (v < 0.05 || v > 3) {
+                        sender.sendMessage(mm("<red>Размер от 0.05 до 3."));
+                        return true;
+                    }
+                }
+                int n = 0;
+                for (Gen g : gens.values()) {
+                    if (!g.group.equals(group) || !(point.equals("all") || g.point.equals(point))) continue;
+                    g.scale = v;
+                    removeDisplays(g);
+                    n++;
+                }
+                if (n == 0) {
+                    sender.sendMessage(mm("<red>Не найдено (/gen list)."));
+                    return true;
+                }
+                save();
+                sender.sendMessage(mm("<green>Размер " + (v == 0 ? "по умолчанию" : String.valueOf(v)) + " - точек: " + n));
             }
             case "reload" -> {
                 reloadConfig();
@@ -574,13 +624,16 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] a) {
         List<String> out = new ArrayList<>();
-        if (a.length == 1) out.addAll(List.of("create", "remove", "list", "reload"));
-        else if (a.length == 2 && (a[0].equalsIgnoreCase("remove") || a[0].equalsIgnoreCase("create"))) {
+        if (a.length == 1) out.addAll(List.of("create", "remove", "size", "list", "reload"));
+        else if (a.length == 2 && (a[0].equalsIgnoreCase("remove") || a[0].equalsIgnoreCase("create") || a[0].equalsIgnoreCase("size"))) {
             out.addAll(materials.keySet());
             if (a[0].equalsIgnoreCase("create")) out.addAll(List.of("dirt", "stone", "coal", "iron_ingot", "diamond", "gunpowder", "gold_ingot"));
         } else if (a.length == 3) {
             for (Gen g : gens.values()) if (g.group.equals(a[1].toLowerCase(Locale.ROOT))) out.add(g.point);
             if (a[0].equalsIgnoreCase("create")) out.add("p" + (out.size() + 1));
+            if (a[0].equalsIgnoreCase("size")) out.add("all");
+        } else if (a.length == 4 && a[0].equalsIgnoreCase("size")) {
+            out.addAll(List.of("0.25", "0.35", "0.5", "default"));
         }
         String last = a[a.length - 1].toLowerCase(Locale.ROOT);
         out.removeIf(s -> !s.startsWith(last));
