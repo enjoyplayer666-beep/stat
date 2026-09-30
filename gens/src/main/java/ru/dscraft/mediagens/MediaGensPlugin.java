@@ -95,6 +95,12 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
             c.set("generator.on-full", "stop");
             c.set("config-version", 2);
         }
+        // надпись прямо над блоком, с тёмным фоном
+        if (c.getInt("config-version", 1) < 3) {
+            c.set("generator.text-offset", 1.55);
+            c.set("generator.text-background", "#40000000");
+            c.set("config-version", 3);
+        }
         saveConfig();
         genKey = new NamespacedKey(this, "gen");
         itemsIdKey = new NamespacedKey("mediaitems", "id");
@@ -320,14 +326,14 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
                 item = d;
             }
             if (text == null || !text.isValid()) {
-                Location at = new Location(w, g.x + 0.5, g.y + gc.getDouble("generator.text-offset", 2.0), g.z + 0.5);
+                Location at = new Location(w, g.x + 0.5, g.y + gc.getDouble("generator.text-offset", 1.55), g.z + 0.5);
                 TextDisplay d = w.spawn(at, TextDisplay.class, e -> {
                     e.setPersistent(false);
                     e.setVisibleByDefault(false);
                     e.getPersistentDataContainer().set(genKey, PersistentDataType.STRING, g.name);
                     e.setBillboard(Display.Billboard.CENTER);
                     e.setViewRange(viewRange());
-                    e.setBackgroundColor(org.bukkit.Color.fromARGB(0, 0, 0, 0));
+                    e.setBackgroundColor(argb(gc.getString("generator.text-background", "#40000000")));
                     e.setShadowed(true);
                 });
                 p.showEntity(this, d);
@@ -561,5 +567,17 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
         String last = a[a.length - 1].toLowerCase(Locale.ROOT);
         out.removeIf(s -> !s.startsWith(last));
         return out;
+    }
+
+    /** #AARRGGBB или #RRGGBB; пусто - без фона. */
+    private static org.bukkit.Color argb(String s) {
+        if (s == null || s.isBlank()) return org.bukkit.Color.fromARGB(0, 0, 0, 0);
+        try {
+            String h = s.startsWith("#") ? s.substring(1) : s;
+            if (h.length() == 6) h = "FF" + h;
+            return org.bukkit.Color.fromARGB((int) Long.parseLong(h, 16));
+        } catch (IllegalArgumentException e) {
+            return org.bukkit.Color.fromARGB(0x40, 0, 0, 0);
+        }
     }
 }

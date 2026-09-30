@@ -25,7 +25,9 @@ generator:
   # с какого расстояния (в блоках) видно блок и надпись; дальше - не видно и не крутится (меньше нагрузка)
   view-distance: 5
   bob: 0.06
-  text-offset: 2.0
+  # высота надписи над блоком генератора и её фон (#AARRGGBB, пусто - без фона)
+  text-offset: 1.55
+  text-background: "#40000000"
 
 # бустеры (предметы из MediaItems): включаются ПКМ, действуют только на того, кто включил -
 # его генераторы копят в multiplier раз быстрее (amount x multiplier за интервал)
@@ -41,4 +43,4 @@ messages:
   ended: "<gray>• Бустер закончился."
   actionbar: "<gold>Бустер <gray>x{mult} <dark_gray>({left} сек.)"
 
-config-version: 2
+config-version: 3
