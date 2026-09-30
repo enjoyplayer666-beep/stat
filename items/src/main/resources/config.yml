@@ -70,8 +70,8 @@ textures:
   # ссылка для ручной установки
   link: "https://goo.su/07BDasw"
   # прямая ссылка на zip для автоматической установки; пусто - берётся resource-pack из server.properties
-  auto-url: ""
-  auto-sha1: ""
+  auto-url: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/pack/SP-DS.zip"
+  auto-sha1: "95a2f99c98b02a4a793384df24182d41dfac6504"
   auto:
     slot: 11
     icon: "PLAYER_HEAD"
