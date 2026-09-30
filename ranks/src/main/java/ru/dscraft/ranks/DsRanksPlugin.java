@@ -156,6 +156,12 @@ public class DsRanksPlugin extends JavaPlugin implements Listener {
         }
     }
 
+    /** Число (время в мс и т.п.) из data.yml, 0 - нет. */
+    double number(String name, String field) {
+        Object v = data.get("players." + key(name) + "." + field);
+        return v instanceof Number n ? n.doubleValue() : 0;
+    }
+
     void set(String name, String field, Object value) {
         data.set("players." + key(name) + "." + field, value);
         dirty = true;

@@ -14,7 +14,16 @@ commands:
   statadmin:
     description: Управление статистикой
     usage: /statadmin <set|reset|reload>
+  like:
+    description: Поставить лайк игроку
+    usage: /like <ник>
+  likegive:
+    description: Лайки себе раз в сутки (ULTRA)
+    usage: /likegive
 permissions:
+  stat.likegive:
+    description: /likegive (кроме групп из likes.give-groups)
+    default: false
   stat.use:
     default: true
   stat.admin:

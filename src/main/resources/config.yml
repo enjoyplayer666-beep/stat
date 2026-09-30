@@ -1,12 +1,12 @@
 # Плейсхолдеры в строках /stat: {player} {privilege} {rank} {clan} {rating}
-# {class} {winrate} {playtime} {hours} {status} {kills} {deaths} {booster}
+# {class} {winrate} {playtime} {hours} {status} {kills} {deaths} {booster} {likes}
 # {rank}, {kills} и {booster} берутся из плагина DsRanks (ранги вынесены туда).
 # {hours} - слово "час/часа/часов" под число
 # Также работают плейсхолдеры PlaceholderAPI (например %luckperms_prefix%).
 # Цвета: &a, &l ... и hex вида &#RRGGBB
 
 # не трогать: по нему плагин обновляет старый config.yml
-config-version: 9
+config-version: 10
 
 lines:
   - '&#7B6FE0╭- - - - - - - - - - - - - - - - - - - - - - - -╮'
@@ -19,7 +19,7 @@ lines:
   - '&#7B6FE0│ &fПроцент побед на пвп: &d{winrate}'
   - '&#7B6FE0│ &fНаиграно: &#3CCFC0{playtime} {hours}'
   - '&#7B6FE0│ &fСтатус: {status}'
-  - '&#7B6FE0╰- - - - - - - - - - - - - - - - - - - - - - - -╯'
+  - '&#7B6FE0╰- - - - - - - - - &c♥&eLIKE {likes}&#7B6FE0 - - - - - - - - -╯'
 
 # Значения по умолчанию
 defaults:
@@ -79,6 +79,26 @@ classes:
   - {rating: 500000, display: '&c✘&3&oLEGENDARY&c✘'}
   - {rating: 1000000, display: '&4➶&e&oImmortal&4➶'}
   - {rating: 2000000, display: '&e↟&c&oNephilim&e↟'}
+
+# ---------------------------------------------------------------------
+#  Лайки: /like <ник> - один аккаунт может лайкнуть другого только один раз
+#  /likegive - раз в сутки случайно give-min..give-max лайков себе (группы give-groups или право stat.likegive)
+# ---------------------------------------------------------------------
+likes:
+  give-groups: [ultra]
+  give-min: 7
+  give-max: 15
+  give-cooldown-hours: 24
+  messages:
+    usage: '&cИспользование: /like <ник>'
+    not-found: '&cИгрок &f{player} &cне найден.'
+    self: '&cНельзя лайкнуть самого себя.'
+    already: '&cТы уже ставил лайк игроку &f{player}&c.'
+    liked: '&aТы поставил &c♥ &aлайк игроку &f{player}&a!'
+    got-like: '&fИгрок &b{player} &fпоставил тебе &c♥ &eлайк&f!'
+    give-ok: '&aТы получил &e+{likes} &c♥ &aлайков! Следующий раз - через сутки.'
+    give-cooldown: '&cЕщё рано. Снова можно через &f{time}'
+    give-no-access: '&cКоманда доступна с привилегии &fULTRA&c.'
 
 messages:
   usage: '&cИспользование: /stat <ник игрока>'

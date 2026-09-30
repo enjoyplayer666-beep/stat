@@ -56,6 +56,10 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
         getCommand("mystat").setExecutor(this);
         getCommand("statadmin").setExecutor(this);
         getCommand("statadmin").setTabCompleter(this);
+        Likes likes = new Likes(this);
+        getCommand("like").setExecutor(likes);
+        getCommand("like").setTabCompleter(likes);
+        getCommand("likegive").setExecutor(likes);
         getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new CombatListener(this), this);
         for (Player p : Bukkit.getOnlinePlayers()) touch(p);
@@ -89,6 +93,19 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
         int version = cfg.contains("config-version", true) ? cfg.getInt("config-version") : 1;
         int latest = cfg.getDefaults() == null ? version : cfg.getDefaults().getInt("config-version", version);
         if (version >= latest || cfg.getDefaults() == null) return;
+        if (version < 10) {
+            // 10: внизу /stat - лайки
+            List<String> lines = new ArrayList<>(cfg.getStringList("lines"));
+            List<String> def = cfg.getDefaults().getStringList("lines");
+            boolean has = lines.stream().anyMatch(l -> l.contains("{likes}"));
+            if (!has && !def.isEmpty()) {
+                int last = lines.size() - 1;
+                if (last >= 0 && lines.get(last).contains("╰")) lines.set(last, def.get(def.size() - 1));
+                else lines.add(def.get(def.size() - 1));
+                cfg.set("lines", lines);
+            }
+            saveConfig();
+        }
         if (version >= 8) {
             if (getServer().getPluginManager().getPlugin("DsRanks") == null) return; // ранги ещё не перенесены
             removeRankSettings(cfg);
@@ -178,6 +195,10 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
 
     boolean isTrue(String name, String field) {
         return data.getBoolean("players." + key(name) + "." + field);
+    }
+
+    List<String> stringList(String name, String field) {
+        return new ArrayList<>(data.getStringList("players." + key(name) + "." + field));
     }
 
     String string(String name, String field) {
@@ -418,7 +439,8 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
                     .replace("{booster}", "x" + RanksHook.booster(shown))
                     .replace("{playtime}", String.valueOf(hours))
                     .replace("{hours}", plural(hours, "час", "часа", "часов"))
-                    .replace("{status}", status);
+                    .replace("{status}", status)
+                    .replace("{likes}", String.valueOf(integer(shown, "likes")));
             sender.sendMessage(color(papi(op, out)));
         }
     }
