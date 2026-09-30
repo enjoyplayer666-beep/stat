@@ -39,6 +39,7 @@ public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
             if (!new File(getDataFolder(), f).exists()) saveResource(f, false);
         }
         items = new Items(idKey, getLogger());
+        ItemsApi.init(items);
         shops = new Shops(this);
         npcs = new Npcs(this);
         loadAll();

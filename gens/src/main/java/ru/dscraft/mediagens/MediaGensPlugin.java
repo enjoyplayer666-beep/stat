@@ -75,6 +75,8 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
     /** группа -> игрок -> накоплено */
     private final Map<String, Map<UUID, Integer>> counts = new LinkedHashMap<>();
     private final Map<String, Material> materials = new LinkedHashMap<>();
+    /** группы, которые копят предмет из MediaItems (item:candy): группа -> id */
+    private final Map<String, String> customs = new HashMap<>();
     private final Map<UUID, Boost> boosts = new HashMap<>();
     private NamespacedKey genKey;
     private NamespacedKey itemsIdKey;
@@ -144,6 +146,7 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
         gens.clear();
         counts.clear();
         materials.clear();
+        customs.clear();
         YamlConfiguration y = YamlConfiguration.loadConfiguration(dataFile);
         ConfigurationSection groups = y.getConfigurationSection("groups");
         if (groups != null) {
@@ -151,6 +154,7 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
                 ConfigurationSection gs = groups.getConfigurationSection(group);
                 Material m = Material.matchMaterial(gs.getString("material", "DIRT"));
                 materials.put(group, m == null ? Material.DIRT : m);
+                if (gs.isString("item")) customs.put(group, gs.getString("item"));
                 Map<UUID, Integer> pc = new HashMap<>();
                 ConfigurationSection cs = gs.getConfigurationSection("players");
                 if (cs != null) {
@@ -202,6 +206,7 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
         YamlConfiguration y = new YamlConfiguration();
         for (var e : materials.entrySet()) {
             y.set("groups." + e.getKey() + ".material", e.getValue().name());
+            if (customs.containsKey(e.getKey())) y.set("groups." + e.getKey() + ".item", customs.get(e.getKey()));
             for (var pc : counts.getOrDefault(e.getKey(), Map.of()).entrySet()) {
                 if (pc.getValue() > 0) y.set("groups." + e.getKey() + ".players." + pc.getKey(), pc.getValue());
             }
@@ -268,7 +273,7 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
                 Map<UUID, Integer> pc = counts.computeIfAbsent(g.group, k -> new HashMap<>());
                 int count = pc.getOrDefault(p.getUniqueId(), 0);
                 if (count <= 0) continue;
-                int left = give(p, g.material, count);
+                int left = give(p, stack(g), count);
                 pc.put(p.getUniqueId(), left);
                 if (count - left > 0) p.playSound(p.getLocation(), org.bukkit.Sound.ENTITY_ITEM_PICKUP, 0.4f, 1.4f);
             }
@@ -276,14 +281,39 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
     }
 
     /** Выдать amount блоков, вернуть сколько не влезло. */
-    private static int give(Player p, Material m, int amount) {
+    private static int give(Player p, ItemStack proto, int amount) {
         int left = 0;
         while (amount > 0) {
-            int n = Math.min(amount, m.getMaxStackSize());
+            int n = Math.min(amount, proto.getMaxStackSize());
             amount -= n;
-            for (ItemStack rest : p.getInventory().addItem(new ItemStack(m, n)).values()) left += rest.getAmount();
+            ItemStack it = proto.clone();
+            it.setAmount(n);
+            for (ItemStack rest : p.getInventory().addItem(it).values()) left += rest.getAmount();
         }
         return left;
+    }
+
+    /** Что копит точка: предмет из MediaItems (item:candy) или обычный блок. */
+    private ItemStack stack(Gen g) {
+        String id = customs.get(g.group);
+        if (id != null) {
+            ItemStack it = mediaItem(id);
+            if (it != null) {
+                it.setAmount(1);
+                return it;
+            }
+        }
+        return new ItemStack(g.material);
+    }
+
+    private static ItemStack mediaItem(String id) {
+        try {
+            Class<?> c = Class.forName("ru.dscraft.mediaitems.ItemsApi", true,
+                    Bukkit.getPluginManager().getPlugin("MediaItems").getClass().getClassLoader());
+            return (ItemStack) c.getMethod("item", String.class).invoke(null, id);
+        } catch (Throwable t) {
+            return null;
+        }
     }
 
     // ---------- отображение: у каждого игрока рядом свои блок и число ----------
@@ -347,7 +377,7 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
                     e.setPersistent(false);
                     e.setVisibleByDefault(false);
                     e.getPersistentDataContainer().set(genKey, PersistentDataType.STRING, g.name);
-                    e.setItemStack(new ItemStack(g.material));
+                    e.setItemStack(stack(g));
                     e.setViewRange(viewRange());
                     e.setTransformation(new Transformation(new Vector3f(), new AxisAngle4f(), new Vector3f(sc, sc, sc), new AxisAngle4f()));
                 });
@@ -508,7 +538,18 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
                     return true;
                 }
                 Material m;
-                if (a.length > 3) m = Material.matchMaterial(a[3]);
+                String custom = null;
+                // candy / item:<id> - предмет из MediaItems
+                String spec = a.length > 3 ? a[3] : customs.containsKey(group) || materials.containsKey(group) ? null : group;
+                if (spec != null && (spec.startsWith("item:") || spec.equalsIgnoreCase("candy"))) {
+                    custom = spec.startsWith("item:") ? spec.substring(5) : "candy";
+                    ItemStack it = mediaItem(custom);
+                    if (it == null) {
+                        sender.sendMessage(mm("<red>Нет предмета '" + custom + "' в MediaItems."));
+                        return true;
+                    }
+                    m = it.getType();
+                } else if (a.length > 3) m = Material.matchMaterial(a[3]);
                 else if (materials.containsKey(group)) m = materials.get(group);
                 else {
                     // группа названа по блоку (dirt, stone...) - он и копится, иначе земля
@@ -520,6 +561,8 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
                     return true;
                 }
                 materials.put(group, m);
+                if (custom != null) customs.put(group, custom);
+                else if (a.length > 3) customs.remove(group);
                 counts.putIfAbsent(group, new HashMap<>());
                 Block under = p.getLocation().subtract(0, 0.2, 0).getBlock();
                 Gen g = addPoint(group, point, under.getWorld().getName(), under.getX(), under.getY(), under.getZ());
@@ -561,13 +604,14 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
                 }
                 // группа без точек больше не нужна
                 materials.keySet().removeIf(gr -> gens.values().stream().noneMatch(g -> g.group.equals(gr)));
+                customs.keySet().retainAll(materials.keySet());
                 counts.keySet().retainAll(materials.keySet());
                 save();
             }
             case "list" -> {
                 if (gens.isEmpty()) sender.sendMessage(mm("<gray>Генераторов нет."));
                 for (var e : materials.entrySet()) {
-                    sender.sendMessage(mm("<white>" + e.getKey() + "</white> <gray>(" + e.getValue().name().toLowerCase(Locale.ROOT)
+                    sender.sendMessage(mm("<white>" + e.getKey() + "</white> <gray>(" + (customs.containsKey(e.getKey()) ? "item:" + customs.get(e.getKey()) : e.getValue().name().toLowerCase(Locale.ROOT))
                             + ") <gray>копят игроков: <aqua>" + counts.getOrDefault(e.getKey(), Map.of()).size()));
                     for (Gen g : gens.values()) {
                         if (g.group.equals(e.getKey())) sender.sendMessage(mm("<gray>  - " + g.point + ": " + g.world + " " + g.x + " " + g.y + " " + g.z
@@ -627,7 +671,8 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
         if (a.length == 1) out.addAll(List.of("create", "remove", "size", "list", "reload"));
         else if (a.length == 2 && (a[0].equalsIgnoreCase("remove") || a[0].equalsIgnoreCase("create") || a[0].equalsIgnoreCase("size"))) {
             out.addAll(materials.keySet());
-            if (a[0].equalsIgnoreCase("create")) out.addAll(List.of("dirt", "stone", "coal", "iron_ingot", "diamond", "gunpowder", "gold_ingot"));
+            if (a[0].equalsIgnoreCase("create")) out.addAll(List.of("dirt", "stone", "coal", "iron_ingot", "diamond", "gunpowder", "gold_ingot",
+                    "candy", "amethyst_shard", "crying_obsidian", "purple_concrete", "lime_concrete"));
         } else if (a.length == 3) {
             for (Gen g : gens.values()) if (g.group.equals(a[1].toLowerCase(Locale.ROOT))) out.add(g.point);
             if (a[0].equalsIgnoreCase("create")) out.add("p" + (out.size() + 1));
