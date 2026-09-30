@@ -629,10 +629,9 @@ items:
     enchants: ["fire_protection:5", "protection:17", "thorns:5"]
     attributes: ["max_health:2.5"]
 
-  # шлем - голова (текстуру пришлёт владелец), пока кожаный
   cloud_helmet:
-    material: LEATHER_HELMET
-    color: "#FFFFFF"
+    material: PLAYER_HEAD
+    head: "161fb24b48d6d132581f1af557a8541c27af46e670927f07af63d5cc267d216e"
     name: "<white><b>Облачный шлем"
     enchants: ["fire_protection:5", "protection:20", "thorns:5"]
     attributes: ["armor:3", "armor_toughness:3", "max_health:2.5"]
