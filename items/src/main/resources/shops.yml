@@ -638,3 +638,31 @@ shops:
       - {item: "item:moon_chestplate", with: "item:comet_cluster:4", result: "item:comet_chestplate"}
       - {item: "item:moon_leggings", with: "item:comet_cluster:4", result: "item:comet_leggings"}
       - {item: "item:moon_boots", with: "item:comet_cluster:4", result: "item:comet_boots"}
+
+  # Странный торговец 1 (скрин): земля -> энергия земли; НПС-игрок без брони
+  strange1:
+    title: "<white><b>Странный торговец"
+    name: "<white><b>Странный торговец"
+    npc:
+      type: "PLAYER"
+      skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/strange1.png"
+      fallback-type: "ZOMBIE"
+    trades:
+      - {buy: "item:earth_piece:48", result: "item:earth_clot"}
+      - {buy: "item:earth_clot:3", result: "item:earth_energy"}
+
+  # Странный торговец 2 (скрин): обмен энергий 2 к 1; НПС-игрок без брони
+  strange2:
+    title: "<white><b>Странный торговец"
+    name: "<white><b>Странный торговец"
+    npc:
+      type: "PLAYER"
+      skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/strange2.png"
+      fallback-type: "ZOMBIE"
+    trades:
+      - {buy: "item:earth_energy:2", result: "item:hell_energy"}
+      - {buy: "item:earth_energy:2", result: "item:purpur_energy"}
+      - {buy: "item:hell_energy:2", result: "item:earth_energy"}
+      - {buy: "item:hell_energy:2", result: "item:purpur_energy"}
+      - {buy: "item:purpur_energy:2", result: "item:earth_energy"}
+      - {buy: "item:purpur_energy:2", result: "item:hell_energy"}

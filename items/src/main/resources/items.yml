@@ -1266,3 +1266,30 @@ items:
     enchants: ["fire_aspect:5", "sharpness:36"]
     attributes: ["attack_damage:55", "attack_speed:4"]
     unbreakable: true
+
+  # ---------- Странные торговцы: энергии ----------
+  earth_piece:
+    material: IRON_INGOT
+    model: 180
+    name: "<white>Кусок земли"
+    lore-mode: vanilla
+  earth_clot:
+    material: IRON_INGOT
+    model: 181
+    name: "<white>Сгусток земли"
+    lore-mode: vanilla
+  earth_energy:
+    material: IRON_INGOT
+    model: 182
+    name: "<white><b>Энергия земли"
+    lore-mode: vanilla
+  hell_energy:
+    material: IRON_INGOT
+    model: 176
+    name: "<red><b>Адская энергия"
+    lore-mode: vanilla
+  purpur_energy:
+    material: IRON_INGOT
+    model: 179
+    name: "<light_purple><b>Энергия пурпура"
+    lore-mode: vanilla
