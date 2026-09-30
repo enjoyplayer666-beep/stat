@@ -6,7 +6,7 @@
 # Цвета: &a, &l ... и hex вида &#RRGGBB
 
 # не трогать: по нему плагин обновляет старый config.yml
-config-version: 12
+config-version: 13
 
 lines:
   - '&#7B6FE0╭- - - - - - - - - - - - - - - - - - - - - - - -╮'
@@ -70,13 +70,17 @@ combat:
 
 # ---------------------------------------------------------------------
 #  Знаки классности - по боевому рейтингу (БР), только для красоты:
-#  0 - нет, от 1 - Мастер, 100к - EXCLUSIVE, 250к - TIGR, 500к - LEGENDARY, 1 млн - Immortal, 2 млн - Nephilim
+#  0 - нет, 1 - 1-Степень, 5к - 2-Степень, 10к - 3-Степень, 40к - Мастер, 90к - EXCLUSIVE, 200к - TIGR,
+#  500к - LEGENDARY, 1 млн - Immortal, 2 млн - Nephilim
 # ---------------------------------------------------------------------
 classes:
   - {rating: 0, display: '&f[Нет отличительных отметок]'}
-  - {rating: 1, display: '&a«Мастер»'}
-  - {rating: 100000, display: '&b«EXCLUSIVE»'}
-  - {rating: 250000, display: '&0«&6虎&bTIGR&6虎&0»'}
+  - {rating: 1, display: '&e«1-Степень»'}
+  - {rating: 5000, display: '&5«2-Степень»'}
+  - {rating: 10000, display: '&c«3-Степень»'}
+  - {rating: 40000, display: '&a«Мастер»'}
+  - {rating: 90000, display: '&b«EXCLUSIVE»'}
+  - {rating: 200000, display: '&0«&6虎&bTIGR&6虎&0»'}
   - {rating: 500000, display: '&c⚔&3&oLEGENDARY&c⚔'}
   - {rating: 1000000, display: '&4➶&e&oImmortal&4➶'}
   - {rating: 2000000, display: '&e↟&c&oNephilim&e↟'}

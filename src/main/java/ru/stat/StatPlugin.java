@@ -89,6 +89,24 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
         int version = cfg.contains("config-version", true) ? cfg.getInt("config-version") : 1;
         int latest = cfg.getDefaults() == null ? version : cfg.getDefaults().getInt("config-version", version);
         if (version >= latest || cfg.getDefaults() == null) return;
+        if (version < 13) {
+            // 13: новые знаки классности (1-3 Степень, пороги Мастер/EXCLUSIVE/TIGR); LEGENDARY и выше - как были
+            List<java.util.Map<?, ?>> def = cfg.getDefaults().getMapList("classes");
+            List<java.util.Map<?, ?>> old = cfg.getMapList("classes");
+            List<java.util.Map<?, ?>> out = new ArrayList<>();
+            for (java.util.Map<?, ?> d : def) {
+                Object r = d.get("rating");
+                java.util.Map<?, ?> keep = null;
+                if (r instanceof Number n && n.intValue() >= 500000) {
+                    for (java.util.Map<?, ?> o : old) {
+                        if (o.get("rating") instanceof Number on && on.intValue() == n.intValue()) keep = o;
+                    }
+                }
+                out.add(keep != null ? keep : d);
+            }
+            cfg.set("classes", out);
+            saveConfig();
+        }
         if (version < 12) {
             // 12: серые подписи, часы &3, мечи у LEGENDARY, куратор выше админа
             cfg.set("lines", cfg.getDefaults().getStringList("lines"));
