@@ -924,7 +924,6 @@ items:
     enchants: ["fire_protection:8", "protection:25", "thorns:8"]
     attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.3", "max_health:6"]
     unbreakable: true
-  # ботинки, меч, элитры - скринов нет, пока по аналогии
   magma_boots:
     material: LEATHER_BOOTS
     model: 10014
@@ -935,12 +934,12 @@ items:
   magma_sword:
     material: DIAMOND_SWORD
     model: 10007
-    name: "<dark_red><b>Магмовый клинок"
-    enchants: ["fire_aspect:2", "sharpness:25"]
-    attributes: ["attack_damage:35", "attack_speed:2"]
+    name: "<dark_red><b>Магмовый меч"
+    enchants: ["fire_aspect:3", "sharpness:22"]
+    attributes: ["attack_damage:30", "attack_speed:2"]
     unbreakable: true
   magma_elytra:
     material: ELYTRA
     name: "<dark_red><b>Магмовые элитры"
     enchants: ["fire_protection:8", "protection:20", "thorns:8"]
-    attributes: ["max_health:6"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.3", "max_health:6"]
