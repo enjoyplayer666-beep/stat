@@ -938,6 +938,12 @@ items:
     enchants: ["fire_aspect:3", "sharpness:22"]
     attributes: ["attack_damage:30", "attack_speed:2"]
     unbreakable: true
+  # элитры за 2 сжатой магмы у НПС (как у джунглей, другое название)
+  magma_elytra_trade:
+    material: ELYTRA
+    name: "<red><b>Огненные элитры"
+    enchants: ["fire_protection:2", "protection:17", "thorns:2"]
+    lore-mode: vanilla
   magma_elytra:
     material: ELYTRA
     name: "<dark_red><b>Магмовые элитры"
