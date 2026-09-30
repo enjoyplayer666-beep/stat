@@ -19,7 +19,7 @@ commands:
     usage: /like <ник>
   likegive:
     description: Лайки себе раз в сутки (ULTRA)
-    usage: /likegive
+    usage: /likegive [ник]
 permissions:
   stat.likegive:
     description: /likegive (кроме групп из likes.give-groups)

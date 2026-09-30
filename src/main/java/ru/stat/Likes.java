@@ -42,7 +42,7 @@ final class Likes implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player p)) return true;
         if (cmd.getName().equalsIgnoreCase("likegive")) {
-            likeGive(p);
+            likeGive(p, args);
             return true;
         }
         if (args.length < 1) {
@@ -74,7 +74,7 @@ final class Likes implements CommandExecutor, TabCompleter {
         return true;
     }
 
-    private void likeGive(Player p) {
+    private void likeGive(Player p, String[] args) {
         if (!canGive(p)) {
             send(p, "give-no-access");
             return;
@@ -88,20 +88,33 @@ final class Likes implements CommandExecutor, TabCompleter {
             send(p, "give-cooldown", "{time}", min >= 60 ? (min / 60) + " ч. " + (min % 60) + " мин." : min + " мин.");
             return;
         }
+        String name = p.getName();
+        OfflinePlayer target = p;
+        if (args.length >= 1) {
+            target = plugin.findPlayer(args[0]);
+            if (target == null || target.getName() == null || (!target.isOnline() && !plugin.known(target.getName()))) {
+                send(p, "not-found", "{player}", args[0]);
+                return;
+            }
+            name = target.getName();
+        }
         int lo = cfg.getInt("likes.give-min", 7), hi = Math.max(lo, cfg.getInt("likes.give-max", 15));
         int amount = ThreadLocalRandom.current().nextInt(lo, hi + 1);
-        plugin.set(p.getName(), "likes", plugin.integer(p.getName(), "likes") + amount);
+        plugin.set(name, "likes", plugin.integer(name, "likes") + amount);
         plugin.set(p.getName(), "likegive-last", now);
         plugin.saveData();
-        send(p, "give-ok", "{likes}", String.valueOf(amount));
+        send(p, "give-ok", "{likes}", String.valueOf(amount), "{player}", name);
+        if (target instanceof Player online && !online.equals(p)) {
+            send(online, "give-got", "{likes}", String.valueOf(amount), "{player}", p.getName());
+        }
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
         List<String> res = new ArrayList<>();
-        if (cmd.getName().equalsIgnoreCase("like") && args.length == 1) {
+        if (args.length == 1 && (cmd.getName().equalsIgnoreCase("like") || canGive(sender))) {
             StatPlugin.addPlayers(res);
-            res.remove(sender.getName());
+            if (cmd.getName().equalsIgnoreCase("like")) res.remove(sender.getName());
             String last = args[0].toLowerCase(Locale.ROOT);
             res.removeIf(s -> !s.toLowerCase(Locale.ROOT).startsWith(last));
         }

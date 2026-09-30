@@ -44,7 +44,7 @@ anti-farm-seconds: 300
 # Ранг в чате DestroyChat (перед кланом). {rank} - иконка и название с градиентом
 chat-rank: '{rank} '
 
-# /rank give - раз в cooldown-hours часов случайно от min до max убийств к рангу себе.
+# /rank give [ник] - раз в cooldown-hours часов случайно от min до max убийств к рангу себе или другому.
 # Доступ: группы LuckPerms из groups (право group.<имя>) или право ranks.give.
 give:
   groups: [ultra]
@@ -64,7 +64,7 @@ messages:
     - '&e/rank list &7- все ранги'
     - '&e/rank top [страница] &7- топ по убийствам'
     - '&e/rank on &7/ &e/rank off &7- показывать ранг в чате'
-    - '&e/rank give &7- убийства к рангу раз в сутки (ULTRA)'
+    - '&e/rank give [ник] &7- убийства к рангу себе или другому раз в сутки (ULTRA)'
   admin-usage:
     - '&e/rank set <ник> <убийства> &7- выставить убийства к рангу'
     - '&e/rank reset <ник> &7- сбросить ранг и бустер'
@@ -73,7 +73,8 @@ messages:
   reset-ok: '&aРанг игрока &f{player} &aсброшен.'
   reload-ok: '&aКонфиг DsRanks перезагружен.'
   bad-number: '&cЗначение должно быть числом.'
-  give-ok: '&aТы получил &f+{kills} &aубийств к рангу! Следующий раз - через сутки.'
+  give-ok: '&c◆ &fВы выдали &a{kills} &fубийств игроку &b{player}&f.'
+  give-got: '&c◆ &fИгрок &b{player} &fвыдал вам &a{kills} &fубийств.'
   give-cooldown: '&cЕщё рано. Снова можно через &f{time}'
   give-no-access: '&cКоманда доступна с привилегии &fULTRA&c.'
 

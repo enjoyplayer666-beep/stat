@@ -59,7 +59,7 @@ public class RankCommand implements CommandExecutor, TabCompleter {
                 plugin.setRankHidden(p, off);
                 send(sender, plugin.msg(off ? "rank-off" : "rank-on"));
             }
-            case "give" -> give(sender);
+            case "give" -> give(sender, args);
             case "set", "reset", "reload" -> admin(sender, sub, args);
             default -> usage(sender);
         }
@@ -117,8 +117,8 @@ public class RankCommand implements CommandExecutor, TabCompleter {
         return false;
     }
 
-    /** /rank give - раз в сутки случайные убийства к рангу (give.min..give.max) себе. */
-    private void give(CommandSender sender) {
+    /** /rank give [ник] - раз в сутки случайные убийства к рангу (give.min..give.max) себе или другому. */
+    private void give(CommandSender sender, String[] args) {
         if (!(sender instanceof Player p)) return;
         if (!canGive(p)) {
             send(p, plugin.msg("give-no-access"));
@@ -132,16 +132,30 @@ public class RankCommand implements CommandExecutor, TabCompleter {
             send(p, plugin.msg("give-cooldown").replace("{time}", left(cooldown - (now - last))));
             return;
         }
+        String name = p.getName();
+        OfflinePlayer target = p;
+        if (args.length >= 2) {
+            target = plugin.findPlayer(args[1]);
+            if (target == null || (!target.isOnline() && !plugin.known(args[1]))) {
+                send(p, plugin.msg("not-found").replace("{player}", args[1]));
+                return;
+            }
+            if (target.getName() != null) name = target.getName();
+        }
         int min = cfg.getInt("give.min", 60), max = Math.max(min, cfg.getInt("give.max", 240));
         int amount = java.util.concurrent.ThreadLocalRandom.current().nextInt(min, max + 1);
-        Ranks.Rank before = plugin.rank(p.getName());
-        plugin.set(p.getName(), "kills", plugin.integer(p.getName(), "kills") + amount);
+        Ranks.Rank before = plugin.rank(name);
+        plugin.set(name, "kills", plugin.integer(name, "kills") + amount);
         plugin.set(p.getName(), "give-last", now);
         plugin.saveData();
-        send(p, plugin.msg("give-ok").replace("{kills}", String.valueOf(amount)));
-        Ranks.Rank after = plugin.rank(p.getName());
-        if (after.index() > before.index()) send(p, plugin.msg("rank-up").replace("{rank}", after.display()));
-        plugin.refreshChatRank(p);
+        send(p, plugin.msg("give-ok").replace("{kills}", String.valueOf(amount)).replace("{player}", name));
+        Player online = target instanceof Player t ? t : null;
+        if (online != null && !online.equals(p)) {
+            send(online, plugin.msg("give-got").replace("{kills}", String.valueOf(amount)).replace("{player}", p.getName()));
+        }
+        Ranks.Rank after = plugin.rank(name);
+        if (online != null && after.index() > before.index()) send(online, plugin.msg("rank-up").replace("{rank}", after.display()));
+        if (online != null) plugin.refreshChatRank(online);
     }
 
     /** "5 ч. 12 мин." */
@@ -233,7 +247,7 @@ public class RankCommand implements CommandExecutor, TabCompleter {
             res.addAll(Arrays.asList("info", "list", "top", "on", "off"));
             if (canGive(sender)) res.add("give");
             if (sender.hasPermission(ADMIN)) res.addAll(Arrays.asList("set", "reset", "reload"));
-        } else if (args.length == 2 && Arrays.asList("info", "set", "reset").contains(args[0].toLowerCase(Locale.ROOT))) {
+        } else if (args.length == 2 && Arrays.asList("info", "set", "reset", "give").contains(args[0].toLowerCase(Locale.ROOT))) {
             DsRanksPlugin.addPlayers(res);
         }
         String last = args[args.length - 1].toLowerCase(Locale.ROOT);
