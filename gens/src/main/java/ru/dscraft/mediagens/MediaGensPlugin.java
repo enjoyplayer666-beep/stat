@@ -74,6 +74,15 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
     private final Map<String, Gen> gens = new LinkedHashMap<>();
     /** группа -> игрок -> накоплено */
     private final Map<String, Map<UUID, Integer>> counts = new LinkedHashMap<>();
+    private static MediaGensPlugin instance;
+
+    /** Для MediaClear (через рефлексию): очистка всех генераторов - накопленное у всех игроков сгорает. */
+    public static void resetAll() {
+        MediaGensPlugin p = instance;
+        if (p == null) return;
+        for (Map<UUID, Integer> m : p.counts.values()) m.clear();
+        p.save();
+    }
     private final Map<String, Material> materials = new LinkedHashMap<>();
     /** группы, которые копят предмет из MediaItems (item:candy): группа -> id */
     private final Map<String, String> customs = new HashMap<>();
@@ -85,6 +94,7 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
+        instance = this;
         saveDefaultConfig();
         var c = getConfig();
         if (c.getDouble("generator.item-scale") == 0.6) c.set("generator.item-scale", 0.35);

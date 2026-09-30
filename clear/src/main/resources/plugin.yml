@@ -3,6 +3,7 @@ version: '1.0'
 main: ru.dscraft.mediaclear.MediaClearPlugin
 api-version: '1.21'
 author: DestroyCraft
+softdepend: [MediaGens]
 description: Очистка предметов с земли по таймеру (кроме лобби)
 commands:
   mediaclear:

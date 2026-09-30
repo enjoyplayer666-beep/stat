@@ -52,7 +52,20 @@ public class MediaClearPlugin extends JavaPlugin {
             if (excluded(w)) continue;
             for (Item item : w.getEntitiesByClass(Item.class)) item.remove();
         }
+        if (getConfig().getBoolean("clear-generators", true)) resetGenerators();
         broadcast(getConfig().getString("done", "&#FF130D◆ &fОчистка завершена!"));
+    }
+
+    /** Генераторы MediaGens тоже обнуляются: кто успел забрать - тот и забрал. */
+    private void resetGenerators() {
+        var gens = Bukkit.getPluginManager().getPlugin("MediaGens");
+        if (gens == null || !gens.isEnabled()) return;
+        try {
+            Class.forName("ru.dscraft.mediagens.MediaGensPlugin", true, gens.getClass().getClassLoader())
+                    .getMethod("resetAll").invoke(null);
+        } catch (Exception e) {
+            getLogger().warning("Не удалось очистить генераторы: " + e.getMessage());
+        }
     }
 
     /** Только игрокам не в лобби. */
