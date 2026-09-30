@@ -666,44 +666,64 @@ items:
     unbreakable: true
 
   # ---------- Шлем пустоты ... ----------
+  # ресурсы
+  void_dust:
+    material: PHANTOM_MEMBRANE
+    name: "<dark_purple>Пыль пустоты"
+    lore-mode: vanilla
+  void_clot:
+    material: PHANTOM_MEMBRANE
+    glint: true
+    name: "<dark_purple><b>Сгусток пустоты"
+    lore-mode: vanilla
+  void_shard:
+    material: GRAY_STAINED_GLASS_PANE
+    name: "<dark_purple><b>Осколок пустоты"
+    lore-mode: vanilla
+  void_block:
+    material: BLACK_CONCRETE
+    name: "<dark_purple><b>Блок пустоты"
+    lore-mode: vanilla
+  # характеристики брони/меча/элитр - без скринов, ждут точных
   void_helmet:
-    material: LEATHER_HELMET
-    model: 10001
-    color: "#3C1C66"
-    name: "<dark_purple><b>Шлем пустоты</b></dark_purple>"
+    material: PLAYER_HEAD
+    head: "fea57e9ed9af86ef785efd50ff68422ceafe99dd203f511c0b159b617e921019"
+    name: "<dark_purple><b>Шлем пустоты"
     enchants: ["fire_protection:8", "protection:30", "thorns:8"]
     attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:20"]
     unbreakable: true
   void_chestplate:
     material: LEATHER_CHESTPLATE
-    model: 10001
     color: "#3C1C66"
-    name: "<dark_purple><b>Нагрудник пустоты</b></dark_purple>"
+    name: "<dark_purple><b>Нагрудник пустоты"
     enchants: ["fire_protection:8", "protection:30", "thorns:8"]
     attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:20"]
     unbreakable: true
   void_leggings:
     material: LEATHER_LEGGINGS
-    model: 10001
     color: "#3C1C66"
-    name: "<dark_purple><b>Поножи пустоты</b></dark_purple>"
+    name: "<dark_purple><b>Поножи пустоты"
     enchants: ["fire_protection:8", "protection:30", "thorns:8"]
     attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:20"]
     unbreakable: true
   void_boots:
     material: LEATHER_BOOTS
-    model: 10001
     color: "#3C1C66"
-    name: "<dark_purple><b>Ботинки пустоты</b></dark_purple>"
+    name: "<dark_purple><b>Ботинки пустоты"
     enchants: ["fire_protection:8", "protection:30", "thorns:8"]
     attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:20"]
     unbreakable: true
+  void_elytra:
+    material: ELYTRA
+    name: "<dark_purple><b>Элитры пустоты"
+    enchants: ["fire_protection:8", "protection:30", "thorns:8"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:20"]
   void_sword:
     material: DIAMOND_SWORD
     model: 10009
-    name: "<dark_purple><b>Меч пустоты</b></dark_purple>"
-    enchants: ["fire_aspect:5", "sharpness:30"]
-    attributes: ["attack_damage:40", "attack_speed:3"]
+    name: "<dark_purple><b>Меч пустоты"
+    enchants: ["fire_aspect:4", "sharpness:28"]
+    attributes: ["attack_damage:38", "attack_speed:3"]
     unbreakable: true
 
   # ---------- Метеоритный шлем ... ----------

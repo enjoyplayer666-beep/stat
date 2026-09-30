@@ -397,25 +397,26 @@ shops:
       - {item: "item:jungle_leggings", with: "item:cloud_fluff:4", result: "item:cloud_leggings"}
       - {item: "item:jungle_boots", with: "item:cloud_fluff:4", result: "item:cloud_boots"}
 
-  # Пустота: облачная вещь + 64 компонента
+  # Сет пустоты (скрин): НПС-игрок со скином; улучшение ледяных вещей - в наковальне
   void:
-    title: "<gradient:#AA00AA:#3C1C66><b>Сет пустоты"
-    name: "<gradient:#AA00AA:#3C1C66><b>Сет пустоты"
+    title: "<dark_purple><b>Сет пустоты"
+    name: "<dark_purple><b>Сет пустоты"
     npc:
       type: "PLAYER"
-      skin: ""
-      fallback-type: "WITHER_SKELETON"
-      equipment:
-        chest: "LEATHER_CHESTPLATE#2A1240"
-        legs: "LEATHER_LEGGINGS#2A1240"
-        feet: "LEATHER_BOOTS#1A0B2E"
-        hand: "item:void_sword"
+      skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/void.png"
+      fallback-type: "ZOMBIE"
     trades:
-      - {buy: "item:cloud_helmet", buy2: "item:accel_component:64", result: "item:void_helmet"}
-      - {buy: "item:cloud_chestplate", buy2: "item:accel_component:64", result: "item:void_chestplate"}
-      - {buy: "item:cloud_leggings", buy2: "item:accel_component:64", result: "item:void_leggings"}
-      - {buy: "item:cloud_boots", buy2: "item:accel_component:64", result: "item:void_boots"}
-      - {buy: "item:cloud_sword", buy2: "item:accel_component:64", result: "item:void_sword"}
+      - {buy: "item:void_dust:35", result: "item:void_clot"}
+      - {buy: "item:void_clot:2", result: "item:void_shard"}
+      - {buy: "item:void_shard:12", result: "item:void_block"}
+      - {buy: "item:separator", buy2: "item:separator", result: "item:separator"}
+    anvil:
+      - {item: "item:ice_sword", with: "item:void_block:8", result: "item:void_sword"}
+      - {item: "item:ice_elytra", with: "item:void_block:4", result: "item:void_elytra"}
+      - {item: "item:ice_helmet", with: "item:void_block:4", result: "item:void_helmet"}
+      - {item: "item:ice_chestplate", with: "item:void_block:4", result: "item:void_chestplate"}
+      - {item: "item:ice_leggings", with: "item:void_block:4", result: "item:void_leggings"}
+      - {item: "item:ice_boots", with: "item:void_block:4", result: "item:void_boots"}
 
   # Метеоритный (чёрный скелет): 32 скрапа -> энергия, 20 энергии -> заряд вселенной, вещь пустоты + заряды -> метеоритная вещь
   meteor:
@@ -548,7 +549,7 @@ shops:
       - {item: "item:magma_leggings", with: "item:ice_cluster:4", result: "item:ice_leggings"}
       - {item: "item:magma_boots", with: "item:ice_cluster:4", result: "item:ice_boots"}
 
-  # Doge Set (скрин): НПС-игрок; улучшение ледяных вещей - в наковальне
+  # Doge Set (скрин): НПС-игрок; улучшение вещей пустоты - в наковальне
   doge:
     title: "<yellow><b>Doge Set"
     name: "<yellow><b>Doge Set"
@@ -562,9 +563,9 @@ shops:
       - {buy: "item:doge_block:6", result: "item:doge_cluster"}
       - {buy: "item:separator", buy2: "item:separator", result: "item:separator"}
     anvil:
-      - {item: "item:ice_sword", with: "item:doge_cluster:8", result: "item:doge_sword"}
-      - {item: "item:ice_elytra", with: "item:doge_cluster:4", result: "item:doge_elytra"}
-      - {item: "item:ice_helmet", with: "item:doge_cluster:4", result: "item:doge_helmet"}
-      - {item: "item:ice_chestplate", with: "item:doge_cluster:4", result: "item:doge_chestplate"}
-      - {item: "item:ice_leggings", with: "item:doge_cluster:4", result: "item:doge_leggings"}
-      - {item: "item:ice_boots", with: "item:doge_cluster:4", result: "item:doge_boots"}
+      - {item: "item:void_sword", with: "item:doge_cluster:8", result: "item:doge_sword"}
+      - {item: "item:void_elytra", with: "item:doge_cluster:4", result: "item:doge_elytra"}
+      - {item: "item:void_helmet", with: "item:doge_cluster:4", result: "item:doge_helmet"}
+      - {item: "item:void_chestplate", with: "item:doge_cluster:4", result: "item:doge_chestplate"}
+      - {item: "item:void_leggings", with: "item:doge_cluster:4", result: "item:doge_leggings"}
+      - {item: "item:void_boots", with: "item:doge_cluster:4", result: "item:doge_boots"}
