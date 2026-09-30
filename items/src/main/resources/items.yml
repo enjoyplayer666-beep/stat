@@ -1204,3 +1204,65 @@ items:
     enchants: ["fire_aspect:5", "sharpness:34"]
     attributes: ["attack_damage:50", "attack_speed:4"]
     unbreakable: true
+
+  # ---------- Кометный сет (характеристики временные: сильнее лунного) ----------
+  comet_flame:
+    material: IRON_INGOT
+    model: 187
+    name: "<light_purple>Пламя кометы"
+    lore-mode: vanilla
+  comet_shard:
+    material: IRON_INGOT
+    model: 171
+    name: "<light_purple>Кометный осколок"
+    lore-mode: vanilla
+  comet_crystal:
+    material: IRON_INGOT
+    model: 172
+    name: "<light_purple>Кометный кристал"
+    lore-mode: vanilla
+  comet_cluster:
+    material: IRON_INGOT
+    model: 173
+    name: "<light_purple><b>Кометный кластер"
+    lore-mode: vanilla
+  comet_helmet:
+    material: PLAYER_HEAD
+    head: "872169657c9f027864ff6b12e9336f09e55bab217c765829f152ab58491506bd"
+    name: "<light_purple><b>Кометный шлем"
+    enchants: ["fire_protection:13", "protection:44", "thorns:13"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:35"]
+    unbreakable: true
+  comet_chestplate:
+    material: LEATHER_CHESTPLATE
+    color: "#3A1466"
+    name: "<light_purple><b>Кометный нагрудник"
+    enchants: ["fire_protection:13", "protection:44", "thorns:13"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:35"]
+    unbreakable: true
+  comet_leggings:
+    material: LEATHER_LEGGINGS
+    color: "#3A1466"
+    name: "<light_purple><b>Кометные поножи"
+    enchants: ["fire_protection:13", "protection:44", "thorns:13"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:35"]
+    unbreakable: true
+  comet_boots:
+    material: LEATHER_BOOTS
+    color: "#3A1466"
+    name: "<light_purple><b>Кометные ботинки"
+    enchants: ["fire_protection:13", "protection:44", "thorns:13"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:35"]
+    unbreakable: true
+  comet_elytra:
+    material: ELYTRA
+    name: "<light_purple><b>Кометные элитры"
+    enchants: ["fire_protection:13", "protection:44", "thorns:13"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:35"]
+  comet_sword:
+    material: DIAMOND_SWORD
+    model: 10013
+    name: "<light_purple><b>Кометный меч"
+    enchants: ["fire_aspect:5", "sharpness:36"]
+    attributes: ["attack_damage:55", "attack_speed:4"]
+    unbreakable: true

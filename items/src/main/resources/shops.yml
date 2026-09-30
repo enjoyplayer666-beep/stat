@@ -617,3 +617,24 @@ shops:
       - {item: "item:space_chestplate", with: "item:moon_cluster:4", result: "item:moon_chestplate"}
       - {item: "item:space_leggings", with: "item:moon_cluster:4", result: "item:moon_leggings"}
       - {item: "item:space_boots", with: "item:moon_cluster:4", result: "item:moon_boots"}
+
+  # Кометный сет (скрин): НПС-игрок без брони; улучшение лунных вещей - в наковальне
+  comet:
+    title: "<light_purple><b>Кометный сет"
+    name: "<light_purple><b>Кометный сет"
+    npc:
+      type: "PLAYER"
+      skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/comet.png"
+      fallback-type: "ZOMBIE"
+    trades:
+      - {buy: "item:comet_flame:20", result: "item:comet_shard"}
+      - {buy: "item:comet_shard:2", result: "item:comet_crystal"}
+      - {buy: "item:comet_crystal:6", result: "item:comet_cluster"}
+      - {buy: "item:separator", buy2: "item:separator", result: "item:separator"}
+    anvil:
+      - {item: "item:moon_sword", with: "item:comet_cluster:8", result: "item:comet_sword"}
+      - {item: "item:moon_elytra", with: "item:comet_cluster:8", result: "item:comet_elytra"}
+      - {item: "item:moon_helmet", with: "item:comet_cluster:4", result: "item:comet_helmet"}
+      - {item: "item:moon_chestplate", with: "item:comet_cluster:4", result: "item:comet_chestplate"}
+      - {item: "item:moon_leggings", with: "item:comet_cluster:4", result: "item:comet_leggings"}
+      - {item: "item:moon_boots", with: "item:comet_cluster:4", result: "item:comet_boots"}

@@ -679,7 +679,7 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
         else if (a.length == 2 && (a[0].equalsIgnoreCase("remove") || a[0].equalsIgnoreCase("create") || a[0].equalsIgnoreCase("size"))) {
             out.addAll(materials.keySet());
             if (a[0].equalsIgnoreCase("create")) out.addAll(List.of("dirt", "stone", "coal", "iron_ingot", "diamond", "gunpowder", "gold_ingot",
-                    "candy", "amethyst_shard", "crying_obsidian", "magenta_concrete", "lime_concrete", "beacon", "magma_piece", "ice_shard", "void_dust", "doge_coin", "space_shard", "moon_stone"));
+                    "candy", "amethyst_shard", "crying_obsidian", "magenta_concrete", "lime_concrete", "beacon", "magma_piece", "ice_shard", "void_dust", "doge_coin", "space_shard", "moon_stone", "comet_flame"));
         } else if (a.length == 3) {
             for (Gen g : gens.values()) if (g.group.equals(a[1].toLowerCase(Locale.ROOT))) out.add(g.point);
             if (a[0].equalsIgnoreCase("create")) out.add("p" + (out.size() + 1));
