@@ -590,3 +590,30 @@ shops:
       - {item: "item:doge_chestplate", with: "item:compressed_space:4", result: "item:space_chestplate"}
       - {item: "item:doge_leggings", with: "item:compressed_space:4", result: "item:space_leggings"}
       - {item: "item:doge_boots", with: "item:compressed_space:4", result: "item:space_boots"}
+
+  # Лунный сет (скрин): НПС-игрок в лунном сете с мечом; улучшение космических вещей - в наковальне
+  moon:
+    title: "<white><b>Лунный сет"
+    name: "<white><b>Лунный сет"
+    npc:
+      type: "PLAYER"
+      skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/moon.png"
+      fallback-type: "ZOMBIE"
+      equipment:
+        head: "item:moon_helmet"
+        chest: "item:moon_chestplate"
+        legs: "item:moon_leggings"
+        feet: "item:moon_boots"
+        hand: "item:moon_sword"
+    trades:
+      - {buy: "item:moon_stone:20", result: "item:moon_block"}
+      - {buy: "item:moon_block:2", result: "item:compressed_moon"}
+      - {buy: "item:compressed_moon:6", result: "item:moon_cluster"}
+      - {buy: "item:separator", buy2: "item:separator", result: "item:separator"}
+    anvil:
+      - {item: "item:space_sword", with: "item:moon_cluster:8", result: "item:moon_sword"}
+      - {item: "item:space_elytra", with: "item:moon_cluster:8", result: "item:moon_elytra"}
+      - {item: "item:space_helmet", with: "item:moon_cluster:4", result: "item:moon_helmet"}
+      - {item: "item:space_chestplate", with: "item:moon_cluster:4", result: "item:moon_chestplate"}
+      - {item: "item:space_leggings", with: "item:moon_cluster:4", result: "item:moon_leggings"}
+      - {item: "item:space_boots", with: "item:moon_cluster:4", result: "item:moon_boots"}

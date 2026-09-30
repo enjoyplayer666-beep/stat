@@ -1144,3 +1144,63 @@ items:
     enchants: ["fire_aspect:5", "sharpness:32"]
     attributes: ["attack_damage:45", "attack_speed:4"]
     unbreakable: true
+
+  # ---------- Лунный сет (характеристики временные: сильнее космического) ----------
+  moon_stone:
+    material: GRAY_DYE
+    name: "<white>Лунный камень"
+    lore-mode: vanilla
+  moon_block:
+    material: LIGHT_GRAY_CONCRETE_POWDER
+    name: "<white><b>Лунный блок"
+    lore-mode: vanilla
+  compressed_moon:
+    material: LIGHT_GRAY_CONCRETE_POWDER
+    glint: true
+    name: "<white><b>Сжатый лунный блок"
+    lore-mode: vanilla
+  moon_cluster:
+    material: WHITE_CONCRETE_POWDER
+    name: "<white><b>Лунный кластер"
+    lore-mode: vanilla
+  # шлем - та же голова, что у космического
+  moon_helmet:
+    material: PLAYER_HEAD
+    head: "c0ecfa821d596a6b8b5c64ad3d909fd4bdf0b8d59abb6796ed47080c1ada1b2d"
+    name: "<white><b>Лунный шлем"
+    enchants: ["fire_protection:12", "protection:41", "thorns:12"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:32.5"]
+    unbreakable: true
+  moon_chestplate:
+    material: LEATHER_CHESTPLATE
+    color: "#C8C8C8"
+    name: "<white><b>Лунный нагрудник"
+    enchants: ["fire_protection:12", "protection:41", "thorns:12"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:32.5"]
+    unbreakable: true
+  moon_leggings:
+    material: LEATHER_LEGGINGS
+    color: "#C8C8C8"
+    name: "<white><b>Лунные поножи"
+    enchants: ["fire_protection:12", "protection:41", "thorns:12"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:32.5"]
+    unbreakable: true
+  moon_boots:
+    material: LEATHER_BOOTS
+    color: "#C8C8C8"
+    name: "<white><b>Лунные ботинки"
+    enchants: ["fire_protection:12", "protection:41", "thorns:12"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:32.5"]
+    unbreakable: true
+  moon_elytra:
+    material: ELYTRA
+    name: "<white><b>Лунные элитры"
+    enchants: ["fire_protection:12", "protection:41", "thorns:12"]
+    attributes: ["armor:10", "armor_toughness:10", "knockback_resistance:0.5", "max_health:32.5"]
+  moon_sword:
+    material: DIAMOND_SWORD
+    model: 10012
+    name: "<white><b>Лунный меч"
+    enchants: ["fire_aspect:5", "sharpness:34"]
+    attributes: ["attack_damage:50", "attack_speed:4"]
+    unbreakable: true
