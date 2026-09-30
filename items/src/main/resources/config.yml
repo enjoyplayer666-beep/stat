@@ -85,6 +85,26 @@ textures:
     message: "<red>◆ <gray><u>Переходи:</u></gray> <white><u><click:open_url:'{link}'>{link}</click></u>"
   no-pack: "<red>• <white>Ресурспак не настроен на сервере."
 
+# Меню НПС "Аукцион" (menu: auction в shops.yml) - пока витрина, все предметы с надписью item-name
+# названия: &-коды (&x&R&R&G&G&B&B, &l, &o) или MiniMessage
+auction:
+  title: "<dark_gray>▪ Предметов в продаже: 54"
+  item-name: "&x&E&4&3&A&9&6&l&oп&x&E&6&4&5&9&C&l&oо&x&E&7&5&0&A&2&l&oк&x&E&9&5&B&A&8&l&oа &x&E&C&7&1&B&3&l&oв &x&E&F&8&7&B&F&l&oр&x&F&0&9&2&C&5&l&oа&x&F&2&9&D&C&B&l&oз&x&F&3&A&7&D&0&l&oр&x&F&5&B&2&D&6&l&oа&x&F&6&B&D&D&C&l&oб&x&F&8&C&8&E&2&l&oо&x&F&9&D&3&E&8&l&oт&x&F&B&D&E&E&E&l&oк&x&F&C&E&9&F&3&l&oе&x&F&E&F&4&F&9&l&o.&x&F&F&F&F&F&F&l&o."
+  items:
+    - {slot: 10, item: "item:majestic_chestplate"}
+    - {slot: 11, item: "item:amethyst_cluster"}
+    - {slot: 12, item: "item:universe_charge"}
+    - {slot: 13, item: "item:majestic_sword"}
+    - {slot: 14, item: "ELYTRA"}
+    - {slot: 15, item: "item:talisman_super"}
+    - {slot: 16, item: "NETHERITE_PICKAXE"}
+    - {slot: 19, item: "item:talisman_life"}
+    - {slot: 20, item: "BOOK"}
+    - {slot: 45, item: "LEAD"}
+    - {slot: 46, item: "TRIPWIRE_HOOK"}
+    - {slot: 49, item: "CYAN_BED"}
+    - {slot: 53, item: "EMERALD"}
+
 messages:
   wrong-ingredient: "<red>Сюда нужны обычные предметы, а не ресурсы с сервера."
   use-anvil: "<yellow>Эти вещи улучшаются в наковальне: <white>/anvil</white> или <white>/upgrade</white>."

@@ -26,6 +26,7 @@ public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
     private Health health;
     private Titles titles;
     private Textures textures;
+    private Auction auction;
     private int hdbRetries;
 
     @Override
@@ -50,6 +51,8 @@ public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
         getServer().getPluginManager().registerEvents(titles, this);
         textures = new Textures(this);
         getServer().getPluginManager().registerEvents(textures, this);
+        auction = new Auction(this);
+        getServer().getPluginManager().registerEvents(auction, this);
         health = new Health(this);
         getServer().getPluginManager().registerEvents(health, this);
         Bukkit.getScheduler().runTaskTimer(this, health::tick, 20L, 4L);
@@ -109,6 +112,10 @@ public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
 
     Items items() {
         return items;
+    }
+
+    Auction auction() {
+        return auction;
     }
 
     Textures textures() {

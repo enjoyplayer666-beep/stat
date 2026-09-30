@@ -462,6 +462,19 @@ shops:
     npc:
       type: "PLAYER"
       menu: "textures"
+      turn: false
       skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/textures.png"
+      fallback-type: "ZOMBIE"
+    trades: []
+
+  # Аукцион (скрин): НПС-игрок, стоит статично, по клику - витрина "пока в разработке"
+  auction:
+    title: "Аукцион"
+    name: "<#C9A7B0>Аукцион"
+    npc:
+      type: "PLAYER"
+      menu: "auction"
+      turn: false
+      skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/auction.png"
       fallback-type: "ZOMBIE"
     trades: []
