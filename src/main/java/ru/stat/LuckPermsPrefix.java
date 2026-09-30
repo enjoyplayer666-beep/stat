@@ -2,6 +2,7 @@ package ru.stat;
 
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.event.user.UserDataRecalculateEvent;
+import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -12,11 +13,26 @@ final class LuckPermsPrefix {
     private LuckPermsPrefix() {
     }
 
+    /**
+     * Префикс донатной группы, а не личный префикс игрока: донатеры меняют себе префикс
+     * (через меню Deluxe и т.п.), а в /stat должна быть привилегия. Берётся группа игрока
+     * с наибольшим весом, у которой есть свой префикс.
+     */
     static String get(Player player) {
-        User user = LuckPermsProvider.get().getUserManager().getUser(player.getUniqueId());
+        var lp = LuckPermsProvider.get();
+        User user = lp.getUserManager().getUser(player.getUniqueId());
         if (user == null) return null;
-        String prefix = user.getCachedData().getMetaData().getPrefix();
-        return prefix == null || prefix.isBlank() ? null : prefix.trim();
+        Group best = null;
+        String bestPrefix = null;
+        for (Group g : user.getInheritedGroups(user.getQueryOptions())) {
+            String p = g.getCachedData().getMetaData().getPrefix();
+            if (p == null || p.isBlank()) continue;
+            if (best == null || g.getWeight().orElse(0) > best.getWeight().orElse(0)) {
+                best = g;
+                bestPrefix = p;
+            }
+        }
+        return bestPrefix == null ? null : bestPrefix.trim();
     }
 
     /** Смена группы / префикса в LuckPerms -> сразу обновить привилегию и ранг в /stat. */
