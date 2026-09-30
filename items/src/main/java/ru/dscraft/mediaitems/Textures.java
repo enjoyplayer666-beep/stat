@@ -57,9 +57,9 @@ final class Textures implements Listener {
         Menu menu = new Menu();
         Inventory inv = Bukkit.createInventory(menu, 27, Text.mm(c.getString("title", "<#8A6DC1>Текстуры")));
         menu.inv = inv;
-        inv.setItem(c.getInt("auto.slot", 11), item(c.getString("auto.icon", "PLAYER_HEAD"),
+        inv.setItem(c.getInt("auto.slot", 11), item(c.getString("auto.icon", "head:ce1f3cc63c73a6a1dde72fe09c6ac5569376d7b61231bb740764368788cbf1fa"),
                 c.getString("auto.name", "<green>Автоматическая установка"), c.getStringList("auto.lore")));
-        inv.setItem(c.getInt("manual.slot", 15), item(c.getString("manual.icon", "PLAYER_HEAD"),
+        inv.setItem(c.getInt("manual.slot", 15), item(c.getString("manual.icon", "head:60026c5e753f2f3b442fee251ecca58655f3770ff2f29fee8c894ee13f5381ff"),
                 c.getString("manual.name", "<white>Ручная установка"), c.getStringList("manual.lore")));
         p.openInventory(inv);
     }
