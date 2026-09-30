@@ -462,5 +462,6 @@ shops:
     npc:
       type: "PLAYER"
       menu: "textures"
+      skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/textures.png"
       fallback-type: "ZOMBIE"
     trades: []
