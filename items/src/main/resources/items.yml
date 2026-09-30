@@ -1293,3 +1293,23 @@ items:
     model: 179
     name: "<light_purple><b>Энергия пурпура"
     lore-mode: vanilla
+  purpur_piece:
+    material: IRON_INGOT
+    model: 177
+    name: "<light_purple>Кусок пурпура"
+    lore-mode: vanilla
+  purpur_clot:
+    material: IRON_INGOT
+    model: 178
+    name: "<light_purple>Сгусток пурпура"
+    lore-mode: vanilla
+  hell_piece:
+    material: IRON_INGOT
+    model: 191
+    name: "<red>Кусок адской земли"
+    lore-mode: vanilla
+  hell_clot:
+    material: IRON_INGOT
+    model: 175
+    name: "<red>Сгусток адской земли"
+    lore-mode: vanilla

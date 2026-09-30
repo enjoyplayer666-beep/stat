@@ -666,3 +666,23 @@ shops:
       - {buy: "item:hell_energy:2", result: "item:purpur_energy"}
       - {buy: "item:purpur_energy:2", result: "item:earth_energy"}
       - {buy: "item:purpur_energy:2", result: "item:hell_energy"}
+
+  # Пурпурный торговец (скрин): статичный эндермен
+  purpur_trader:
+    title: "<light_purple><b>Пурпурный торговец"
+    name: "<light_purple><b>Пурпурный торговец"
+    npc:
+      type: "ENDERMAN"
+    trades:
+      - {buy: "item:purpur_piece:48", result: "item:purpur_clot"}
+      - {buy: "item:purpur_clot:6", result: "item:purpur_energy"}
+
+  # Адский торговец (скрин): статичный ифрит
+  hell_trader:
+    title: "<red><b>Адский торговец"
+    name: "<red><b>Адский торговец"
+    npc:
+      type: "BLAZE"
+    trades:
+      - {buy: "item:hell_piece:56", result: "item:hell_clot"}
+      - {buy: "item:hell_clot:8", result: "item:hell_energy"}
