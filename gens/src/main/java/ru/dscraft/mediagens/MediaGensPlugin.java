@@ -97,6 +97,9 @@ public final class MediaGensPlugin extends ru.dscraft.destroyskypvp.Module imple
     public void onEnable() {
         instance = this;
         saveDefaultConfig();
+        // новые настройки (grow-radius и т.п.) дописываются в старый config.yml
+        getConfig().options().copyDefaults(true);
+        saveConfig();
         var c = getConfig();
         if (c.getDouble("generator.item-scale") == 0.6) c.set("generator.item-scale", 0.35);
         if (c.getDouble("generator.item-offset") == 1.35) c.set("generator.item-offset", 1.2);
@@ -257,14 +260,20 @@ public final class MediaGensPlugin extends ru.dscraft.destroyskypvp.Module imple
         if (tickCounter % 1200 == 0) save();
     }
 
-    /** Каждому игроку в сети: +amount (с бустером - x множитель), до max. */
+    /**
+     * +amount (с бустером - x множитель), до max - только игрокам, которые стоят рядом с точкой группы
+     * (generator.grow-radius блоков; 0 - копится всем в сети, где бы ни были).
+     */
     private void grow() {
         var gc = getConfig();
         int max = gc.getInt("generator.max", 512);
         boolean reset = "reset".equalsIgnoreCase(gc.getString("generator.on-full", "stop"));
         int amount = gc.getInt("generator.amount", 1);
-        for (Map<UUID, Integer> pc : counts.values()) {
+        double radius = gc.getDouble("generator.grow-radius", 16);
+        for (Map.Entry<String, Map<UUID, Integer>> e : counts.entrySet()) {
+            Map<UUID, Integer> pc = e.getValue();
             for (Player p : Bukkit.getOnlinePlayers()) {
+                if (radius > 0 && !near(p, e.getKey(), radius)) continue;
                 int c = pc.getOrDefault(p.getUniqueId(), 0);
                 if (c >= max) {
                     if (reset) pc.put(p.getUniqueId(), 0);
@@ -273,6 +282,18 @@ public final class MediaGensPlugin extends ru.dscraft.destroyskypvp.Module imple
                 pc.put(p.getUniqueId(), Math.min(max, c + amount * multiplier(p)));
             }
         }
+    }
+
+    /** Игрок в радиусе хотя бы одной точки группы (тот же мир). */
+    private boolean near(Player p, String group, double radius) {
+        Location l = p.getLocation();
+        double r2 = radius * radius;
+        for (Gen g : gens.values()) {
+            if (!g.group.equals(group) || !l.getWorld().getName().equals(g.world)) continue;
+            double dx = l.getX() - (g.x + 0.5), dy = l.getY() - (g.y + 1), dz = l.getZ() - (g.z + 0.5);
+            if (dx * dx + dy * dy + dz * dz <= r2) return true;
+        }
+        return false;
     }
 
     /** Игрок на площадке точки забирает своё накопленное в группе. */
