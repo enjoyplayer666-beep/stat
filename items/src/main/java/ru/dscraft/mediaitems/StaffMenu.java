@@ -98,11 +98,21 @@ final class StaffMenu implements Listener, CommandExecutor, org.bukkit.command.T
         return allowed(sender) && a.length == 1 && "items".startsWith(a[0].toLowerCase(Locale.ROOT)) ? List.of("items") : List.of();
     }
 
-    /** Не-стафф не видит /menu в подсказках команд. */
-    @EventHandler
-    public void onCommandsSend(org.bukkit.event.player.PlayerCommandSendEvent e) {
-        if (allowed(e.getPlayer())) return;
-        e.getCommands().removeIf(c -> c.equals("menu") || c.equals("mediaitems:menu"));
+    /**
+     * /menu items - меню предметов для стаффа. Своей команды /menu у плагина нет (её занимает меню
+     * сервера DsMenu), поэтому перехватываем ввод; не-стаффу команда уходит в обычное /menu.
+     */
+    @EventHandler(priority = org.bukkit.event.EventPriority.LOW, ignoreCancelled = true)
+    public void onMenuItems(org.bukkit.event.player.PlayerCommandPreprocessEvent e) {
+        String[] parts = e.getMessage().substring(1).trim().split("\\s+");
+        if (parts.length < 2 || !parts[1].equalsIgnoreCase("items")) return;
+        String label = parts[0].toLowerCase(Locale.ROOT);
+        int colon = label.indexOf(':');
+        if (colon >= 0) label = label.substring(colon + 1);
+        if (!label.equals("menu") && !label.equals("меню")) return;
+        if (!allowed(e.getPlayer())) return;
+        e.setCancelled(true);
+        openMain(e.getPlayer());
     }
 
     // ---------- что куда ----------

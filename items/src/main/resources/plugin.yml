@@ -13,9 +13,6 @@ commands:
   upgrade:
     description: Наковальня для улучшения сетов
     aliases: [anvil]
-  menu:
-    description: Меню предметов для стаффа (/menu items)
-    usage: /menu items
 permissions:
   mediaitems.staffmenu:
     description: Доступ к /menu items (кроме групп из staff-menu.groups)
