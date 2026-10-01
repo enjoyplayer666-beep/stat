@@ -184,6 +184,8 @@ public final class MediaVaultsPlugin extends JavaPlugin implements Listener {
         int colon = label.indexOf(':');
         if (colon >= 0) label = label.substring(colon + 1);
         if (!List.of("ec", "enderchest", "echest", "vault", "vaults").contains(label)) return;
+        // у опа /ec, /enderchest, /echest - от Essentials (в т.ч. /ec ник); хранилища - /vaults или эндер-сундук
+        if (event.getPlayer().isOp() && List.of("ec", "enderchest", "echest").contains(label)) return;
         event.setCancelled(true);
         openMenu(event.getPlayer());
     }
