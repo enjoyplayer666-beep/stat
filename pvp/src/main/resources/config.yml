@@ -48,5 +48,28 @@ streak-broken: "<#FF5555><killer></#FF5555> <#AAAAAA>прервал серию �
 # from-set или любого сета после него в списке sets. Новые сеты дописывай в конец sets.
 legacy-pvp:
   enabled: true
-  from-set: meteor
+  from-set: void
   sets: [leather, chain, iron, diamond, netherite, amethyst, obsidian, majestic, jungle, cloud, magma, ice, void, doge, space, moon, comet, planet, meteor]
+
+# стафф (не оп) ударил игрока, будучи в творческом - творческий слетает в выживание
+staff-creative-drop:
+  enabled: true
+  message: "<#E53232>◆</#E53232> <#C7C4B7>Бить игроков в творческом нельзя - режим сменён на выживание.</#C7C4B7>"
+
+# любой (и стафф) ударил опа - в чат фраза по счёту удара: 1-й удар - первая строка и т.д. по кругу.
+# reset-seconds без ударов - счёт заново; cooldown-ms - не чаще одной фразы за это время
+op-hit:
+  enabled: true
+  reset-seconds: 60
+  cooldown-ms: 400
+  messages:
+    - "<#E51510>◆</#E51510> <#AAAAAA>Слыш, ты кого бьешь?</#AAAAAA>"
+    - "<#EB3F11>◆</#EB3F11> <#AAAAAA>Ты давай прекращай.</#AAAAAA>"
+    - "<#EB6912>◆</#EB6912> <#AAAAAA>Я, между прочим, всё вижу. И всё помню.</#AAAAAA>"
+    - "<#EBA510>◆</#EBA510> <#AAAAAA>Ещё удар - и твой инвентарь пойдёт в музей.</#AAAAAA>"
+    - "<#C1E90D>◆</#C1E90D> <#AAAAAA>Мой палец уже над /ban. Он очень устал.</#AAAAAA>"
+    - "<#31F046>◆</#31F046> <#AAAAAA>Ладно, массаж засчитан. Можешь идти.</#AAAAAA>"
+    - "<#33EC48>◆</#33EC48> <#AAAAAA>Всё, обиделся. Иди обними спавн и подумай о жизни.</#AAAAAA>"
+
+# не трогать: по ней плагин сам обновляет старый config.yml
+config-version: 2

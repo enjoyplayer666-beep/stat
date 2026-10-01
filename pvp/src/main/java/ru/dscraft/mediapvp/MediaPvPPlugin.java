@@ -47,7 +47,7 @@ import java.util.UUID;
  *   выход из игры в бою - смерть), кроме лобби и команды проекта;
  * - "ник убил ник" в чат (повтор того же игрока раньше минуты - без сообщения);
  * - серии убийств ("Двойное убийство", ... "ПРЕВОСХОДИТ БОГОВ") и их срыв;
- * - PvP 1.8 (без задержки удара и размашистых атак) с метеоритного сета и выше.
+ * - PvP 1.8 (без задержки удара и размашистых атак) с пустотного сета и выше.
  */
 public final class MediaPvPPlugin extends ru.dscraft.destroypvp.Module implements Listener {
 
@@ -77,6 +77,7 @@ public final class MediaPvPPlugin extends ru.dscraft.destroypvp.Module implement
     public void onEnable() {
         saveDefaultConfig();
         getConfig().options().copyDefaults(true);
+        migrateConfig();
         saveConfig();
         legacyKey = new NamespacedKey(this, "legacy_attack_speed");
         itemsIdKey = new NamespacedKey("mediaitems", "id");
@@ -86,6 +87,18 @@ public final class MediaPvPPlugin extends ru.dscraft.destroypvp.Module implement
             for (Player p : Bukkit.getOnlinePlayers()) updateLegacy(p);
         }, 20L, 10L);
         getLogger().info("MediaPvP включен.");
+    }
+
+    /** Раз на версию: PvP 1.8 теперь с пустотного сета (было с метеоритного). */
+    private void migrateConfig() {
+        Object v = getConfig().get("config-version", null);
+        int version = v instanceof Number n ? n.intValue() : 1;
+        if (version < 2) {
+            if ("meteor".equalsIgnoreCase(getConfig().getString("legacy-pvp.from-set"))) {
+                getConfig().set("legacy-pvp.from-set", "void");
+            }
+            getConfig().set("config-version", 2);
+        }
     }
 
     @Override
@@ -142,16 +155,41 @@ public final class MediaPvPPlugin extends ru.dscraft.destroypvp.Module implement
     }
 
     /**
-     * Замах по стаффу: у стаффа в творческом/god урон не проходит (и события урона может не быть),
-     * но игрок, который его бьёт, всё равно получает режим PvP. Сам стафф - без режима.
+     * Удар по игроку (событие замаха - есть и в творческом, где урона нет):
+     * - стафф (не оп) бьёт игрока в творческом - творческий слетает в выживание;
+     * - кто угодно бьёт опа - в чат фраза по счёту удара (op-hit.messages).
+     * Стафф в творческом по-прежнему без урона и без релога для того, кто его бьёт:
+     * релог даёт только настоящий урон (onHit).
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onSwing(io.papermc.paper.event.player.PrePlayerAttackEntityEvent event) {
         if (!(event.getAttacked() instanceof Player victim)) return;
         Player attacker = event.getPlayer();
-        if (attacker.equals(victim) || inLobby(attacker) || inLobby(victim)) return;
-        if (!isStaff(victim)) return;
-        tag(attacker, victim);
+        if (attacker.equals(victim)) return;
+        if (!attacker.isOp() && !inLobby(attacker) && attacker.getGameMode() == org.bukkit.GameMode.CREATIVE && isStaff(attacker)
+                && getConfig().getBoolean("staff-creative-drop.enabled", true)) {
+            attacker.setGameMode(org.bukkit.GameMode.SURVIVAL);
+            String text = getConfig().getString("staff-creative-drop.message", "");
+            if (!text.isEmpty()) attacker.sendMessage(MM.deserialize(text));
+        }
+        if (victim.isOp() && getConfig().getBoolean("op-hit.enabled", true)) opHit(attacker);
+    }
+
+    private final Map<UUID, long[]> opHits = new HashMap<>();
+
+    /** Следующая фраза за удар по опу; через reset-seconds без ударов счёт начинается заново. */
+    private void opHit(Player attacker) {
+        List<String> lines = getConfig().getStringList("op-hit.messages");
+        if (lines.isEmpty()) return;
+        long now = System.currentTimeMillis();
+        long[] st = opHits.computeIfAbsent(attacker.getUniqueId(), k -> new long[]{0, 0, 0});
+        if (now - st[2] < getConfig().getLong("op-hit.cooldown-ms", 400)) return;
+        if (now - st[1] > getConfig().getLong("op-hit.reset-seconds", 60) * 1000L) st[0] = 0;
+        String line = lines.get((int) (st[0] % lines.size()));
+        st[0]++;
+        st[1] = now;
+        st[2] = now;
+        attacker.sendMessage(MM.deserialize(line));
     }
 
     private void tag(Player player, Player opponent) {
@@ -255,6 +293,7 @@ public final class MediaPvPPlugin extends ru.dscraft.destroypvp.Module implement
     /** Вышел из игры в бою - смерть, убийство засчитывается противнику. */
     @EventHandler(priority = EventPriority.LOWEST)
     public void onQuit(PlayerQuitEvent event) {
+        opHits.remove(event.getPlayer().getUniqueId());
         Player p = event.getPlayer();
         Combat c = combats.get(p.getUniqueId());
         if (c != null && getConfig().getBoolean("combat.kill-on-quit", true) && !p.isDead()) {
