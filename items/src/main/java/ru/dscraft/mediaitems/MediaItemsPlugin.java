@@ -60,6 +60,7 @@ public final class MediaItemsPlugin extends ru.dscraft.destroyskypvp.Module impl
         getServer().getPluginManager().registerEvents(auction, this);
         health = new Health(this);
         getServer().getPluginManager().registerEvents(health, this);
+        getServer().getPluginManager().registerEvents(new ElytraDurability(this), this);
         Bukkit.getScheduler().runTaskTimer(this, health::tick, 20L, 4L);
         getCommand("itemnpc").setTabCompleter(this);
         Bukkit.getScheduler().runTaskTimer(this, npcs::tick, 40L, 40L);

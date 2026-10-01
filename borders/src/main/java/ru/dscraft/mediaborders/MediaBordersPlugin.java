@@ -77,6 +77,8 @@ public final class MediaBordersPlugin extends ru.dscraft.destroyskypvp.Module im
     private final Map<UUID, Location[]> selections = new HashMap<>();
     private final Map<UUID, Shown> shown = new HashMap<>();
     private final Map<UUID, Long> lastMessage = new HashMap<>();
+    /** Опы, которые сейчас у стены и пролетают сквозь неё. */
+    private final java.util.Set<UUID> passing = new java.util.HashSet<>();
     private File zonesFile;
     /** Миры, где настоящую границу мира поставил этот плагин (чтобы вернуть её, когда барьеров не останется). */
     private final java.util.Set<String> managedWorlds = new java.util.LinkedHashSet<>();
@@ -162,6 +164,8 @@ public final class MediaBordersPlugin extends ru.dscraft.destroyskypvp.Module im
             wb.setCenter((minX + maxX) / 2.0, (minZ + maxZ) / 2.0);
             wb.setSize(Math.max(maxX - minX, maxZ - minZ) + margin * 2);
             wb.setWarningDistance(0);
+            // кого оп телепортнул за барьер - не должен получать урон от границы мира
+            wb.setDamageAmount(0);
             withZones.add(world.getName());
             managedWorlds.add(world.getName());
         }
@@ -194,7 +198,7 @@ public final class MediaBordersPlugin extends ru.dscraft.destroyskypvp.Module im
         return null;
     }
 
-    /** Сквозь барьер проходят только опы - в любом режиме игры; остальные, даже стафф, - нет. */
+    /** Сквозь барьер проходят только опы - в любом режиме игры; остальные, даже стафф, - нет (только телепортом). */
     private boolean bypass(Player p) {
         return p.isOp();
     }
@@ -207,8 +211,8 @@ public final class MediaBordersPlugin extends ru.dscraft.destroyskypvp.Module im
      * Так ближние стены всегда стоят ровно по барьеру, а лишняя сторона квадрата - снаружи зоны.
      */
     private void updateWall(Player p, Location at) {
-        if (bypass(p)) {
-            // опу - граница на весь мир: игра сама не пускает сквозь видимую стену даже в творческом
+        if (bypass(p) && passing.contains(p.getUniqueId())) {
+            // оп у самой стены: стену убираем, пока не отлетит (игра сама не пускает сквозь видимую стену)
             Shown free = new Shown(0, 0, 59_999_968);
             if (free.equals(shown.get(p.getUniqueId()))) return;
             WorldBorder border = Bukkit.createWorldBorder();
@@ -255,7 +259,9 @@ public final class MediaBordersPlugin extends ru.dscraft.destroyskypvp.Module im
     }
 
     private void refresh(Player p) {
-        if (p.isOnline()) updateWall(p, p.getLocation());
+        if (!p.isOnline()) return;
+        if (bypass(p)) updatePassing(p, p.getLocation());
+        updateWall(p, p.getLocation());
     }
 
     private void refreshAll() {
@@ -264,6 +270,22 @@ public final class MediaBordersPlugin extends ru.dscraft.destroyskypvp.Module im
             p.setWorldBorder(null);
             refresh(p);
         }
+    }
+
+    /** Расстояние до ближайшего края зоны (изнутри или снаружи). */
+    private static double edgeDistance(Zone z, Location l) {
+        if (!z.contains(l)) return z.distance(l);
+        return Math.min(Math.min(l.getX() - z.minX(), z.maxX() + 1 - l.getX()),
+                Math.min(l.getZ() - z.minZ(), z.maxZ() + 1 - l.getZ()));
+    }
+
+    /** Оп подлетел к стене ближе pass-distance - стена пропадает; отлетел дальше 4 блоков - снова видна. */
+    private void updatePassing(Player p, Location at) {
+        double near = Double.MAX_VALUE;
+        for (Zone z : zonesIn(at.getWorld())) near = Math.min(near, edgeDistance(z, at));
+        double pass = getConfig().getDouble("op-pass-distance", 1.5);
+        if (near <= pass) passing.add(p.getUniqueId());
+        else if (near > pass + 2.5) passing.remove(p.getUniqueId());
     }
 
     /** Отбросить от барьера: внутрь зоны, если был внутри, иначе наружу. */
@@ -303,6 +325,8 @@ public final class MediaBordersPlugin extends ru.dscraft.destroyskypvp.Module im
                 blockedMessage(p);
                 return;
             }
+        } else {
+            updatePassing(p, to);
         }
         updateWall(p, to);
     }
@@ -365,6 +389,7 @@ public final class MediaBordersPlugin extends ru.dscraft.destroyskypvp.Module im
     public void onQuit(PlayerQuitEvent e) {
         UUID id = e.getPlayer().getUniqueId();
         shown.remove(id);
+        passing.remove(id);
         selections.remove(id);
         lastMessage.remove(id);
     }

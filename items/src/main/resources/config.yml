@@ -51,6 +51,9 @@ tooltip:
     attack_speed:         {icon: "⚡", color: "#FFFF55", name: "Скорость атаки"}
     movement_speed:       {icon: "🏃", color: "#FFFF55", name: "Скорость"}
 
+# элитры (обычные и элитры сетов) не тратят прочность
+elytra-no-durability: true
+
 # команды, которые открывают наковальню для улучшения сетов (перехватываются раньше Essentials)
 anvil-commands: ["/anvil", "/upgrade"]
 
