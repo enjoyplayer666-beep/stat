@@ -154,19 +154,6 @@ public final class MediaPvPPlugin extends ru.dscraft.destroypvp.Module implement
         tag(attacker, victim);
     }
 
-    /**
-     * Замах по стаффу: у стаффа в творческом/god урон не проходит (и события урона может не быть),
-     * но игрок, который его бьёт, всё равно получает режим PvP. Сам стафф - без режима.
-     */
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onSwing(io.papermc.paper.event.player.PrePlayerAttackEntityEvent event) {
-        if (!(event.getAttacked() instanceof Player victim)) return;
-        Player attacker = event.getPlayer();
-        if (attacker.equals(victim) || inLobby(attacker) || inLobby(victim)) return;
-        if (!isStaff(victim)) return;
-        tag(attacker, victim);
-    }
-
     private void tag(Player player, Player opponent) {
         if (isStaff(player)) return; // команду проекта режим не трогает
         Combat c = combats.computeIfAbsent(player.getUniqueId(), k -> new Combat());
