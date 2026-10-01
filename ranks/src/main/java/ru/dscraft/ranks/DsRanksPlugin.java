@@ -39,6 +39,7 @@ public class DsRanksPlugin extends JavaPlugin implements Listener {
     public void onEnable() {
         boolean freshConfig = !new File(getDataFolder(), "config.yml").exists();
         saveDefaultConfig();
+        migrateRanks();
         loadData();
         importFromStatPlugin(freshConfig);
         ranks.load(getConfig());
@@ -65,6 +66,41 @@ public class DsRanksPlugin extends JavaPlugin implements Listener {
         saveData();
         chatRanks.clear();
         RanksApi.init(null);
+    }
+
+    /** ranks-version 2: статы атаки/защиты рангов по серверу-образцу - старый список заменяется на новый. */
+    private void migrateRanks() {
+        if (getConfig().getInt("ranks-version", 1) >= 2) return;
+        java.io.InputStream in = getResource("config.yml");
+        if (in == null) return;
+        org.bukkit.configuration.file.YamlConfiguration def = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(
+                new java.io.InputStreamReader(in, java.nio.charset.StandardCharsets.UTF_8));
+        getConfig().set("ranks", def.getList("ranks"));
+        getConfig().set("ranks-version", 2);
+        saveConfig();
+        getLogger().info("Ранги обновлены: новые статы атаки и защиты.");
+    }
+
+    /** Строки карточки ранга (как всплывающая подсказка на сервере-образце): /rank info и наведение на ранг в чате. */
+    java.util.List<String> infoLines(String name) {
+        Ranks.Rank rank = rank(name);
+        Ranks.Rank next = ranks.next(rank);
+        int kills = integer(name, "kills");
+        int atk = rank.attack();
+        int def = rank.defense();
+        int atkChance = atk > 0 ? getConfig().getInt("skills.attack-chance", 33) : 0;
+        int defChance = def > 0 ? getConfig().getInt("skills.defense-chance", 33) : 0;
+        java.util.List<String> out = new java.util.ArrayList<>();
+        out.add("&7Никнейм: &b" + name);
+        out.add("&7Ранг: " + rank.display());
+        out.add("&7Бустер: &ax" + booster(name));
+        out.add("&7Убито игроков: &c" + kills);
+        out.add("&7Прогресс: " + (next == null ? "&aМаксимальный ранг!"
+                : "&7Осталось &c" + (next.kills() - kills) + " &7" + plural(next.kills() - kills, "убийство", "убийства", "убийств")));
+        out.add("&7Умения:");
+        out.add("&3[Атака] &c+" + atk + "% &7урона (Шанс: " + atkChance + "%)");
+        out.add("&a[Защита] &e-" + def + "% &7урона (Шанс: " + defChance + "%)");
+        return out;
     }
 
     void reload() {
@@ -294,6 +330,9 @@ public class DsRanksPlugin extends JavaPlugin implements Listener {
     String msg(String key) {
         String def = switch (key) {
             case "no-ranks" -> "&#E53232◆ &#C7C4B7Вас нет в базе данных!";
+            case "kill-points" -> "&#E53232◆ &#C7C4B7Вы убили &#FF5555{player} &#C7C4B7и получили &#55FF55{points} &#C7C4B7очков ранга!";
+            case "skill-defense" -> "&#E53232◆ &#C7C4B7Вы отбили &#55FF55{percent}% &#C7C4B7урона!";
+            case "skill-attack" -> "&#E53232◆ &#C7C4B7Вы нанесли на &#FF5555{percent}% &#C7C4B7больше урона!";
             case "give-no-vip" -> "&#E53232◆ &#C7C4B7У игрока &f{player} &#C7C4B7нет привилегии VIP - киллы выдать нельзя.";
             default -> key;
         };

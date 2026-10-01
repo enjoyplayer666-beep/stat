@@ -1,0 +1,15 @@
+name: MediaPvP
+version: '1.0'
+main: ru.dscraft.mediapvp.MediaPvPPlugin
+api-version: '1.21'
+author: DestroyCraft
+description: Режим PvP (боссбар, запрет команд, выход из игры в бою), сообщения об убийствах, серии, PvP 1.8 с метеоритного сета
+softdepend: [LuckPerms, MediaItems]
+commands:
+  mediapvp:
+    description: Перезагрузка конфига MediaPvP
+    usage: /mediapvp reload
+    permission: mediapvp.admin
+permissions:
+  mediapvp.admin:
+    default: op

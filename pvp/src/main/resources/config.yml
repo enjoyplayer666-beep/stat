@@ -1,0 +1,52 @@
+# =====================================================================
+#  MediaPvP - режим PvP, убийства, серии, PvP 1.8. После правки: /mediapvp reload
+#  Тексты - MiniMessage (<#RRGGBB>, <bold> ...).
+# =====================================================================
+
+# мир лобби - там режима PvP нет
+lobby-world: "world"
+
+# команда проекта - режим PvP её не касается (опы - тоже)
+staff-groups: [curator, admin, manager, moderator, media, mediajr, helper]
+
+combat:
+  seconds: 10
+  # боссбар: <name> - ник противника, <hp> / <max> - его здоровье в сердечках
+  bossbar: "<#55FFFF><name>:</#55FFFF> <white><hp></white><dark_gray>/</dark_gray><white><max></white>"
+  # над хотбаром: <sec> - сколько секунд осталось
+  actionbar: "<#E0283C><bold>РЕЖИМ PvP</bold></#E0283C> <dark_gray>|</dark_gray> <white><sec> сек.</white>"
+  # любая команда в режиме PvP
+  command-blocked: "<#E53232>◆</#E53232> <#C7C4B7>Вы не можете делать это в режиме PvP!</#C7C4B7>"
+  # после окончания - над хотбаром на end-seconds секунд
+  end: "<#3FEF90>◆</#3FEF90> <#C7C4B7>Вы больше не в бою.</#C7C4B7> <#55FF55>Команды доступны.</#55FF55>"
+  end-seconds: 3
+  # вышел из игры в режиме PvP - умирает (убийство засчитывается противнику)
+  kill-on-quit: true
+
+kills:
+  # в общий чат; повторное убийство того же игрока раньше repeat-seconds - без сообщения и без серии
+  message: "<white><killer></white> <#AAAAAA>убил</#AAAAAA> <#FF5555><victim></#FF5555>"
+  repeat-seconds: 60
+
+# Серии убийств: число -> сообщение (берётся ближайшее меньшее или равное число, 9 - для 9 и дальше).
+# <name> - ник, <count> - сколько убийств в серии. Наведение на сообщение - последние 10 жертв.
+streaks:
+  "2": "<white><name></white> <#AAAAAA>совершает</#AAAAAA> <#55FF55>Двойное убийство</#55FF55> <#AAAAAA>(</#AAAAAA><white><count></white><#AAAAAA>)</#AAAAAA>"
+  "3": "<white><name></white> <#AAAAAA>совершает</#AAAAAA> <#FFFF55>Тройное убийство</#FFFF55> <#AAAAAA>(</#AAAAAA><white><count></white><#AAAAAA>)</#AAAAAA>"
+  "4": "<white><name></white> <#FF55FF>Доминирует</#FF55FF> <#AAAAAA>(</#AAAAAA><white><count></white><#AAAAAA>)</#AAAAAA>"
+  "5": "<white><name></white> <#FFAA00>Неудержим</#FFAA00> <#AAAAAA>(</#AAAAAA><white><count></white><#AAAAAA>)</#AAAAAA>"
+  "6": "<white><name></white> <#55FFFF>Беспощаден</#55FFFF> <#AAAAAA>(</#AAAAAA><white><count></white><#AAAAAA>)</#AAAAAA>"
+  "7": "<white><name></white> <#AA00AA>Сеет хаос</#AA00AA> <#AAAAAA>(</#AAAAAA><white><count></white><#AAAAAA>)</#AAAAAA>"
+  "8": "<white><name></white> <#FF8C00>Легендарен</#FF8C00> <#AAAAAA>(</#AAAAAA><white><count></white><#AAAAAA>)</#AAAAAA>"
+  "9": "<white><name></white> <#FF5555>ПРЕВОСХОДИТ БОГОВ</#FF5555> <#AAAAAA>(</#AAAAAA><white><count></white><#AAAAAA>)</#AAAAAA>"
+streak-hover-title: "<white>Последние 10 жертв:</white>"
+streak-hover-line: "<white>- <victim></white>"
+# убили игрока с серией от 2
+streak-broken: "<#FF5555><killer></#FF5555> <#AAAAAA>прервал серию из</#AAAAAA> <#FFAA00><count></#FFAA00> <#AAAAAA>убийств у</#AAAAAA> <white><victim>!</white>"
+
+# PvP 1.8 (без задержки удара и размашистых атак) - если на игроке или в руке предмет сета
+# from-set или любого сета после него в списке sets. Новые сеты дописывай в конец sets.
+legacy-pvp:
+  enabled: true
+  from-set: meteor
+  sets: [leather, chain, iron, diamond, netherite, amethyst, obsidian, majestic, jungle, cloud, magma, ice, void, doge, space, moon, comet, planet, meteor]

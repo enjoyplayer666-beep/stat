@@ -190,17 +190,7 @@ public class RankCommand implements CommandExecutor, TabCompleter {
         int defChance = def > 0 ? cfg.getInt("skills.defense-chance", 33) : 0;
 
         send(sender, B + "╭" + DASHES + DASHES + "╮");
-        send(sender, LINE + "&fНикнейм: &b" + shown);
-        send(sender, LINE + "&fРанг: " + rank.display());
-        send(sender, LINE + "&fБустер: &ax" + plugin.booster(shown));
-        send(sender, LINE + "&fУбито игроков: &c" + kills);
-        send(sender, LINE + "&fПрогресс: " + (next == null
-                ? "&aМаксимальный ранг!"
-                : "&fОсталось &c" + (next.kills() - kills) + " &f"
-                        + DsRanksPlugin.plural(next.kills() - kills, "убийство", "убийства", "убийств")));
-        send(sender, LINE + "&fУмения:");
-        send(sender, LINE + "&7[&#3CCFC0Атака&7] &c+" + atk + "% &fурона &7(Шанс: " + atkChance + "%)");
-        send(sender, LINE + "&7[&aЗащита&7] &e-" + def + "% &fурона &7(Шанс: " + defChance + "%)");
+        for (String line : plugin.infoLines(shown)) send(sender, LINE + line);
         send(sender, B + "╰" + DASHES + DASHES + "╯");
     }
 

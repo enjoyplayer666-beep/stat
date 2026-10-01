@@ -32,6 +32,13 @@ public final class RanksApi {
         return p == null || !p.hasRanks(name) ? null : p.rank(name).display();
     }
 
+    /** Карточка ранга для наведения на ранг в чате (строки через \n, &-цвета и &#hex), null - рангов нет. */
+    public static String rankHover(Player player) {
+        DsRanksPlugin p = plugin;
+        if (p == null || !p.canUseRanks(player)) return null;
+        return String.join("\n", p.infoLines(player.getName()));
+    }
+
     /** Убийства к рангу (с учётом бустера). */
     public static int kills(String name) {
         DsRanksPlugin p = plugin;

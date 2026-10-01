@@ -55,11 +55,12 @@ public class KillListener implements Listener {
         int credited = 1;
         if (booster > 1 && ThreadLocalRandom.current().nextDouble(100) < cfg.getDouble("booster.chance", 30)) {
             credited = booster;
-            killer.sendMessage(plugin.color(plugin.msg("booster")
-                    .replace("{booster}", String.valueOf(booster))
-                    .replace("{kills}", String.valueOf(credited))));
         }
         plugin.set(k, "kills", plugin.integer(k, "kills") + credited);
+        // ◆ Вы убили ник и получили N очков ранга! (N - с бустером x1-x15)
+        killer.sendMessage(plugin.color(plugin.msg("kill-points")
+                .replace("{player}", victim.getName())
+                .replace("{points}", String.valueOf(credited))));
 
         Ranks.Rank after = plugin.rank(k);
         if (after.index() > before.index()) {
@@ -82,12 +83,17 @@ public class KillListener implements Listener {
         ThreadLocalRandom rnd = ThreadLocalRandom.current();
         double damage = event.getDamage();
 
-        int atk = plugin.rank(attacker.getName()).attack();
-        if (atk > 0 && rnd.nextDouble(100) < cfg.getDouble("skills.attack-chance", 33)) damage *= 1 + atk / 100.0;
+        // без рангов (нет VIP) умения не работают - только обычные криты Minecraft
+        int atk = plugin.canUseRanks(attacker) ? plugin.rank(attacker.getName()).attack() : 0;
+        if (atk > 0 && rnd.nextDouble(100) < cfg.getDouble("skills.attack-chance", 33)) {
+            damage *= 1 + atk / 100.0;
+            attacker.sendMessage(plugin.color(plugin.msg("skill-attack").replace("{percent}", String.valueOf(atk))));
+        }
 
-        int def = plugin.rank(victim.getName()).defense();
+        int def = plugin.canUseRanks(victim) ? plugin.rank(victim.getName()).defense() : 0;
         if (def > 0 && rnd.nextDouble(100) < cfg.getDouble("skills.defense-chance", 33)) {
             damage *= Math.max(0, 1 - def / 100.0);
+            victim.sendMessage(plugin.color(plugin.msg("skill-defense").replace("{percent}", String.valueOf(def))));
         }
 
         event.setDamage(damage);
