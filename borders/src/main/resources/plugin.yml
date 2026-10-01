@@ -14,6 +14,3 @@ permissions:
   mediaborders.admin:
     description: Ставить и удалять барьеры
     default: op
-  mediaborders.bypass:
-    description: Проходить сквозь барьеры
-    default: false

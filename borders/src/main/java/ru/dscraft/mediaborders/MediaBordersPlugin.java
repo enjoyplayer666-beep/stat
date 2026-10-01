@@ -4,7 +4,6 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
@@ -41,7 +40,7 @@ import java.util.UUID;
  * Барьеры: прямоугольная зона по двум углам (/barrier pos1, pos2, create). Игрок видит её край синей
  * стеной, как у границы мира (своя граница у каждого игрока, сервер её не считает), и не может
  * ни выйти из зоны, ни войти в неё - ни пешком, ни на элитрах, ни жемчугом. Команды телепорта
- * (/spawn, /warp, /tp) барьер не трогает.
+ * (/spawn, /warp, /tp) барьер не трогает. Сквозь барьер проходят только опы.
  */
 public final class MediaBordersPlugin extends ru.dscraft.destroyskypvp.Module implements Listener {
 
@@ -195,11 +194,9 @@ public final class MediaBordersPlugin extends ru.dscraft.destroyskypvp.Module im
         return null;
     }
 
+    /** Сквозь барьер проходят только опы - в любом режиме игры; остальные, даже стафф, - нет. */
     private boolean bypass(Player p) {
-        if (p.hasPermission("mediaborders.bypass")) return true;
-        GameMode m = p.getGameMode();
-        if (m == GameMode.CREATIVE && getConfig().getBoolean("bypass-creative", true)) return true;
-        return m == GameMode.SPECTATOR && getConfig().getBoolean("bypass-spectator", true);
+        return p.isOp();
     }
 
     // ---------------- стена ----------------
@@ -210,6 +207,20 @@ public final class MediaBordersPlugin extends ru.dscraft.destroyskypvp.Module im
      * Так ближние стены всегда стоят ровно по барьеру, а лишняя сторона квадрата - снаружи зоны.
      */
     private void updateWall(Player p, Location at) {
+        if (bypass(p)) {
+            // опу - граница на весь мир: игра сама не пускает сквозь видимую стену даже в творческом
+            Shown free = new Shown(0, 0, 59_999_968);
+            if (free.equals(shown.get(p.getUniqueId()))) return;
+            WorldBorder border = Bukkit.createWorldBorder();
+            border.setCenter(0, 0);
+            border.setSize(free.size());
+            border.setWarningDistance(0);
+            border.setDamageAmount(0);
+            border.setDamageBuffer(0);
+            p.setWorldBorder(border);
+            shown.put(p.getUniqueId(), free);
+            return;
+        }
         Zone zone = null;
         double best = getConfig().getDouble("show-distance", 48);
         for (Zone z : zonesIn(at.getWorld())) {
