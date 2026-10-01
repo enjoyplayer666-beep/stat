@@ -173,6 +173,11 @@ public final class MediaPvPPlugin extends ru.dscraft.destroypvp.Module implement
             if (!text.isEmpty()) attacker.sendMessage(MM.deserialize(text));
         }
         if (victim.isOp() && getConfig().getBoolean("op-hit.enabled", true)) opHit(attacker);
+        // стафф (не оп) ударил опа - релог получает и стафф
+        if (victim.isOp() && !attacker.isOp() && isStaff(attacker) && !inLobby(attacker)
+                && getConfig().getBoolean("staff-hits-op-combat", true)) {
+            tag(attacker, victim, true);
+        }
     }
 
     private final Map<UUID, long[]> opHits = new HashMap<>();
@@ -193,7 +198,12 @@ public final class MediaPvPPlugin extends ru.dscraft.destroypvp.Module implement
     }
 
     private void tag(Player player, Player opponent) {
-        if (isStaff(player)) return; // команду проекта режим не трогает
+        tag(player, opponent, false);
+    }
+
+    /** @param force режим и для стаффа (стафф ударил опа) */
+    private void tag(Player player, Player opponent, boolean force) {
+        if (!force && isStaff(player)) return; // команду проекта режим не трогает
         Combat c = combats.computeIfAbsent(player.getUniqueId(), k -> new Combat());
         c.opponent = opponent.getUniqueId();
         c.opponentName = opponent.getName();
