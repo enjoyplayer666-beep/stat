@@ -250,6 +250,12 @@ public class DsRanksPlugin extends JavaPlugin implements Listener {
         return Math.min(b, max);
     }
 
+    /** Ранги работают только с правом use-permission (ranks.use - с VIP); "" - у всех. */
+    boolean canUseRanks(Player player) {
+        String perm = getConfig().getString("use-permission", "ranks.use");
+        return perm == null || perm.isBlank() || player.hasPermission(perm);
+    }
+
     String chatRank(UUID uuid) {
         return chatRanks.get(uuid);
     }

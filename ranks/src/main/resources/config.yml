@@ -42,6 +42,8 @@ booster:
 anti-farm-seconds: 300
 
 # Ранг в чате DestroyChat (перед кланом). {rank} - иконка и название с градиентом
+# ранги работают (убийства к рангу, ранг в чате) только с этим правом; "" - у всех
+use-permission: "ranks.use"
 chat-rank: '{rank} '
 
 # /rank give [ник] - раз в cooldown-hours часов случайно от min до max убийств к рангу себе или другому.

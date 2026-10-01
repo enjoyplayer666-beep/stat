@@ -15,6 +15,9 @@ commands:
     description: Выдать бустер к убийствам ранга
     usage: /booster give <ник> <x1-x15>
 permissions:
+  ranks.use:
+    description: Ранги работают (убийства к рангу, ранг в чате) - с VIP
+    default: op
   ranks.give:
     description: /rank give (кроме групп из give.groups)
     default: false

@@ -33,6 +33,7 @@ public class KillListener implements Listener {
         Player victim = event.getEntity();
         Player killer = victim.getKiller();
         if (killer == null || killer.equals(victim)) return;
+        if (!plugin.canUseRanks(killer)) return; // ранги - с VIP
         FileConfiguration cfg = plugin.getConfig();
 
         // ---- защита от фарма ----

@@ -21,7 +21,8 @@ public final class RanksApi {
     /** Ранг для чата (§-цвета), например "§x..☠ Лич ", или null - ранг скрыт (/rank off). Можно из асинхронного чата. */
     public static String chatRank(Player player) {
         DsRanksPlugin p = plugin;
-        return p == null ? null : p.chatRank(player.getUniqueId());
+        // без VIP ранга в чате нет
+        return p == null || !p.canUseRanks(player) ? null : p.chatRank(player.getUniqueId());
     }
 
     /** Иконка и название ранга с градиентом в &#RRGGBB-кодах, например "&#E4E4E4☠ &#E4E4E4Л..." */
