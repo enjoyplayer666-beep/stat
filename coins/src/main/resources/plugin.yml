@@ -1,0 +1,21 @@
+name: MediaCoins
+version: '1.0'
+main: ru.dscraft.mediacoins.MediaCoinsPlugin
+api-version: '1.21'
+author: DestroyCraft
+description: Коины DestroyCraft (скорборд, покупки). Другие плагины - через ru.dscraft.mediacoins.CoinsApi
+# коины раньше хранил DestroyLobby - при первом запуске переносятся оттуда; /coins забираем себе
+softdepend: [DestroyLobby, Essentials]
+loadbefore: [MediaTab, MediaVaults]
+commands:
+  coinsgive:
+    description: Выдать коины (только опы)
+    usage: /coinsgive <ник> <количество>
+    permission: mediacoins.admin
+  coins:
+    description: Баланс коинов
+    usage: /coins [money]
+permissions:
+  mediacoins.admin:
+    description: /coinsgive и /coins give|take|set
+    default: op

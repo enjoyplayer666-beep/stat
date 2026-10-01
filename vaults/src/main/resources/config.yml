@@ -1,0 +1,33 @@
+# MediaVaults - хранилища (/ec, эндер-сундук). Хранилища хранятся в plugins/MediaVaults/players/.
+# На вайп - удалить папку players.
+
+# всего хранилищ в меню (максимум 14)
+total: 14
+# цена каждого следующего хранилища в коинах
+price: 50
+# без коинов (баланс 0) хранилища не открываются
+open-requires-coins: true
+
+# сколько хранилищ бесплатно: первая подходящая группа сверху вниз, иначе default.
+# Команда проекта (staff-groups) и опы - как elitesp.
+free:
+  elitesp: 4
+  legend: 3
+  ultra: 3
+  deluxe: 2
+  luxe: 2
+  vip: 2
+  default: 1
+staff-groups: [curator, admin, manager, moderator, media, mediajr, helper]
+
+# головы (ссылка textures.minecraft.net/texture/... или хеш)
+heads:
+  info: "f83236639607036c1ba391c2b46a9c7b0efd760c8bfa2996a6055582b4da5"
+  open: "73ac7aea402ce629a4833a45228df45a5062d112f0f826c3c343cf068091cbea"
+  buy: "54bf893fc6defad218f7836efefbe636f1c2cc1bb650c82fccd99f2c1ee6"
+  locked: "6c8fc3a7ca60583fc6d4813e4147c52d3a7fc4bd9fb2e8f7f23ae7c32e4b3e4"
+
+messages:
+  no-coins: "<#E53232>◆</#E53232> <#C7C4B7>Без коинов хранилище не открывается.</#C7C4B7>"
+  not-enough: "<#E53232>◆</#E53232> <#C7C4B7>Недостаточно коинов! Нужно</#C7C4B7> <#FFFF55><price></#FFFF55><#C7C4B7>.</#C7C4B7>"
+  bought: "<#E53232>◆</#E53232> <#C7C4B7>Вы купили хранилище</#C7C4B7> <#30DA8E>#<number></#30DA8E><#C7C4B7>!</#C7C4B7>"

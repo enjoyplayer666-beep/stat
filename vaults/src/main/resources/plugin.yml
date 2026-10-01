@@ -1,0 +1,13 @@
+name: MediaVaults
+version: '1.0'
+main: ru.dscraft.mediavaults.MediaVaultsPlugin
+api-version: '1.21'
+author: DestroyCraft
+description: Хранилища (/ec и эндер-сундук) - 14 хранилищ по 54 слота, бесплатные по привилегии, остальные за коины
+depend: [MediaCoins]
+softdepend: [LuckPerms, Essentials]
+commands:
+  ec:
+    description: Хранилища
+    usage: /ec
+    aliases: [enderchest, echest, vault, vaults]

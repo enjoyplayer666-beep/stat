@@ -1,0 +1,7 @@
+# MediaCoins - коины. Выдать: /coinsgive <ник> <количество> (только опы).
+messages:
+  balance: "<#E53232>◆</#E53232> <#C7C4B7>Ваш баланс:</#C7C4B7> <#FFFF55><amount></#FFFF55> <#C7C4B7>коинов.</#C7C4B7>"
+  given: "<#E53232>◆</#E53232> <#C7C4B7>Игроку</#C7C4B7> <white><player></white> <#C7C4B7>выдано</#C7C4B7> <#FFFF55><amount></#FFFF55> <#C7C4B7>коинов. Теперь у него</#C7C4B7> <#FFFF55><balance></#FFFF55><#C7C4B7>.</#C7C4B7>"
+  received: "<#E53232>◆</#E53232> <#C7C4B7>Вам выдано</#C7C4B7> <#FFFF55><amount></#FFFF55> <#C7C4B7>коинов!</#C7C4B7>"
+  not-found: "<#E53232>◆</#E53232> <#C7C4B7>Игрок</#C7C4B7> <white><player></white> <#C7C4B7>ещё не заходил на сервер.</#C7C4B7>"
+  bad-number: "<#E53232>◆</#E53232> <#C7C4B7>Количество - целое число больше нуля.</#C7C4B7>"
