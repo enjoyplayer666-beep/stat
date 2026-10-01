@@ -22,6 +22,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.world.EntitiesLoadEvent;
@@ -500,6 +501,89 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
             }
             long left = (b.until() - now + 999) / 1000;
             p.sendActionBar(mm(msg("actionbar").replace("{mult}", String.valueOf(b.multiplier())).replace("{left}", String.valueOf(left))));
+        }
+    }
+
+    // ---------------- смерть: выпадает только часть ресурсов ----------------
+
+    /** Ресурс с генератора: предмет MediaItems из генератора или блок, который копит генератор. */
+    private boolean isResource(ItemStack it) {
+        if (it == null || it.getType().isAir()) return false;
+        if (getConfig().getBoolean("death.fireworks", true) && it.getType() == Material.FIREWORK_ROCKET) return true;
+        String id = it.hasItemMeta()
+                ? it.getItemMeta().getPersistentDataContainer().get(itemsIdKey, PersistentDataType.STRING) : null;
+        if (id != null) return customs.containsValue(id);
+        for (Gen g : gens.values()) {
+            if (!customs.containsKey(g.group) && g.material == it.getType()) return true;
+        }
+        return false;
+    }
+
+    /**
+     * При смерти всё остаётся на игроке (мечи, броня и т.д.), выпадает только death.drop-percent %
+     * ресурсов с генераторов и фейерверков - от каждого вида отдельно.
+     */
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onDeath(PlayerDeathEvent e) {
+        if (!getConfig().getBoolean("death.enabled", true)) return;
+        Player p = e.getEntity();
+        double percent = Math.max(0, Math.min(100, getConfig().getDouble("death.drop-percent", 20)));
+        e.setKeepInventory(true);
+        e.getDrops().clear();
+
+        ItemStack[] contents = p.getInventory().getContents();
+        // виды ресурсов: образец -> сколько всего
+        List<ItemStack> kinds = new ArrayList<>();
+        List<Integer> totals = new ArrayList<>();
+        for (ItemStack it : contents) {
+            if (!isResource(it)) continue;
+            int k = -1;
+            for (int i = 0; i < kinds.size(); i++) {
+                if (kinds.get(i).isSimilar(it)) {
+                    k = i;
+                    break;
+                }
+            }
+            if (k < 0) {
+                kinds.add(it.clone());
+                totals.add(it.getAmount());
+            } else {
+                totals.set(k, totals.get(k) + it.getAmount());
+            }
+        }
+        Location at = p.getLocation();
+        boolean dropped = false;
+        for (int i = 0; i < kinds.size(); i++) {
+            int take = (int) Math.round(totals.get(i) * percent / 100.0);
+            if (take <= 0) continue;
+            ItemStack kind = kinds.get(i);
+            // забрать из инвентаря
+            int left = take;
+            for (int slot = 0; slot < contents.length && left > 0; slot++) {
+                ItemStack it = contents[slot];
+                if (it == null || !kind.isSimilar(it)) continue;
+                int n = Math.min(left, it.getAmount());
+                it.setAmount(it.getAmount() - n);
+                if (it.getAmount() <= 0) contents[slot] = null;
+                left -= n;
+            }
+            // и выбросить на месте смерти
+            int drop = take - left;
+            while (drop > 0) {
+                ItemStack out = kind.clone();
+                int n = Math.min(drop, out.getMaxStackSize());
+                out.setAmount(n);
+                at.getWorld().dropItemNaturally(at, out);
+                drop -= n;
+            }
+            dropped = true;
+        }
+        p.getInventory().setContents(contents);
+        if (dropped) {
+            String text = getConfig().getString("death.message",
+                    "<#E53232>◆</#E53232> <#C7C4B7>С вас выпало</#C7C4B7> <#E53232>{percent}%</#E53232> <#C7C4B7>ресурсов</#C7C4B7>");
+            String pct = percent == Math.floor(percent) ? String.valueOf((int) percent) : String.valueOf(percent);
+            p.sendMessage(mm(text.replace("{percent}", pct)));
         }
     }
 

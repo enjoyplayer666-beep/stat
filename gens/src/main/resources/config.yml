@@ -38,6 +38,14 @@ boosters:
   booster_x3:      {multiplier: 3,  seconds: 90}
   booster_x10:     {multiplier: 10, seconds: 60}
 
+# смерть: всё (мечи, броня и т.д.) остаётся на игроке, выпадает только drop-percent %
+# ресурсов с генераторов (и фейерверков, если fireworks: true) - от каждого вида
+death:
+  enabled: true
+  drop-percent: 20
+  fireworks: true
+  message: "<#E53232>◆</#E53232> <#C7C4B7>С вас выпало</#C7C4B7> <#E53232>{percent}%</#E53232> <#C7C4B7>ресурсов</#C7C4B7>"
+
 messages:
   activated: "<green>• <white>Бустер <red>x{mult}</red> на <gold>{sec} сек.</gold> активирован!"
   already: "<red>• <white>У вас уже есть активный бустер."
