@@ -41,6 +41,12 @@ jobs:
       - name: run
         run: |
           cd srv
+          # старые папки, как на живом сервере: должны переехать в новые
+          mkdir -p plugins/MediaCoins plugins/DestroyChat plugins/DestroyLobby plugins/MediaBans
+          echo "11111111-2222-3333-4444-555555555555: 777" > plugins/MediaCoins/coins.yml
+          echo "old-chat" > plugins/DestroyChat/marker.txt
+          echo "old-lobby" > plugins/DestroyLobby/marker.txt
+          echo "old-bans" > plugins/MediaBans/marker.txt
           mkfifo in
           (java -Xmx2G -jar paper.jar --nogui < in > server.log 2>&1; echo "exit $?" >> server.log) &
           exec 3> in
@@ -59,5 +65,7 @@ jobs:
           grep -n -i -E "exception|error|severe|не запустился|caused by|could not" server.log | grep -v -i "errorlevel" | head -150 || true
           echo "===== FULL LOG ====="
           cat server.log
+          echo "===== MIGRATION ====="
+          cat plugins/MediaEconomy/MediaCoins/coins.yml plugins/MediaDestroyChat/marker.txt plugins/MediaDestroyLobby/marker.txt plugins/MediaDestroyChat/MediaBans/marker.txt || echo "MIGRATION FAILED"
           echo "===== FOLDERS ====="
           find plugins -maxdepth 2 | sort
