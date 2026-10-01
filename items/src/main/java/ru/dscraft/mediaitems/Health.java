@@ -49,7 +49,9 @@ final class Health implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
-        if (enabled()) scale(e.getPlayer());
+        if (!enabled()) return;
+        base(e.getPlayer());
+        scale(e.getPlayer());
     }
 
     /** Надписи прошлой версии (над головой) убираем. */
@@ -58,6 +60,14 @@ final class Health implements Listener {
         for (Entity ent : e.getEntities()) {
             if (ent.getPersistentDataContainer().has(oldTag, PersistentDataType.BYTE)) ent.remove();
         }
+    }
+
+    /** Здоровье без брони (health.base-hp): сеты добавляют своё сверху. */
+    private void base(Player p) {
+        AttributeInstance max = p.getAttribute(maxHealth());
+        if (max == null) return;
+        double base = Math.max(1, plugin.getConfig().getDouble("health.base-hp", 10));
+        if (max.getBaseValue() != base) max.setBaseValue(base);
     }
 
     private void scale(Player p) {
@@ -81,6 +91,7 @@ final class Health implements Listener {
         String fmt = plugin.getConfig().getString("health.format", "<white>{hp} <dark_red>❤");
         Map<String, String> text = new HashMap<>();
         for (Player p : Bukkit.getOnlinePlayers()) {
+            base(p);
             if (!p.isHealthScaled()) scale(p);
             int hp = (int) Math.ceil(p.getHealth() - 1e-6);
             text.put(p.getName(), fmt.replace("{hp}", String.valueOf(hp)).replace("{hearts}", String.valueOf(hearts(p))));

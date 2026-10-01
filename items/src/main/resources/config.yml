@@ -59,6 +59,8 @@ anvil-commands: ["/anvil", "/upgrade"]
 # {hp} - здоровье числом, {hearts} - сердечки в хотбаре
 health:
   enabled: true
+  # здоровье без брони (ванильное - 20); сеты добавляют своё сверху
+  base-hp: 10
   hotbar-hp: 20
   format: "<white>{hp} <dark_red>❤"
   # миры, где надпись не показывается (world - лобби)

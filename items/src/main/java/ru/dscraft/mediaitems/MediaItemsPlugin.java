@@ -112,6 +112,11 @@ public final class MediaItemsPlugin extends ru.dscraft.destroyskypvp.Module impl
             c.set("health.disabled-worlds", java.util.List.of("world"));
             changed = true;
         }
+        // get(путь, null) смотрит только в сам файл: дописываем новую настройку, чтобы её было видно
+        if (c.get("health.base-hp", null) == null) {
+            c.set("health.base-hp", 10);
+            changed = true;
+        }
         if (changed) saveConfig();
     }
 
