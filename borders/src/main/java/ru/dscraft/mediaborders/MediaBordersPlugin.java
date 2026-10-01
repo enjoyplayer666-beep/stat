@@ -79,6 +79,8 @@ public final class MediaBordersPlugin extends ru.dscraft.destroyskypvp.Module im
     private final Map<UUID, Shown> shown = new HashMap<>();
     private final Map<UUID, Long> lastMessage = new HashMap<>();
     private File zonesFile;
+    /** Миры, где настоящую границу мира поставил этот плагин (чтобы вернуть её, когда барьеров не останется). */
+    private final java.util.Set<String> managedWorlds = new java.util.LinkedHashSet<>();
 
     @Override
     public void onEnable() {
@@ -87,6 +89,7 @@ public final class MediaBordersPlugin extends ru.dscraft.destroyskypvp.Module im
         saveConfig();
         zonesFile = new File(getDataFolder(), "zones.yml");
         loadZones();
+        applyWorldBorders();
         getServer().getPluginManager().registerEvents(this, this);
         if (getCommand("barrier") != null) getCommand("barrier").setExecutor(this);
         Bukkit.getScheduler().runTask(this, this::refreshAll);
@@ -106,6 +109,8 @@ public final class MediaBordersPlugin extends ru.dscraft.destroyskypvp.Module im
     private void loadZones() {
         zones.clear();
         YamlConfiguration yml = YamlConfiguration.loadConfiguration(zonesFile);
+        managedWorlds.clear();
+        managedWorlds.addAll(yml.getStringList("managed-worlds"));
         ConfigurationSection s = yml.getConfigurationSection("zones");
         if (s == null) return;
         for (String name : s.getKeys(false)) {
@@ -118,6 +123,7 @@ public final class MediaBordersPlugin extends ru.dscraft.destroyskypvp.Module im
 
     private void saveZones() {
         YamlConfiguration yml = new YamlConfiguration();
+        yml.set("managed-worlds", new ArrayList<>(managedWorlds));
         for (Zone z : zones.values()) {
             String p = "zones." + z.name() + ".";
             yml.set(p + "world", z.world());
@@ -132,6 +138,42 @@ public final class MediaBordersPlugin extends ru.dscraft.destroyskypvp.Module im
         } catch (IOException e) {
             getLogger().warning("Не удалось сохранить zones.yml: " + e.getMessage());
         }
+    }
+
+    /**
+     * Настоящая граница мира вокруг всех барьеров мира (квадрат + запас): дальше неё сервер не грузит
+     * и не создаёт чанки совсем - это и снимает нагрузку в бесконечных мирах. Мир без барьеров
+     * получает обратно обычную границу.
+     */
+    private void applyWorldBorders() {
+        boolean on = getConfig().getBoolean("world-border.enabled", true);
+        double margin = Math.max(0, getConfig().getDouble("world-border.margin", 16));
+        java.util.Set<String> withZones = new java.util.HashSet<>();
+        for (World world : Bukkit.getWorlds()) {
+            List<Zone> list = zonesIn(world);
+            if (!on || list.isEmpty()) continue;
+            int minX = Integer.MAX_VALUE, minZ = Integer.MAX_VALUE, maxX = Integer.MIN_VALUE, maxZ = Integer.MIN_VALUE;
+            for (Zone z : list) {
+                minX = Math.min(minX, z.minX());
+                minZ = Math.min(minZ, z.minZ());
+                maxX = Math.max(maxX, z.maxX() + 1);
+                maxZ = Math.max(maxZ, z.maxZ() + 1);
+            }
+            WorldBorder wb = world.getWorldBorder();
+            wb.setCenter((minX + maxX) / 2.0, (minZ + maxZ) / 2.0);
+            wb.setSize(Math.max(maxX - minX, maxZ - minZ) + margin * 2);
+            wb.setWarningDistance(0);
+            withZones.add(world.getName());
+            managedWorlds.add(world.getName());
+        }
+        for (String name : new ArrayList<>(managedWorlds)) {
+            if (withZones.contains(name)) continue;
+            World world = Bukkit.getWorld(name);
+            if (world == null) continue;
+            world.getWorldBorder().reset();
+            managedWorlds.remove(name);
+        }
+        saveZones();
     }
 
     private List<Zone> zonesIn(World world) {
@@ -282,6 +324,12 @@ public final class MediaBordersPlugin extends ru.dscraft.destroyskypvp.Module im
         }
     }
 
+    /** Мир подгрузили позже (Multiverse) - ставим и ему границу. */
+    @EventHandler
+    public void onWorldLoad(org.bukkit.event.world.WorldLoadEvent e) {
+        if (!zonesIn(e.getWorld()).isEmpty()) applyWorldBorders();
+    }
+
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
@@ -356,6 +404,7 @@ public final class MediaBordersPlugin extends ru.dscraft.destroyskypvp.Module im
                         Math.max(sel[0].getBlockX(), sel[1].getBlockX()), Math.max(sel[0].getBlockZ(), sel[1].getBlockZ()));
                 zones.put(name.toLowerCase(Locale.ROOT), z);
                 saveZones();
+                applyWorldBorders();
                 refreshAll();
                 msg(p, "created", Placeholder.unparsed("name", name), Placeholder.unparsed("world", z.world()),
                         Placeholder.unparsed("w", String.valueOf(z.width())), Placeholder.unparsed("d", String.valueOf(z.depth())));
@@ -371,6 +420,7 @@ public final class MediaBordersPlugin extends ru.dscraft.destroyskypvp.Module im
                     return true;
                 }
                 saveZones();
+                applyWorldBorders();
                 refreshAll();
                 msg(sender, "removed", Placeholder.unparsed("name", z.name()));
             }
@@ -390,6 +440,7 @@ public final class MediaBordersPlugin extends ru.dscraft.destroyskypvp.Module im
             case "reload" -> {
                 reloadConfig();
                 loadZones();
+                applyWorldBorders();
                 refreshAll();
                 msg(sender, "reloaded");
             }
