@@ -168,7 +168,7 @@ public class RankCommand implements CommandExecutor, TabCompleter {
             send(online, plugin.msg("give-got").replace("{kills}", String.valueOf(amount)).replace("{player}", p.getName()));
         }
         Ranks.Rank after = plugin.rank(name);
-        if (online != null && after.index() > before.index()) send(online, plugin.msg("rank-up").replace("{rank}", after.display()));
+        if (online != null && after.index() > before.index()) plugin.rankUp(online, after);
         if (online != null) plugin.refreshChatRank(online);
     }
 

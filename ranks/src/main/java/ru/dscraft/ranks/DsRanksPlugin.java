@@ -81,6 +81,38 @@ public class DsRanksPlugin extends JavaPlugin implements Listener {
         getLogger().info("Ранги обновлены: новые статы атаки и защиты.");
     }
 
+    /** Метка нашего фейерверка - он не наносит урон. */
+    private org.bukkit.NamespacedKey fireworkKey;
+
+    /** Новый ранг: сообщение в чат и небольшой фейерверк над игроком. */
+    void rankUp(Player player, Ranks.Rank rank) {
+        player.sendMessage(color(msg("rank-up-new").replace("{rank}", rank.display())));
+        if (!getConfig().getBoolean("rank-up-firework", true)) return;
+        if (fireworkKey == null) fireworkKey = new org.bukkit.NamespacedKey(this, "rankup");
+        org.bukkit.Location at = player.getLocation().add(0, 2.3, 0);
+        org.bukkit.Color c1 = org.bukkit.Color.fromRGB(Integer.parseInt(rank.color().replace("#", ""), 16));
+        org.bukkit.Color c2 = org.bukkit.Color.fromRGB(Integer.parseInt(rank.color2().replace("#", ""), 16));
+        org.bukkit.entity.Firework fw = player.getWorld().spawn(at, org.bukkit.entity.Firework.class, f -> {
+            org.bukkit.inventory.meta.FireworkMeta meta = f.getFireworkMeta();
+            meta.addEffect(org.bukkit.FireworkEffect.builder().with(org.bukkit.FireworkEffect.Type.BALL)
+                    .withColor(c1, c2).withFade(org.bukkit.Color.WHITE).trail(false).flicker(false).build());
+            meta.setPower(0);
+            f.setFireworkMeta(meta);
+            f.getPersistentDataContainer().set(fireworkKey, org.bukkit.persistence.PersistentDataType.BYTE, (byte) 1);
+        });
+        // взрывается сразу над головой, небольшой
+        Bukkit.getScheduler().runTaskLater(this, fw::detonate, 1L);
+    }
+
+    /** Наш фейерверк никого не ранит. */
+    @org.bukkit.event.EventHandler(ignoreCancelled = true)
+    public void onFireworkDamage(org.bukkit.event.entity.EntityDamageByEntityEvent event) {
+        if (fireworkKey != null && event.getDamager() instanceof org.bukkit.entity.Firework f
+                && f.getPersistentDataContainer().has(fireworkKey, org.bukkit.persistence.PersistentDataType.BYTE)) {
+            event.setCancelled(true);
+        }
+    }
+
     /** Строки карточки ранга (как всплывающая подсказка на сервере-образце): /rank info и наведение на ранг в чате. */
     java.util.List<String> infoLines(String name) {
         Ranks.Rank rank = rank(name);
@@ -330,6 +362,7 @@ public class DsRanksPlugin extends JavaPlugin implements Listener {
     String msg(String key) {
         String def = switch (key) {
             case "no-ranks" -> "&#E53232◆ &#C7C4B7Вас нет в базе данных!";
+            case "rank-up-new" -> "&#E53232◆ &#C7C4B7Поздравляем! Ваш ранг повышен до {rank}&#C7C4B7!";
             case "kill-points" -> "&#E53232◆ &#C7C4B7Вы убили &#FF5555{player} &#C7C4B7и получили &#55FF55{points} &#C7C4B7очков ранга!";
             case "skill-defense" -> "&#E53232◆ &#C7C4B7Вы отбили &#55FF55{percent}% &#C7C4B7урона!";
             case "skill-attack" -> "&#E53232◆ &#C7C4B7Вы нанесли на &#FF5555{percent}% &#C7C4B7больше урона!";

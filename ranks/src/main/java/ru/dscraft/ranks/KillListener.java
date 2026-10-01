@@ -64,7 +64,7 @@ public class KillListener implements Listener {
 
         Ranks.Rank after = plugin.rank(k);
         if (after.index() > before.index()) {
-            killer.sendMessage(plugin.color(plugin.msg("rank-up").replace("{rank}", after.display())));
+            plugin.rankUp(killer, after);
         }
         plugin.refreshChatRank(killer);
     }
