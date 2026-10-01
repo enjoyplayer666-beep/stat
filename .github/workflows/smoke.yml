@@ -1,0 +1,52 @@
+# Проверка на живом сервере (запуск вручную): Paper 1.21.1 + все плагины из веток jars,
+# сервер стартует, выполняет несколько команд и выключается; в логе ищем ошибки.
+name: smoke
+on: [workflow_dispatch]
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: plugins
+        run: |
+          mkdir -p srv/plugins && cd srv/plugins
+          for r in stat DestroyChat DsLobbyV2 mediadestroyauthv2; do
+            git clone -q --depth 1 -b jars "https://x-access-token:${{ github.token }}@github.com/enjoyplayer666-beep/$r.git" "/tmp/$r" || git clone -q --depth 1 -b jars "https://github.com/enjoyplayer666-beep/$r.git" "/tmp/$r" || echo "no access to $r"
+            cp /tmp/$r/*.jar . 2>/dev/null || true
+          done
+          curl -sfL -o LuckPerms.jar "https://download.luckperms.net/1556/bukkit/loader/LuckPerms-Bukkit-5.4.141.jar" || echo "no LuckPerms"
+          ls -la
+      - name: paper
+        run: |
+          cd srv
+          B=$(curl -sf https://api.papermc.io/v2/projects/paper/versions/1.21.1/builds | python3 -c "import json,sys; print(json.load(sys.stdin)['builds'][-1]['build'])")
+          curl -sfL -o paper.jar "https://api.papermc.io/v2/projects/paper/versions/1.21.1/builds/$B/downloads/paper-1.21.1-$B.jar"
+          echo "eula=true" > eula.txt
+          printf "online-mode=false\nlevel-type=minecraft\\:flat\ngenerate-structures=false\nspawn-protection=0\n" > server.properties
+      - name: run
+        run: |
+          cd srv
+          mkfifo in
+          (java -Xmx2G -jar paper.jar --nogui < in > server.log 2>&1; echo "exit $?" >> server.log) &
+          exec 3> in
+          for i in $(seq 1 240); do grep -q "Done (" server.log && break; sleep 1; done
+          sleep 5
+          for c in plugins "mediapvp" "tops" "coins" "gen" "destroychat reload" "destroylobby reload" "mediabans" "mediatab" "destroymotd reload" "statadmin" "itemnpc" "mediaclear"; do echo "$c" >&3; sleep 2; done
+          sleep 15
+          echo stop >&3
+          for i in $(seq 1 60); do grep -q "^exit" server.log && break; sleep 1; done
+          exec 3>&-
+      - name: log
+        if: always()
+        run: |
+          cd srv
+          echo "===== ERRORS ====="
+          grep -n -i -E "exception|error|severe|не запустился|caused by|could not" server.log | grep -v -i "errorlevel" | head -150 || true
+          echo "===== FULL LOG ====="
+          cat server.log
+          echo "===== FOLDERS ====="
+          find plugins -maxdepth 2 | sort
