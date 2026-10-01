@@ -24,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class DsRanksPlugin extends JavaPlugin implements Listener {
+public class DsRanksPlugin extends ru.dscraft.destroypvp.Module implements Listener {
 
     private static final Pattern HEX = Pattern.compile("&#([A-Fa-f0-9]{6})");
 

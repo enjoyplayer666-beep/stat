@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public final class MediaItemsPlugin extends JavaPlugin implements TabCompleter {
+public final class MediaItemsPlugin extends ru.dscraft.destroyskypvp.Module implements TabCompleter {
 
     NamespacedKey idKey;
     NamespacedKey npcKey;

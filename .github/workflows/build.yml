@@ -1,5 +1,5 @@
 name: build
-on: [push, workflow_dispatch]
+on: [workflow_dispatch]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -9,28 +9,6 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
-      - run: mvn -B package
-      - run: mvn -B -f ranks/pom.xml package
-      - run: mvn -B -f tops/pom.xml package
-      - run: mvn -B -f items/pom.xml package
-      - run: mvn -B -f gens/pom.xml package
-      - uses: actions/upload-artifact@v4
-        with:
-          name: StatPlugin
-          path: target/StatPlugin.jar
-      - uses: actions/upload-artifact@v4
-        with:
-          name: DsRanks
-          path: ranks/target/DsRanks.jar
-      - uses: actions/upload-artifact@v4
-        with:
-          name: MediaTops
-          path: tops/target/MediaTops.jar
-      - uses: actions/upload-artifact@v4
-        with:
-          name: MediaItems
-          path: items/target/MediaItems.jar
-      - uses: actions/upload-artifact@v4
-        with:
-          name: MediaGens
-          path: gens/target/MediaGens.jar
+      - run: mvn -B -f destroypvp/pom.xml package
+      - run: mvn -B -f destroyskypvp/pom.xml package
+      - run: mvn -B -f mediaeconomy/pom.xml package

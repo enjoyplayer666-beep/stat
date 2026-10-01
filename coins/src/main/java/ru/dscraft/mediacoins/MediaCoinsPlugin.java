@@ -23,7 +23,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /** MediaCoins - коины игроков (plugins/MediaCoins/coins.yml). */
-public final class MediaCoinsPlugin extends JavaPlugin implements TabCompleter {
+public final class MediaCoinsPlugin extends ru.dscraft.mediaeconomy.Module implements TabCompleter {
 
     private static final MiniMessage MM = MiniMessage.miniMessage();
 

@@ -18,7 +18,7 @@ import org.bukkit.entity.Interaction;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Transformation;
 import org.joml.AxisAngle4f;
 import org.joml.Vector3f;
@@ -61,7 +61,7 @@ public final class Boards {
         }
     }
 
-    private final JavaPlugin plugin;
+    private final Plugin plugin;
     private final Stats stats;
     private final NamespacedKey key;
     private final Map<String, Board> boards = new ConcurrentHashMap<>();
@@ -69,7 +69,7 @@ public final class Boards {
     private final Map<UUID, Boolean> wipeMode = new ConcurrentHashMap<>();
     private final Map<UUID, Long> clickCooldown = new ConcurrentHashMap<>();
 
-    public Boards(JavaPlugin plugin, Stats stats) {
+    public Boards(Plugin plugin, Stats stats) {
         this.plugin = plugin;
         this.stats = stats;
         this.key = new NamespacedKey(plugin, "board");

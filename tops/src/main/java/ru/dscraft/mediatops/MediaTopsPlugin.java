@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Locale;
 
 /** MediaTops: голограммы "Топ бойцов / кланов / активистов" за день и за вайп. */
-public class MediaTopsPlugin extends JavaPlugin implements Listener, TabCompleter {
+public class MediaTopsPlugin extends ru.dscraft.destroypvp.Module implements Listener, TabCompleter {
 
     /** Оформление, которое обновляется из плагина при смене config-version (голограммы boards не трогаются). */
     private static final String[] STYLE_KEYS = {"background", "shadow", "line-spacing", "mode-day", "mode-wipe",

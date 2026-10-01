@@ -6,7 +6,7 @@ import org.bukkit.Statistic;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,7 +44,7 @@ public final class Stats {
     public record Row(String name, long value) {
     }
 
-    private final JavaPlugin plugin;
+    private final Plugin plugin;
     private final File file;
     private final Map<UUID, Entry> players = new ConcurrentHashMap<>();
     /** ID клана -> рейтинг на начало дня (или на момент, когда клан впервые попался сегодня). */
@@ -52,7 +52,7 @@ public final class Stats {
     private volatile String clanDay;
     private volatile boolean dirty;
 
-    public Stats(JavaPlugin plugin) {
+    public Stats(Plugin plugin) {
         this.plugin = plugin;
         this.file = new File(plugin.getDataFolder(), "data.yml");
     }

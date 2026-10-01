@@ -51,7 +51,7 @@ import java.util.UUID;
  * Над точкой каждый игрок видит свой блок-иконку и "x{count}" (только в радиусе view-distance).
  * Бустеры - предметы MediaItems (метка mediaitems:id), включаются ПКМ.
  */
-public final class MediaGensPlugin extends JavaPlugin implements Listener {
+public final class MediaGensPlugin extends ru.dscraft.destroyskypvp.Module implements Listener {
 
     private static final MiniMessage MM = MiniMessage.miniMessage();
 
@@ -325,7 +325,7 @@ public final class MediaGensPlugin extends JavaPlugin implements Listener {
     private static ItemStack mediaItem(String id) {
         try {
             Class<?> c = Class.forName("ru.dscraft.mediaitems.ItemsApi", true,
-                    Bukkit.getPluginManager().getPlugin("MediaItems").getClass().getClassLoader());
+                    Bukkit.getPluginManager().getPlugin("DestroySkyPvP").getClass().getClassLoader());
             return (ItemStack) c.getMethod("item", String.class).invoke(null, id);
         } catch (Throwable t) {
             return null;

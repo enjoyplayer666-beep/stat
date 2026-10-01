@@ -44,7 +44,7 @@ import java.util.UUID;
  * MediaVaults - хранилища как на сервере-образце: меню по /ec и по эндер-сундуку, 14 хранилищ по 54 слота.
  * Бесплатно по привилегии (default 1, vip 2, ultra 3, elite 4), остальные покупаются за коины (MediaCoins).
  */
-public final class MediaVaultsPlugin extends JavaPlugin implements Listener {
+public final class MediaVaultsPlugin extends ru.dscraft.mediaeconomy.Module implements Listener {
 
     private static final MiniMessage MM = MiniMessage.miniMessage();
     /** Слоты хранилищ #1-#14 в меню. */
@@ -107,7 +107,7 @@ public final class MediaVaultsPlugin extends JavaPlugin implements Listener {
     private static long coins(UUID id) {
         try {
             Class<?> api = Class.forName("ru.dscraft.mediacoins.CoinsApi", true,
-                    Bukkit.getPluginManager().getPlugin("MediaCoins").getClass().getClassLoader());
+                    Bukkit.getPluginManager().getPlugin("MediaEconomy").getClass().getClassLoader());
             return (long) api.getMethod("coins", UUID.class).invoke(null, id);
         } catch (Throwable t) {
             return 0;
@@ -117,7 +117,7 @@ public final class MediaVaultsPlugin extends JavaPlugin implements Listener {
     private static boolean take(UUID id, long amount) {
         try {
             Class<?> api = Class.forName("ru.dscraft.mediacoins.CoinsApi", true,
-                    Bukkit.getPluginManager().getPlugin("MediaCoins").getClass().getClassLoader());
+                    Bukkit.getPluginManager().getPlugin("MediaEconomy").getClass().getClassLoader());
             return (boolean) api.getMethod("take", UUID.class, long.class).invoke(null, id, amount);
         } catch (Throwable t) {
             return false;

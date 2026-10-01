@@ -13,7 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.List;
 
 /** Очистка предметов с земли раз в interval-seconds с предупреждениями; лобби не трогается. */
-public class MediaClearPlugin extends JavaPlugin {
+public class MediaClearPlugin extends ru.dscraft.destroyskypvp.Module {
 
     private static final LegacyComponentSerializer LEGACY = LegacyComponentSerializer.builder()
             .character('&').hexColors().build();
@@ -58,7 +58,7 @@ public class MediaClearPlugin extends JavaPlugin {
 
     /** Генераторы MediaGens тоже обнуляются: кто успел забрать - тот и забрал. */
     private void resetGenerators() {
-        var gens = Bukkit.getPluginManager().getPlugin("MediaGens");
+        var gens = Bukkit.getPluginManager().getPlugin("DestroySkyPvP");
         if (gens == null || !gens.isEnabled()) return;
         try {
             Class.forName("ru.dscraft.mediagens.MediaGensPlugin", true, gens.getClass().getClassLoader())

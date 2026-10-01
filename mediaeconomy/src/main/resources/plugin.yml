@@ -1,0 +1,51 @@
+name: MediaEconomy
+version: '1.0'
+main: ru.dscraft.mediaeconomy.MediaEconomyPlugin
+api-version: '1.21'
+author: DestroyCraft
+softdepend:
+- LuckPerms
+- Essentials
+loadbefore:
+- DestroyLobby
+commands:
+  coinsgive:
+    description: Выдать коины (только опы)
+    usage: /coinsgive <ник> <количество>
+    permission: mediacoins.admin
+  coins:
+    description: Баланс коинов
+    usage: /coins [money]
+  ec:
+    description: Хранилища
+    usage: /ec
+    aliases:
+    - enderchest
+    - echest
+    - vault
+    - vaults
+  menu:
+    description: Главное меню
+    usage: /menu
+    aliases:
+    - меню
+  donate:
+    description: Меню привилегий
+    usage: /donate
+    aliases:
+    - donat
+    - privileges
+    - привилегии
+  warps:
+    description: Меню телепортов
+    usage: /warps
+  dsmenu:
+    description: Перезагрузка конфига меню
+    usage: /dsmenu reload
+    permission: dsmenu.admin
+permissions:
+  mediacoins.admin:
+    description: /coinsgive и /coins give|take|set
+    default: op
+  dsmenu.admin:
+    default: op

@@ -30,7 +30,7 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class StatPlugin extends JavaPlugin implements CommandExecutor, TabCompleter, Listener {
+public class StatPlugin extends ru.dscraft.destroypvp.Module implements CommandExecutor, TabCompleter, Listener {
 
     private static final List<String> FIELDS =
             Arrays.asList("privilege", "rating", "winrate", "deaths");
@@ -154,7 +154,7 @@ public class StatPlugin extends JavaPlugin implements CommandExecutor, TabComple
             saveConfig();
         }
         if (version >= 8) {
-            if (getServer().getPluginManager().getPlugin("DsRanks") == null) return; // ранги ещё не перенесены
+            if (getServer().getPluginManager().getPlugin("DestroyPvP") == null) return; // ранги ещё не перенесены
             removeRankSettings(cfg);
             cfg.set("messages.admin-usage", null);
             cfg.set("messages.bad-field", null);

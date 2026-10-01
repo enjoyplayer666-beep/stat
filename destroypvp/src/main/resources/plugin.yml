@@ -1,0 +1,58 @@
+name: DestroyPvP
+version: '1.0'
+main: ru.dscraft.destroypvp.DestroyPvPPlugin
+api-version: '1.21'
+author: DestroyCraft
+softdepend:
+- LuckPerms
+- PlaceholderAPI
+- MediaClans
+- DestroySkyPvP
+commands:
+  rank:
+    description: Ранги
+    usage: /rank <info|list|top|on|off>
+    aliases:
+    - ranks
+    - ранг
+  booster:
+    description: Выдать бустер к убийствам ранга
+    usage: /booster give <ник> <x1-x15>
+  stat:
+    description: Статистика игрока
+    usage: /stat <ник>
+  mystat:
+    description: Своя статистика
+    usage: /mystat
+  statadmin:
+    description: Управление статистикой
+    usage: /statadmin <set|reset|reload>
+  tops:
+    description: Голограммы-топы
+    usage: /tops <create|move|remove|list|reload>
+    permission: mediatops.admin
+  mediapvp:
+    description: Перезагрузка конфига MediaPvP
+    usage: /mediapvp reload
+    permission: mediapvp.admin
+permissions:
+  ranks.use:
+    description: Ранги работают (убийства к рангу, ранг в чате) - с VIP
+    default: op
+  ranks.give:
+    description: /rank give (кроме групп из give.groups)
+    default: false
+  ranks.admin:
+    description: /rank set|reset|reload
+    default: op
+  stat.booster.give:
+    description: /booster give|take|info (старое название права оставлено)
+    default: op
+  stat.use:
+    default: true
+  stat.admin:
+    default: op
+  mediatops.admin:
+    default: op
+  mediapvp.admin:
+    default: op

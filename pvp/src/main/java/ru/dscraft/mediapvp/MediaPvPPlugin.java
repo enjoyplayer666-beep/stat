@@ -49,7 +49,7 @@ import java.util.UUID;
  * - серии убийств ("Двойное убийство", ... "ПРЕВОСХОДИТ БОГОВ") и их срыв;
  * - PvP 1.8 (без задержки удара и размашистых атак) с метеоритного сета и выше.
  */
-public final class MediaPvPPlugin extends JavaPlugin implements Listener {
+public final class MediaPvPPlugin extends ru.dscraft.destroypvp.Module implements Listener {
 
     private static final MiniMessage MM = MiniMessage.miniMessage();
 

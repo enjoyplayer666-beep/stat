@@ -1,0 +1,363 @@
+# =====================================================================
+#  DsMenu - главное меню (/menu, предмет-кремень) и меню привилегий (/donate)
+#  Цвета: &a, &l ... и hex &#RRGGBB. Цвета и тексты сняты со скринов сервера-образца.
+#  Действия по клику (action): close - закрыть, message - написать menus.donate.click-message,
+#  command:<команда> - выполнить от игрока, open:<меню> - открыть меню (main, donate), none - ничего.
+#  После правки: /dsmenu reload
+# =====================================================================
+
+# Предмет меню: выдаётся в игровых мирах (вход через портал, заход, возрождение), в лобби забирается.
+menu-item:
+  enabled: true
+  material: FLINT
+  # модель из ресурс-пака (как в ItemEdit: /ie custommodeldata 102)
+  custom-model-data: 102
+  # слот хотбара 0-8 (8 - правый край)
+  slot: 8
+  name: '&#B7F455М&#AFEA76е&#A7E096н&#9FD6B7ю'
+  lore:
+    - '&7Нажми ПКМ'
+  # какое меню открывает
+  opens: main
+  # миры лобби - там предмета нет
+  lobby-worlds:
+    - world
+
+menus:
+  main:
+    commands: [menu, меню]
+    title: '&#8971AF                 Меню'
+    rows: 3
+    items:
+      spawn:
+        slot: 10
+        material: GRASS_BLOCK
+        name: '&#B7F455&lС&#B1EC6E&lп&#ABE586&lа&#A5DE9E&lв&#9FD6B7&lн'
+        lore:
+          - '&#C8C5B8Телепортация на спавн'
+        action: 'command:spawn'
+      warps:
+        slot: 12
+        material: CHEST
+        name: '&#54A6F4&lВ&#67B0EC&lа&#7ABAE5&lр&#8CC4DE&lп&#9FCED6&lы'
+        lore:
+          - '&#C8C5B8Варпы сервера'
+        action: 'open:warps'
+      clans:
+        slot: 14
+        material: NETHERITE_SWORD
+        name: '&#F45461&lК&#EC6771&lл&#E57A80&lа&#DE8C90&lн&#D69FA0&lы'
+        lore:
+          - '&#C8C5B8Меню кланов'
+        action: 'command:clan'
+        hide-attributes: false
+      privileges:
+        slot: 16
+        material: FLINT
+        custom-model-data: 101
+        name: '&#9A6BFF&lП&#A575ED&lр&#B07FDA&lи&#BC8AC8&lв&#C794B6&lи&#D29EA3&lл&#DDA891&lе&#E9B37F&lг&#F4BD6C&lи&#FFC75A&lи'
+        lore:
+          - '&#C8C5B8Привелегии сервера'
+        action: 'open:donate'
+
+  donate:
+    commands: [donate, donat, privileges, привилегии]
+    title: '&#8971AF             Привилегии'
+    rows: 5
+    click-message: '&7Покупка привилегий на сайте &#8971AF&nds-craft.ru'
+    click-url: 'https://ds-craft.ru'
+    items:
+      vip:
+        slot: 10
+        material: YELLOW_DYE
+        name: '&f⌜&eVIP&f⌟'
+        lore:
+          - ''
+          - '&7[&e✔&7] &7Одеть предмет на голову &e/hat'
+          - '&7[&e✔&7] &7Восстановить голод &e/feed'
+          - '&7[&e✔&7] &7Отправить запрос на тп к себе &e/tpahere'
+          - '&7[&e✔&7] &7Установить время суток для себя - &e/ptime'
+          - '&7[&e✔&7] &7Доступ к &e2-м &7хранилищам &e/ec'
+          - '&7[&e✔&7] &7Доступ к системе рангов - &e/rank'
+          - '&7[&e✔&7] &7Кит набор - &e/kit vip'
+          - '&7[&e✔&7] &7Создать клан - &e/c create'
+          - ''
+          - '&7[&e✔&7] &eВход на переполненный сервер'
+          - ''
+          - '&7[&e✔&7] &7Префикс &e⌜VIP⌟ &7в чате и над головой'
+          - ''
+          - '&7Цена &e65 руб &7/ Навсегда'
+          - ''
+          - '&7Покупка на сайте &e&nds-craft.ru'
+        action: 'message'
+      luxe:
+        slot: 11
+        material: GREEN_DYE
+        name: '&f⌜&aLuxe&f⌟'
+        lore:
+          - ''
+          - '&7[&a✔&7] &7Установить AFK - &a/afk'
+          - '&7[&a✔&7] &7Вернуться обратно после смерти - &a/dback'
+          - '&7[&a✔&7] &7Открыть наковальню &a/anvil'
+          - '&7[&a✔&7] &7Очистить инвентарь &a/clear'
+          - '&7[&a✔&7] &7Изменить погоду &a/pweather'
+          - '&7[&a✔&7] &7Изменить время &a/ptime'
+          - '&7[&a✔&7] &7Кит набор - &a/kit luxe'
+          - ''
+          - '&7[&a✔&7] &7Префикс &a⌜Luxe⌟ &7в чате и над головой'
+          - ''
+          - '&a+ &7Все Возможности предыдущих привилегий'
+          - ''
+          - '&7Цена &a125 руб &7/ Навсегда'
+          - ''
+          - '&7Покупка на сайте &a&nds-craft.ru'
+        action: 'message'
+      deluxe:
+        slot: 12
+        material: ORANGE_DYE
+        name: '&f⌜&6Deluxe&f⌟'
+        lore:
+          - ''
+          - '&7[&6✔&7] &7Посмотреть какие игроки рядом &6/near'
+          - '&7[&6✔&7] &7Накормить себя &6/feed'
+          - '&7[&6✔&7] &7Вылечить себя &6/heal'
+          - '&7[&6✔&7] &7Установить префикс &6/prefix set'
+          - '&7[&6✔&7] &7Маскировка под обычного игрока &6/prefix off'
+          - '&7[&6✔&7] &7Информация о замученном - &6/checkmute [Ник]'
+          - '&7[&6✔&7] &7Информация о забаненном - &6/checkban [Ник]'
+          - '&7[&6✔&7] &7Открыть чужой инвентарь &6/invsee [Ник]'
+          - '&7[&6✔&7] &7Кикнуть нарушителя &6/kick [Ник]'
+          - '&7[&6✔&7] &7Кит набор - &6/kit deluxe'
+          - ''
+          - '&7[&6✔&7] &7Бустер для боевого рейтинга &6x2'
+          - '&7[&6✔&7] &7Защита от &6кика'
+          - '&7[&6✔&7] &7Префикс &6⌜Deluxe⌟ &7в чате и над головой'
+          - ''
+          - '&6+ &7Все Возможности предыдущих привилегий'
+          - ''
+          - '&7Цена &6240 руб &7/ Навсегда'
+          - ''
+          - '&7Покупка на сайте &6&nds-craft.ru'
+        action: 'message'
+      ultra:
+        slot: 13
+        material: PINK_DYE
+        name: '&f⌜&#FB42B1Ultra&f⌟'
+        lore:
+          - ''
+          - '&7[&#FB42B1✔&7] &7Замутить нарушителя &#FB42B1/tempmute [Ник] [Время] [Причина]'
+          - '&7[&#FB42B1✔&7] &7Снять мут &#FB42B1/unmute [Ник]'
+          - '&7[&#FB42B1✔&7] &7Выдача пакета-киллов для ранга &#FB42B1/rank give [Ник]'
+          - '&7[&#FB42B1✔&7] &7Отдельный префикс на чат &#FB42B1/prefix chat'
+          - '&7[&#FB42B1✔&7] &7Доступ к &#FB42B13-м &7хранилищам - &#FB42B1/ec'
+          - '&7[&#FB42B1✔&7] &7Кит набор - &#FB42B1/kit ultra'
+          - ''
+          - '&7[&#FB42B1✔&7] &7Разрешено использовать &#FB42B1жирные &7префиксы и все символы'
+          - '&7[&#FB42B1✔&7] &7Бустер для кланового рейтинга &#FB42B1x2'
+          - '&7[&#FB42B1✔&7] &7Префикс &#FB42B1⌜Ultra⌟ &7в чате и над головой'
+          - ''
+          - '&#FB42B1+ &7Все Возможности предыдущих привилегий'
+          - ''
+          - '&7Цена &#FB42B1399 руб &7/ Навсегда'
+          - ''
+          - '&7Покупка на сайте &#FB42B1&nds-craft.ru'
+        action: 'message'
+      legend:
+        slot: 14
+        material: RED_DYE
+        name: '&f⌜&#FB6A4ALegend&f⌟'
+        lore:
+          - ''
+          - '&7[&#FB6A4A✔&7] &7Полёт &#FB6A4A/fly'
+          - ''
+          - '&7[&#FB6A4A✔&7] &7Посмотреть банлист &#FB6A4A/banlist'
+          - '&7[&#FB6A4A✔&7] &7Выстрелить пчелой &#FB6A4A/beezooka'
+          - '&7[&#FB6A4A✔&7] &7Невидимость &#FB6A4A/vanish'
+          - '&7[&#FB6A4A✔&7] &7Кит набор - &#FB6A4A/kit legend'
+          - '&7[&#FB6A4A✔&7] &7Посмотреть что надето на игроке - &#FB6A4A/invsee [nick] a'
+          - '&7[&#FB6A4A✔&7] &76 цветов свечения - &#FB6A4A/glow'
+          - ''
+          - '&7[&#FB6A4A✔&7] &#FF2000Ц&#FF4500в&#FF6A00е&#FF9000т&#FFB500н&#FFDA00ы&#FFFF00е &7сообщения в чате'
+          - '&7[&#FB6A4A✔&7] &#FF2000Ц&#FF4500в&#FF6A00е&#FF9000т&#FFB500н&#FFDA00ы&#FFFF00е &7сообщения в лс'
+          - ''
+          - '&7[&#FB6A4A✔&7] &7Префикс &#FB6A4A⌜Legend⌟ &7в чате и над головой'
+          - ''
+          - '&#FB6A4A+ &7Все Возможности предыдущих привилегий'
+          - ''
+          - '&7Цена &#FB6A4A699 руб &7/ Навсегда'
+          - ''
+          - '&7Покупка на сайте &#FB6A4A&nds-craft.ru'
+        action: 'message'
+      elite:
+        slot: 16
+        material: PURPLE_DYE
+        name: '&f⌜&#8C8CFFElite&f⌟ &c&lSP&a✔'
+        lore:
+          - ''
+          - '&7[&#8C8CFF✔&7] &7Телепортация к игроку - &#8C8CFF/tpa'
+          - '&7[&#8C8CFF✔&7] &7Телепортировать игрока к себе - &#8C8CFF/tpahere'
+          - '&7[&#8C8CFF✔&7] &7Отключить личные сообщения - &#8C8CFF/msgtoggle'
+          - '&7[&#8C8CFF✔&7] &7Отключить телепортацию - &#8C8CFF/tptoggle'
+          - '&7[&#8C8CFF✔&7] &7Следить за личными сообщениями - &#8C8CFF/socialspy'
+          - '&7[&#8C8CFF✔&7] &7Установить цвет сообщений в чате - &#8C8CFF/color'
+          - ''
+          - '&7[&#8C8CFF✔&7] &7Забанить нарушителя на время - &#8C8CFF/tempban'
+          - '&7[&#8C8CFF✔&7] &7Разбанить игрока - &#8C8CFF/unban'
+          - '&7[&#8C8CFF✔&7] &7Доступ к &#8C8CFF4-м &7хранилищам - &#8C8CFF/ec'
+          - '&7[&#8C8CFF✔&7] &7Кит набор - &#8C8CFF/kit elite'
+          - '&7[&#8C8CFF✔&7] &7Все цвета свечения - &#8C8CFF/glow'
+          - ''
+          - '&7[&#8C8CFF✔&7] &7Префикс &#8C8CFF⌜Elite⌟ &c&lSP&a✔ &7в чате и над головой'
+          - ''
+          - '&#8C8CFF+ &7Все Возможности предыдущих привилегий'
+          - ''
+          - '&7[&#8C8CFF*&7] &7Имея данную привилегию, вы вступаете в персонал сервера'
+          - '&7      и добавляетесь в беседу администрации SkyPvP'
+          - ''
+          - '&7Цена &#8C8CFF1599 руб &7/ Навсегда'
+          - ''
+          - '&7Покупка на сайте &#8C8CFF&nds-craft.ru'
+        action: 'message'
+      kit-vip:
+        slot: 19
+        material: CHEST
+        name: '&7Кит набор &f⌜&eVIP&f⌟'
+        lore:
+          - '&7Команда: &e/kit vip'
+        action: 'none'
+      kit-luxe:
+        slot: 20
+        material: CHEST
+        name: '&7Кит набор &f⌜&aLuxe&f⌟'
+        lore:
+          - '&7Команда: &a/kit luxe'
+        action: 'none'
+      kit-deluxe:
+        slot: 21
+        material: CHEST
+        name: '&7Кит набор &f⌜&6Deluxe&f⌟'
+        lore:
+          - '&7Команда: &6/kit deluxe'
+        action: 'none'
+      kit-ultra:
+        slot: 22
+        material: CHEST
+        name: '&7Кит набор &f⌜&#FB42B1Ultra&f⌟'
+        lore:
+          - '&7Команда: &#FB42B1/kit ultra'
+        action: 'none'
+      kit-legend:
+        slot: 23
+        material: CHEST
+        name: '&7Кит набор &f⌜&#FB6A4ALegend&f⌟'
+        lore:
+          - '&7Команда: &#FB6A4A/kit legend'
+        action: 'none'
+      kit-elite:
+        slot: 25
+        material: ENDER_CHEST
+        name: '&7Кит набор &f⌜&#8C8CFFElite&f⌟ &c&lSP&a✔'
+        lore:
+          - '&7Команда: &#8C8CFF/kit elite'
+        action: 'none'
+      close:
+        slot: 36
+        material: REDSTONE
+        name: '&cЗакрыть'
+        lore:
+          - '&fНажми чтобы закрыть меню'
+        action: 'close'
+
+  # /warps и сундук "Варпы" в главном меню. Иконки - модели из ресурс-пака SP-DS.
+  warps:
+    title: '&#8971AF               Телепорты'
+    rows: 6
+    # эти команды открывают меню (перехватываются раньше Essentials)
+    commands: [warps]
+    items:
+      armor:
+        slot: 2
+        material: ANVIL
+        name: '&#9259E7Прокачка брони'
+        lore:
+          - '&#C8C5B8Нажми для перемещения'
+        action: 'command:warp armor'
+      afk:
+        slot: 4
+        material: RED_BED
+        name: '&eAFK &7мир'
+        lore:
+          - '&#C8C5B8Нажми для перемещения'
+        action: 'command:warp afk'
+      top:
+        slot: 6
+        material: DIAMOND_SWORD
+        custom-model-data: 10011
+        name: '&#9259E7Топы игроков/кланов'
+        lore:
+          - '&#C8C5B8Нажми для перемещения'
+        action: 'command:warp top'
+        hide-attributes: false
+      spawn:
+        slot: 10
+        material: IRON_INGOT
+        custom-model-data: 187
+        name: '&#6BFF5CН&#7BFF5Aа&#8CFF59ч&#9CFF57а&#ACFF56л&#BDFF54ь&#CDFF52н&#DEFF51ы&#EEFF4Fй &7мир'
+        lore:
+          - '&#C8C5B8Нажми для перемещения'
+        action: 'command:warp spawn'
+      mystic:
+        slot: 12
+        material: IRON_INGOT
+        custom-model-data: 101
+        name: '&#7FB2FFМ&#86B1FFи&#8CAFFFс&#92AEFFт&#99ACFFи&#A0ABFFч&#A6AAFFе&#ACA8FFс&#B3A7FFк&#BAA5FFи&#C0A4FFй &7мир'
+        lore:
+          - '&#C8C5B8Нажми для перемещения'
+        action: 'command:warp mystic'
+      under:
+        slot: 14
+        material: IRON_INGOT
+        custom-model-data: 149
+        name: '&#FF4747П&#FF4D49о&#FF544Cд&#FF5A4Eз&#FF6050е&#FF6753м&#FF6D55н&#FF7458ы&#FF7A5Aй &7мир'
+        lore:
+          - '&#C8C5B8Нажми для перемещения'
+        action: 'command:warp under'
+      ice:
+        slot: 16
+        material: IRON_INGOT
+        custom-model-data: 118
+        name: '&#3FE8FFЛ&#4CE3FFе&#59DDFFд&#66D8FFя&#74D3FFн&#81CDFFо&#8EC8FFй &7мир'
+        lore:
+          - '&#C8C5B8Нажми для перемещения'
+        action: 'command:warp ice'
+      hell:
+        slot: 30
+        material: IRON_INGOT
+        custom-model-data: 195
+        name: '&#FF8A2EА&#FF8531л&#FF8133ь&#FF7C36т&#FF7838е&#FF733Bр&#FF6F3Dн&#FF6A40а&#FF6642т&#FF6145и&#FF5D47в&#FF584Aн&#FF544Cы&#FF4F4Fй &7мир'
+        lore:
+          - '&#C8C5B8Нажми для перемещения'
+        action: 'command:warp hell'
+      infinity:
+        slot: 32
+        material: IRON_INGOT
+        custom-model-data: 204
+        name: '&#B04CFFБ&#A849FFе&#A045FFс&#9742FFк&#8F3FFFо&#873CFFн&#7F38FFе&#7735FFч&#6E32FFн&#662EFFы&#5E2BFFй &7мир'
+        lore:
+          - '&#C8C5B8Нажми для перемещения'
+        action: 'command:warp infinity'
+      case:
+        slot: 49
+        material: LEATHER_HORSE_ARMOR
+        custom-model-data: 1000
+        name: '&6Кейсы'
+        lore:
+          - '&#C8C5B8Нажми для перемещения'
+        action: 'command:warp case'
+      back:
+        slot: 45
+        material: REDSTONE
+        name: '&cНазад'
+        lore:
+          - '&7Вернуться в меню'
+        action: 'open:main'

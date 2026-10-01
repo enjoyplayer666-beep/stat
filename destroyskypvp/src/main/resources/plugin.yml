@@ -1,0 +1,40 @@
+name: DestroySkyPvP
+version: '1.0'
+main: ru.dscraft.destroyskypvp.DestroySkyPvPPlugin
+api-version: '1.21'
+author: DestroyCraft
+softdepend:
+- FancyNpcs
+- HeadDatabase
+- Multiverse-Core
+commands:
+  itemnpc:
+    description: НПС-торговцы предметами
+    usage: /itemnpc <create|remove|list|movehere|give|shops|reload>
+    permission: mediaitems.admin
+  upgrade:
+    description: Наковальня для улучшения сетов
+    aliases:
+    - anvil
+  gen:
+    description: Генераторы
+    usage: /gen create <группа> <точка> | remove | list | reload
+    permission: mediagens.admin
+  mediaclear:
+    description: Очистка предметов с земли
+    usage: /mediaclear <now|reload>
+    permission: mediaclear.admin
+    aliases:
+    - clearitems
+permissions:
+  mediaitems.staffmenu:
+    description: Доступ к /menu items (кроме групп из staff-menu.groups)
+    default: op
+  mediaitems.admin:
+    default: op
+  mediaitems.titles.customcolor:
+    default: true
+  mediagens.admin:
+    default: op
+  mediaclear.admin:
+    default: op
