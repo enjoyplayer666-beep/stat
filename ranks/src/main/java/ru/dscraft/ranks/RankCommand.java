@@ -33,6 +33,11 @@ public class RankCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         String sub = args.length == 0 ? "info" : args[0].toLowerCase(Locale.ROOT);
+        // без VIP рангов нет: всё, кроме /rank top - "Вас нет в базе данных!"
+        if (sender instanceof Player self && !plugin.canUseRanks(self) && !sub.equals("top") && !sender.hasPermission(ADMIN)) {
+            send(sender, plugin.msg("no-ranks"));
+            return true;
+        }
         switch (sub) {
             case "info" -> {
                 String name = args.length >= 2 ? args[1] : (sender instanceof Player p ? p.getName() : null);
@@ -145,6 +150,10 @@ public class RankCommand implements CommandExecutor, TabCompleter {
                 return;
             }
             if (target.getName() != null) name = target.getName();
+        }
+        if (!plugin.hasRanks(name)) {
+            send(p, plugin.msg("give-no-vip").replace("{player}", name));
+            return;
         }
         int min = cfg.getInt("give.min", 60), max = Math.max(min, cfg.getInt("give.max", 240));
         int amount = java.util.concurrent.ThreadLocalRandom.current().nextInt(min, max + 1);

@@ -28,7 +28,8 @@ public final class RanksApi {
     /** Иконка и название ранга с градиентом в &#RRGGBB-кодах, например "&#E4E4E4☠ &#E4E4E4Л..." */
     public static String rankDisplay(String name) {
         DsRanksPlugin p = plugin;
-        return p == null ? null : p.rank(name).display();
+        // без VIP ранга нет и в /stat
+        return p == null || !p.hasRanks(name) ? null : p.rank(name).display();
     }
 
     /** Убийства к рангу (с учётом бустера). */

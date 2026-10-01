@@ -211,6 +211,8 @@ public class DsRanksPlugin extends JavaPlugin implements Listener {
     private void touch(Player player) {
         set(player.getName(), "name", player.getName());
         set(player.getName(), "uuid", player.getUniqueId().toString());
+        // запоминаем, есть ли VIP - для /stat и /rank give, когда игрок не в сети
+        set(player.getName(), "ranked", canUseRanks(player) ? true : null);
         refreshChatRank(player);
     }
 
@@ -221,6 +223,7 @@ public class DsRanksPlugin extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
+        set(event.getPlayer().getName(), "ranked", canUseRanks(event.getPlayer()) ? true : null);
         chatRanks.remove(event.getPlayer().getUniqueId());
     }
 
@@ -289,7 +292,19 @@ public class DsRanksPlugin extends JavaPlugin implements Listener {
     }
 
     String msg(String key) {
-        return getConfig().getString("messages." + key, key);
+        String def = switch (key) {
+            case "no-ranks" -> "&#E53232◆ &#C7C4B7Вас нет в базе данных!";
+            case "give-no-vip" -> "&#E53232◆ &#C7C4B7У игрока &f{player} &#C7C4B7нет привилегии VIP - киллы выдать нельзя.";
+            default -> key;
+        };
+        return getConfig().getString("messages." + key, def);
+    }
+
+    /** Есть ли ранги у игрока по нику: в сети - по праву, не в сети - как было при последнем входе/выходе. */
+    boolean hasRanks(String name) {
+        Player online = Bukkit.getPlayerExact(name);
+        if (online != null) return canUseRanks(online);
+        return data.getBoolean("players." + key(name) + ".ranked");
     }
 
     /** Склонение: 1 убийство, 2 убийства, 5 убийств. */
