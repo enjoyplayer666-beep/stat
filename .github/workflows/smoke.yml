@@ -22,13 +22,20 @@ jobs:
             git clone -q --depth 1 -b jars "https://x-access-token:${{ github.token }}@github.com/enjoyplayer666-beep/$r.git" "/tmp/$r" || git clone -q --depth 1 -b jars "https://github.com/enjoyplayer666-beep/$r.git" "/tmp/$r" || echo "no access to $r"
             cp /tmp/$r/*.jar . 2>/dev/null || true
           done
-          curl -sfL -o LuckPerms.jar "https://download.luckperms.net/1556/bukkit/loader/LuckPerms-Bukkit-5.4.141.jar" || echo "no LuckPerms"
+          U=$(curl -sf -A "dscraft-smoke" 'https://api.modrinth.com/v2/project/luckperms/version?loaders=%5B%22bukkit%22%5D&game_versions=%5B%221.21.1%22%5D' | python3 -c "import json,sys; print(json.load(sys.stdin)[0]['files'][0]['url'])") && curl -sfL -o LuckPerms.jar "$U" || echo "no LuckPerms"
           ls -la
       - name: paper
         run: |
           cd srv
-          B=$(curl -sf https://api.papermc.io/v2/projects/paper/versions/1.21.1/builds | python3 -c "import json,sys; print(json.load(sys.stdin)['builds'][-1]['build'])")
-          curl -sfL -o paper.jar "https://api.papermc.io/v2/projects/paper/versions/1.21.1/builds/$B/downloads/paper-1.21.1-$B.jar"
+          U=$(curl -sf -A "dscraft-smoke" https://fill.papermc.io/v3/projects/paper/versions/1.21.1/builds | python3 -c "
+          import json,sys
+          b=json.load(sys.stdin)
+          b=b if isinstance(b,list) else b.get('builds',b)
+          b=sorted(b,key=lambda x:x['id'])[-1]
+          print(b['downloads']['server:default']['url'])")
+          echo "$U"
+          curl -sfL -A "dscraft-smoke" -o paper.jar "$U"
+          ls -la paper.jar
           echo "eula=true" > eula.txt
           printf "online-mode=false\nlevel-type=minecraft\\:flat\ngenerate-structures=false\nspawn-protection=0\n" > server.properties
       - name: run
