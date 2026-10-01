@@ -70,13 +70,13 @@ public class DsRanksPlugin extends JavaPlugin implements Listener {
 
     /** ranks-version 2: статы атаки/защиты рангов по серверу-образцу - старый список заменяется на новый. */
     private void migrateRanks() {
-        if (getConfig().getInt("ranks-version", 1) >= 2) return;
+        if (getConfig().getInt("ranks-version", 1) >= 3) return;
         java.io.InputStream in = getResource("config.yml");
         if (in == null) return;
         org.bukkit.configuration.file.YamlConfiguration def = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(
                 new java.io.InputStreamReader(in, java.nio.charset.StandardCharsets.UTF_8));
         getConfig().set("ranks", def.getList("ranks"));
-        getConfig().set("ranks-version", 2);
+        getConfig().set("ranks-version", 3);
         saveConfig();
         getLogger().info("Ранги обновлены: новые статы атаки и защиты.");
     }
