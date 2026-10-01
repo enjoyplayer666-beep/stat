@@ -26,6 +26,12 @@ commands:
     permission: mediaclear.admin
     aliases:
     - clearitems
+  barrier:
+    description: Барьеры - синяя стена, через которую не пройти
+    usage: /barrier <pos1|pos2|create|remove|list|reload>
+    aliases:
+    - mbarrier
+    permission: mediaborders.admin
 permissions:
   mediaitems.staffmenu:
     description: Доступ к /menu items (кроме групп из staff-menu.groups)
@@ -38,3 +44,9 @@ permissions:
     default: op
   mediaclear.admin:
     default: op
+  mediaborders.admin:
+    description: Ставить и удалять барьеры
+    default: op
+  mediaborders.bypass:
+    description: Проходить сквозь барьеры
+    default: false

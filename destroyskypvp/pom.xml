@@ -56,6 +56,13 @@
           <exclude>plugin.yml</exclude>
         </excludes>
       </resource>
+      <resource>
+        <directory>../borders/src/main/resources</directory>
+        <targetPath>MediaBorders</targetPath>
+        <excludes>
+          <exclude>plugin.yml</exclude>
+        </excludes>
+      </resource>
     </resources>
     <plugins>
       <plugin>
@@ -74,6 +81,7 @@
                 <source>../items/src/main/java</source>
                 <source>../gens/src/main/java</source>
                 <source>../clear/src/main/java</source>
+                <source>../borders/src/main/java</source>
               </sources>
             </configuration>
           </execution>

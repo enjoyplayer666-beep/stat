@@ -1,0 +1,36 @@
+# =====================================================================
+#  MediaBorders - барьеры (синяя стена, как у границы мира)
+#  /barrier pos1 и /barrier pos2 - углы (там, где стоишь), /barrier create <имя> - создать.
+#  /barrier remove <имя>, /barrier list, /barrier reload. Зоны хранятся в zones.yml.
+#  Стена - на всю высоту мира. Через неё не пройти ни пешком, ни на элитрах, ни жемчугом;
+#  команды телепорта (/spawn, /warp, /tp) барьер не трогает.
+# =====================================================================
+
+# нельзя выйти из зоны
+block-exit: true
+# нельзя войти в зону снаружи
+block-enter: true
+
+# с какого расстояния (блоков) стену видно снаружи зоны
+show-distance: 48
+# красная дымка по краям экрана у стены, за сколько блоков (0 - без дымки)
+warning-distance: 0
+
+# проходят сквозь барьеры: творческий режим, наблюдатель и право mediaborders.bypass
+bypass-creative: true
+bypass-spectator: true
+
+messages:
+  blocked: "<#E53232>◆</#E53232> <#C7C4B7>Дальше барьер - пройти нельзя.</#C7C4B7>"
+  usage: "<#C7C4B7>/barrier pos1 | pos2 | create <имя> | remove <имя> | list | reload</#C7C4B7>"
+  pos: "<#55FF55>Точка <n></#55FF55> <#C7C4B7>установлена: <white><x></white>, <white><z></white></#C7C4B7>"
+  no-selection: "<#E53232>◆</#E53232> <#C7C4B7>Сначала поставь обе точки: /barrier pos1 и /barrier pos2</#C7C4B7>"
+  other-world: "<#E53232>◆</#E53232> <#C7C4B7>Обе точки должны быть в одном мире.</#C7C4B7>"
+  exists: "<#E53232>◆</#E53232> <#C7C4B7>Барьер <white><name></white> уже есть. Удали его: /barrier remove <name></#C7C4B7>"
+  not-found: "<#E53232>◆</#E53232> <#C7C4B7>Барьера <white><name></white> нет.</#C7C4B7>"
+  created: "<#55FF55>Барьер <white><name></white> создан</#55FF55> <#C7C4B7>в мире <white><world></white>: <white><w></white> x <white><d></white> блоков.</#C7C4B7>"
+  removed: "<#55FF55>Барьер <white><name></white> удалён.</#55FF55>"
+  list-empty: "<#C7C4B7>Барьеров пока нет.</#C7C4B7>"
+  list-header: "<#C7C4B7>Барьеры (<white><count></white>):</#C7C4B7>"
+  list-line: "<dark_gray>-</dark_gray> <white><name></white> <#C7C4B7><world>, <w> x <d> (<x1>, <z1> - <x2>, <z2>)</#C7C4B7>"
+  reloaded: "<#55FF55>MediaBorders: конфиг и барьеры перезагружены.</#55FF55>"

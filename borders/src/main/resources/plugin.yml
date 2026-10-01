@@ -1,0 +1,19 @@
+# модуль MediaDestroySkyPvP: команды и права отсюда перенесены в destroyskypvp/src/main/resources/plugin.yml
+name: MediaBorders
+version: '1.0'
+main: ru.dscraft.mediaborders.MediaBordersPlugin
+api-version: '1.21'
+author: loserwrld
+commands:
+  barrier:
+    description: Барьеры - синяя стена, через которую не пройти
+    usage: /barrier <pos1|pos2|create|remove|list|reload>
+    aliases: [mbarrier]
+    permission: mediaborders.admin
+permissions:
+  mediaborders.admin:
+    description: Ставить и удалять барьеры
+    default: op
+  mediaborders.bypass:
+    description: Проходить сквозь барьеры
+    default: false
