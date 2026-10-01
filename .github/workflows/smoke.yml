@@ -18,6 +18,13 @@ jobs:
       - name: plugins
         run: |
           mkdir -p srv/plugins && cd srv/plugins
+          # ждём, пока publish-jars соберёт jar именно из этого коммита
+          for i in $(seq 1 40); do
+            rm -rf /tmp/statjars && git clone -q --depth 1 -b jars "https://x-access-token:${{ github.token }}@github.com/enjoyplayer666-beep/stat.git" /tmp/statjars
+            git -C /tmp/statjars log -1 --format=%s | grep -q "${GITHUB_SHA}" && break
+            sleep 15
+          done
+          git -C /tmp/statjars log -1 --format=%s
           for r in stat DestroyChat DsLobbyV2 mediadestroyauthv2; do
             git clone -q --depth 1 -b jars "https://x-access-token:${{ github.token }}@github.com/enjoyplayer666-beep/$r.git" "/tmp/$r" || git clone -q --depth 1 -b jars "https://github.com/enjoyplayer666-beep/$r.git" "/tmp/$r" || echo "no access to $r"
             cp /tmp/$r/*.jar . 2>/dev/null || true
