@@ -1,13 +1,13 @@
-name: DestroyPvP
+name: MediaDestroyPvP
 version: '1.0'
 main: ru.dscraft.destroypvp.DestroyPvPPlugin
 api-version: '1.21'
-author: DestroyCraft
+author: loserwrld
 softdepend:
 - LuckPerms
 - PlaceholderAPI
 - MediaClans
-- DestroySkyPvP
+- MediaDestroySkyPvP
 commands:
   rank:
     description: Ранги

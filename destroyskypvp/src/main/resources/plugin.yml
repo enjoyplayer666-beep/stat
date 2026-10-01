@@ -1,8 +1,8 @@
-name: DestroySkyPvP
+name: MediaDestroySkyPvP
 version: '1.0'
 main: ru.dscraft.destroyskypvp.DestroySkyPvPPlugin
 api-version: '1.21'
-author: DestroyCraft
+author: loserwrld
 softdepend:
 - FancyNpcs
 - HeadDatabase

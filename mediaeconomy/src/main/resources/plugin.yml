@@ -2,12 +2,12 @@ name: MediaEconomy
 version: '1.0'
 main: ru.dscraft.mediaeconomy.MediaEconomyPlugin
 api-version: '1.21'
-author: DestroyCraft
+author: loserwrld
 softdepend:
 - LuckPerms
 - Essentials
 loadbefore:
-- DestroyLobby
+- MediaDestroyLobby
 commands:
   coinsgive:
     description: Выдать коины (только опы)

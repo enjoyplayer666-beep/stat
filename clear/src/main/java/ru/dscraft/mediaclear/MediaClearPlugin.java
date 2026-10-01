@@ -58,7 +58,7 @@ public class MediaClearPlugin extends ru.dscraft.destroyskypvp.Module {
 
     /** Генераторы MediaGens тоже обнуляются: кто успел забрать - тот и забрал. */
     private void resetGenerators() {
-        var gens = Bukkit.getPluginManager().getPlugin("DestroySkyPvP");
+        var gens = Bukkit.getPluginManager().getPlugin("MediaDestroySkyPvP");
         if (gens == null || !gens.isEnabled()) return;
         try {
             Class.forName("ru.dscraft.mediagens.MediaGensPlugin", true, gens.getClass().getClassLoader())

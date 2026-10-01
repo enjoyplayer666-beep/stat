@@ -36,7 +36,7 @@
   </dependencies>
 
   <build>
-    <finalName>DestroyPvP</finalName>
+    <finalName>MediaDestroyPvP</finalName>
     <resources>
       <resource>
         <directory>src/main/resources</directory>

@@ -325,7 +325,7 @@ public final class MediaGensPlugin extends ru.dscraft.destroyskypvp.Module imple
     private static ItemStack mediaItem(String id) {
         try {
             Class<?> c = Class.forName("ru.dscraft.mediaitems.ItemsApi", true,
-                    Bukkit.getPluginManager().getPlugin("DestroySkyPvP").getClass().getClassLoader());
+                    Bukkit.getPluginManager().getPlugin("MediaDestroySkyPvP").getClass().getClassLoader());
             return (ItemStack) c.getMethod("item", String.class).invoke(null, id);
         } catch (Throwable t) {
             return null;

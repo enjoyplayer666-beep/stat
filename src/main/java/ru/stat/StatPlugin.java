@@ -154,7 +154,7 @@ public class StatPlugin extends ru.dscraft.destroypvp.Module implements CommandE
             saveConfig();
         }
         if (version >= 8) {
-            if (getServer().getPluginManager().getPlugin("DestroyPvP") == null) return; // ранги ещё не перенесены
+            if (getServer().getPluginManager().getPlugin("MediaDestroyPvP") == null) return; // ранги ещё не перенесены
             removeRankSettings(cfg);
             cfg.set("messages.admin-usage", null);
             cfg.set("messages.bad-field", null);
@@ -415,7 +415,7 @@ public class StatPlugin extends ru.dscraft.destroypvp.Module implements CommandE
             Plugin clans = getServer().getPluginManager().getPlugin("MediaClans");
             String api = "ru.dscraft.mediaclans.ClanApi";
             if (clans == null || !clans.isEnabled()) {
-                clans = getServer().getPluginManager().getPlugin("DestroyChat");
+                clans = getServer().getPluginManager().getPlugin("MediaDestroyChat");
                 api = "ru.dscraft.destroychat.clan.ClanApi";
             }
             if (clans == null || !clans.isEnabled()) return null;

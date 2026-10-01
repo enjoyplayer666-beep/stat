@@ -21,7 +21,7 @@ jobs:
       - run: mvn -B -f destroyskypvp/pom.xml package
       - run: mvn -B -f mediaeconomy/pom.xml package
       - run: |
-          mkdir -p /tmp/out && cp destroypvp/target/DestroyPvP.jar destroyskypvp/target/DestroySkyPvP.jar mediaeconomy/target/MediaEconomy.jar /tmp/out/
+          mkdir -p /tmp/out && cp destroypvp/target/MediaDestroyPvP.jar destroyskypvp/target/MediaDestroySkyPvP.jar mediaeconomy/target/MediaEconomy.jar /tmp/out/
           git config user.name "github-actions" && git config user.email "actions@github.com"
           git checkout --orphan jars && git rm -rfq . && cp /tmp/out/*.jar .
           git add *.jar && git commit -qm "jars from ${GITHUB_SHA}" && git push -f origin jars

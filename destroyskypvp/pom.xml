@@ -30,7 +30,7 @@
   </dependencies>
 
   <build>
-    <finalName>DestroySkyPvP</finalName>
+    <finalName>MediaDestroySkyPvP</finalName>
     <resources>
       <resource>
         <directory>src/main/resources</directory>

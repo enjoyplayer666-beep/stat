@@ -59,7 +59,7 @@ final class RanksHook {
 
     /** Находит RanksApi; после перезагрузки DsRanks (новый загрузчик классов) ищет заново. */
     private static synchronized boolean resolve() {
-        Plugin ranks = Bukkit.getPluginManager().getPlugin("DestroyPvP");
+        Plugin ranks = Bukkit.getPluginManager().getPlugin("MediaDestroyPvP");
         if (ranks == null || !ranks.isEnabled()) return false;
         ClassLoader cl = ranks.getClass().getClassLoader();
         if (cl == loadedFrom && rankDisplay != null) return true;
