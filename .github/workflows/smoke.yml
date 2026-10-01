@@ -54,12 +54,14 @@ jobs:
           echo "old-chat" > plugins/DestroyChat/marker.txt
           echo "old-lobby" > plugins/DestroyLobby/marker.txt
           echo "old-bans" > plugins/MediaBans/marker.txt
+          mkdir -p plugins/MediaDestroySkyPvP/MediaBorders
+          printf "zones:\n  test:\n    world: world\n    min-x: -100\n    min-z: -50\n    max-x: 99\n    max-z: 49\n" > plugins/MediaDestroySkyPvP/MediaBorders/zones.yml
           mkfifo in
           (java -Xmx2G -jar paper.jar --nogui < in > server.log 2>&1; echo "exit $?" >> server.log) &
           exec 3> in
           for i in $(seq 1 240); do grep -q "Done (" server.log && break; sleep 1; done
           sleep 5
-          for c in plugins "mediapvp" "tops" "coins" "gen" "destroychat reload" "destroylobby reload" "mediabans" "mediatab" "destroymotd reload" "statadmin" "itemnpc" "mediaclear" "barrier list" "barrier reload"; do echo "$c" >&3; sleep 2; done
+          for c in plugins "mediapvp" "tops" "coins" "gen" "destroychat reload" "destroylobby reload" "mediabans" "mediatab" "destroymotd reload" "statadmin" "itemnpc" "mediaclear" "barrier list" "barrier reload" "worldborder get"; do echo "$c" >&3; sleep 2; done
           sleep 15
           echo stop >&3
           for i in $(seq 1 60); do grep -q "^exit" server.log && break; sleep 1; done
