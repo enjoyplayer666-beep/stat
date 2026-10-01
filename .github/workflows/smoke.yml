@@ -1,9 +1,13 @@
-# Проверка на живом сервере (запуск вручную): Paper 1.21.1 + все плагины из веток jars,
+# Проверка на живом сервере (при пуше с [smoke] в сообщении коммита): Paper 1.21.1 + все плагины из веток jars,
 # сервер стартует, выполняет несколько команд и выключается; в логе ищем ошибки.
 name: smoke
-on: [workflow_dispatch]
+on:
+  workflow_dispatch:
+  push:
+    branches: [claude/sharp-brahmagupta-ptif54]
 jobs:
   smoke:
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[smoke]')
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
