@@ -27,7 +27,8 @@ point:
     # высота над полом (0.5 - стоит на блоке)
     y-offset: 0.5
     # NONE - модель стоит ровно как есть. Смотрит туда, куда смотрел игрок при /cases setpoint;
-    # rotation-y - доповорот в градусах (180 - развернуть задом наперёд), rotation-x - наклон
+    # rotation-y - доповорот в градусах (180 - развернуть задом наперёд), rotation-x - наклон.
+    # Повернуть уже стоящий кейс на 90°: /cases rotate
     transform: NONE
     rotation-x: 0
     rotation-y: 0
@@ -101,7 +102,7 @@ cases:
     menu-icon: CHEST
     # иконка в меню НПС: материал или голова (ссылка textures.minecraft.net / хеш в shop-head)
     shop-icon: LIME_SHULKER_BOX
-    shop-head: ""
+    shop-head: "9115dc88e3214c38243d782d63edb0a6e06291eb6da8e600c7e2ea36e7f61b31"
     # столбец в меню НПС (0-8)
     shop-column: 2
     # над экраном у выигравшего: <reward> - приз, <reward-text> - приз без цветов
@@ -157,7 +158,7 @@ cases:
     menu-slot: 23
     menu-icon: NETHER_STAR
     shop-icon: YELLOW_SHULKER_BOX
-    shop-head: ""
+    shop-head: "db6975af70724d6a44fd5946e60b2717737dfdb545b4dab1893351a9c9dd183c"
     shop-column: 6
     win-title: "<#FFAA00>Вам выпало <reward-text></#FFAA00>"
     win-chat: "<white><player></white> <#FFAA00>выиграл</#FFAA00> <reward> <#FFAA00>из</#FFAA00> <point>"
@@ -183,4 +184,4 @@ cases:
       c1600: {display: "<white>1600 коинов</white>", amount: "1600", chance: 2,  coins: 1600, color: "#FFFFFF", icon: NETHER_STAR}
 
 # не трогать: по ней плагин сам обновляет старый config.yml
-config-version: 2
+config-version: 3

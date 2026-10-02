@@ -176,12 +176,23 @@ public final class MediaCasesPlugin extends ru.dscraft.mediaeconomy.Module imple
     /** v2: модель стоит ровно (transform NONE) и поворачивается по взгляду игрока при /cases setpoint */
     private void migrateConfig() {
         Object v = getConfig().get("config-version", null);
-        if (v instanceof Number n && n.intValue() >= 2) return;
-        getConfig().set("point.model.transform", "NONE");
-        getConfig().set("point.model.rotation-x", 0);
-        getConfig().set("point.model.rotation-y", 0);
-        getConfig().set("point.model.y-offset", 0.5);
-        getConfig().set("config-version", 2);
+        int version = v instanceof Number n ? n.intValue() : 1;
+        if (version < 2) {
+            getConfig().set("point.model.transform", "NONE");
+            getConfig().set("point.model.rotation-x", 0);
+            getConfig().set("point.model.rotation-y", 0);
+            getConfig().set("point.model.y-offset", 0.5);
+        }
+        if (version < 3) {
+            // головы-сундуки в меню НПС
+            if (getConfig().getString("cases.privileges.shop-head", "").isBlank()) {
+                getConfig().set("cases.privileges.shop-head", "9115dc88e3214c38243d782d63edb0a6e06291eb6da8e600c7e2ea36e7f61b31");
+            }
+            if (getConfig().getString("cases.coins.shop-head", "").isBlank()) {
+                getConfig().set("cases.coins.shop-head", "db6975af70724d6a44fd5946e60b2717737dfdb545b4dab1893351a9c9dd183c");
+            }
+        }
+        getConfig().set("config-version", 3);
     }
 
     private void loadCases() {
@@ -365,7 +376,8 @@ public final class MediaCasesPlugin extends ru.dscraft.mediaeconomy.Module imple
             float s = (float) m.getDouble("scale", 1.0);
             float rx = (float) Math.toRadians(m.getDouble("rotation-x", 0));
             // лицом туда, куда смотрел игрок при /cases setpoint (+ rotation-y из конфига)
-            float ry = (float) (Math.PI - Math.toRadians(point.getYaw()) + Math.toRadians(m.getDouble("rotation-y", 0)));
+            // лицевая сторона модели - туда, куда смотрел игрок (сама игра ещё разворачивает предмет на 180)
+            float ry = (float) (-Math.toRadians(point.getYaw()) + Math.toRadians(m.getDouble("rotation-y", 0)));
             ItemDisplay.ItemDisplayTransform tf;
             try {
                 tf = ItemDisplay.ItemDisplayTransform.valueOf(m.getString("transform", "NONE").toUpperCase(Locale.ROOT));
@@ -926,6 +938,16 @@ public final class MediaCasesPlugin extends ru.dscraft.mediaeconomy.Module imple
                 spawnPointEntities();
                 sender.sendMessage("§aТочка открытия поставлена: " + point.getBlockX() + " " + point.getBlockY() + " " + point.getBlockZ());
             }
+            case "rotate" -> {
+                if (point == null) {
+                    sender.sendMessage("§cТочка открытия не поставлена.");
+                    return true;
+                }
+                point.setYaw((point.getYaw() + 90f) % 360f);
+                saveData();
+                if (spin == null) spawnPointEntities();
+                sender.sendMessage("§aКейс повёрнут на 90°.");
+            }
             case "removepoint" -> {
                 removePointEntities();
                 point = null;
@@ -964,7 +986,7 @@ public final class MediaCasesPlugin extends ru.dscraft.mediaeconomy.Module imple
                 if (spin == null && pointReady()) spawnPointEntities();
                 sender.sendMessage("§aMediaCases: конфиг перезагружен.");
             }
-            default -> sender.sendMessage("§7/cases setpoint | removepoint | shop [ник] | menu [ник] | give <ник> <кейс> <кол-во> | reload\n"
+            default -> sender.sendMessage("§7/cases setpoint | rotate | removepoint | shop [ник] | menu [ник] | give <ник> <кейс> <кол-во> | reload\n"
                     + "§7/silver give|take|set <ник> <кол-во>");
         }
         return true;
@@ -978,7 +1000,7 @@ public final class MediaCasesPlugin extends ru.dscraft.mediaeconomy.Module imple
             if (a.length == 1) out.addAll(List.of("give", "take", "set"));
             else if (a.length == 2) for (Player p : Bukkit.getOnlinePlayers()) out.add(p.getName());
         } else {
-            if (a.length == 1) out.addAll(List.of("setpoint", "removepoint", "shop", "menu", "give", "reload"));
+            if (a.length == 1) out.addAll(List.of("setpoint", "rotate", "removepoint", "shop", "menu", "give", "reload"));
             else if (a.length == 2) for (Player p : Bukkit.getOnlinePlayers()) out.add(p.getName());
             else if (a.length == 3 && a[0].equalsIgnoreCase("give")) out.addAll(cases.keySet());
         }
