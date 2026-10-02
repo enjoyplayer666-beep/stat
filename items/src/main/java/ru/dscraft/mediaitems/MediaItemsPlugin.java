@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -85,6 +86,7 @@ public final class MediaItemsPlugin extends ru.dscraft.destroyskypvp.Module impl
         }
         YamlConfiguration itemsYml = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "items.yml"));
         YamlConfiguration shopsYml = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "shops.yml"));
+        addNewShops(shopsYml);
         items.load(itemsYml.getConfigurationSection("items"), getConfig().getConfigurationSection("tooltip"));
         shops.load(shopsYml.getConfigurationSection("shops"), items);
         // головы из HeadDatabase: её база грузится после старта - перечитываем, пока все не найдутся
@@ -92,6 +94,38 @@ public final class MediaItemsPlugin extends ru.dscraft.destroyskypvp.Module impl
             Bukkit.getScheduler().runTaskLater(this, this::loadAll, 200L);
         } else if (!items.hdbMissing) {
             hdbRetries = 0;
+        }
+    }
+
+    /** Новые магазины из плагина дописываются в старый shops.yml один раз (удалённые вручную не возвращаются). */
+    private static final String[] NEW_SHOPS = {"cases"};
+
+    private void addNewShops(YamlConfiguration yml) {
+        java.util.List<String> added = new java.util.ArrayList<>(yml.getStringList("auto-added"));
+        boolean changed = false;
+        try (var in = getResource("shops.yml")) {
+            if (in == null) return;
+            YamlConfiguration def = YamlConfiguration.loadConfiguration(new java.io.InputStreamReader(in, java.nio.charset.StandardCharsets.UTF_8));
+            for (String id : NEW_SHOPS) {
+                if (added.contains(id)) continue;
+                added.add(id);
+                changed = true;
+                var sec = def.getConfigurationSection("shops." + id);
+                if (sec == null || yml.isConfigurationSection("shops." + id)) continue;
+                for (String k : sec.getKeys(true)) {
+                    if (!sec.isConfigurationSection(k)) yml.set("shops." + id + "." + k, sec.get(k));
+                }
+                getLogger().info("В shops.yml добавлен магазин " + id + " (НПС: /itemnpc create " + id + ")");
+            }
+        } catch (IOException e) {
+            return;
+        }
+        if (!changed) return;
+        yml.set("auto-added", added);
+        try {
+            yml.save(new File(getDataFolder(), "shops.yml"));
+        } catch (IOException e) {
+            getLogger().warning("Не удалось сохранить shops.yml: " + e.getMessage());
         }
     }
 

@@ -24,10 +24,12 @@ point:
     material: IRON_INGOT
     custom-model-data: 10115
     scale: 1.0
-    y-offset: 0.0
-    # как показывать модель (FIXED - как в рамке) и повороты в градусах; если стоит криво - подправь
-    transform: FIXED
-    rotation-x: -90
+    # высота над полом (0.5 - стоит на блоке)
+    y-offset: 0.5
+    # NONE - модель стоит ровно как есть. Смотрит туда, куда смотрел игрок при /cases setpoint;
+    # rotation-y - доповорот в градусах (180 - развернуть задом наперёд), rotation-x - наклон
+    transform: NONE
+    rotation-x: 0
     rotation-y: 0
   # название точки в чате ("выиграл ... из Ультра-Кейса")
   chat-name: "<#AA00AA>Ультра-Кейса</#AA00AA>"
@@ -179,3 +181,6 @@ cases:
       c640:  {display: "<white>640 коина</white>",   amount: "640",  chance: 15, coins: 640,  color: "#FFFFFF", icon: NETHER_STAR}
       c1000: {display: "<white>1000 коинов</white>", amount: "1000", chance: 6,  coins: 1000, color: "#FFFFFF", icon: NETHER_STAR}
       c1600: {display: "<white>1600 коинов</white>", amount: "1600", chance: 2,  coins: 1600, color: "#FFFFFF", icon: NETHER_STAR}
+
+# не трогать: по ней плагин сам обновляет старый config.yml
+config-version: 2

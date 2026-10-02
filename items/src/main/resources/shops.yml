@@ -719,7 +719,7 @@ shops:
     name: "<gradient:#8460A8:#A8EAF6>Покупка кейсов"
     npc:
       type: "PLAYER"
-      skin: ""
+      skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/cases.png"
       fallback-type: "VILLAGER"
       menu: "command:cases shop {player}"
     trades: []

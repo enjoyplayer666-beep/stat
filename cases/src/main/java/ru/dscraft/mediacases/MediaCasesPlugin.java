@@ -143,6 +143,7 @@ public final class MediaCasesPlugin extends ru.dscraft.mediaeconomy.Module imple
     public void onEnable() {
         saveDefaultConfig();
         getConfig().options().copyDefaults(true);
+        migrateConfig();
         saveConfig();
         tagKey = new NamespacedKey(this, "entity");
         dataFile = new File(getDataFolder(), "data.yml");
@@ -171,6 +172,17 @@ public final class MediaCasesPlugin extends ru.dscraft.mediaeconomy.Module imple
     // =====================================================================
     //  конфиг и данные
     // =====================================================================
+
+    /** v2: модель стоит ровно (transform NONE) и поворачивается по взгляду игрока при /cases setpoint */
+    private void migrateConfig() {
+        Object v = getConfig().get("config-version", null);
+        if (v instanceof Number n && n.intValue() >= 2) return;
+        getConfig().set("point.model.transform", "NONE");
+        getConfig().set("point.model.rotation-x", 0);
+        getConfig().set("point.model.rotation-y", 0);
+        getConfig().set("point.model.y-offset", 0.5);
+        getConfig().set("config-version", 2);
+    }
 
     private void loadCases() {
         cases.clear();
@@ -227,7 +239,8 @@ public final class MediaCasesPlugin extends ru.dscraft.mediaeconomy.Module imple
                     String.valueOf(m.get("reward")), m.get("time") instanceof Number n ? n.longValue() : 0));
         }
         if (y.isConfigurationSection("point") && Bukkit.getWorld(y.getString("point.world", "")) != null) {
-            point = new Location(Bukkit.getWorld(y.getString("point.world")), y.getInt("point.x"), y.getInt("point.y"), y.getInt("point.z"));
+            point = new Location(Bukkit.getWorld(y.getString("point.world")), y.getInt("point.x"), y.getInt("point.y"), y.getInt("point.z"),
+                    (float) y.getDouble("point.yaw", 0), 0f);
         } else if (y.isConfigurationSection("point")) {
             pendingPoint = y.getConfigurationSection("point").getValues(false);
         }
@@ -263,6 +276,7 @@ public final class MediaCasesPlugin extends ru.dscraft.mediaeconomy.Module imple
         if (point != null) {
             y.set("point.world", point.getWorld().getName());
             y.set("point.x", point.getBlockX());
+            y.set("point.yaw", point.getYaw());
             y.set("point.y", point.getBlockY());
             y.set("point.z", point.getBlockZ());
         } else if (pendingPoint != null) {
@@ -322,7 +336,9 @@ public final class MediaCasesPlugin extends ru.dscraft.mediaeconomy.Module imple
         if (point == null && pendingPoint != null) {
             World w = Bukkit.getWorld(String.valueOf(pendingPoint.get("world")));
             if (w != null) {
-                point = new Location(w, num(pendingPoint.get("x"), 0), num(pendingPoint.get("y"), 0), num(pendingPoint.get("z"), 0));
+                Object yaw = pendingPoint.get("yaw");
+                point = new Location(w, num(pendingPoint.get("x"), 0), num(pendingPoint.get("y"), 0), num(pendingPoint.get("z"), 0),
+                        yaw instanceof Number n ? n.floatValue() : 0f, 0f);
                 pendingPoint = null;
             }
         }
@@ -347,19 +363,20 @@ public final class MediaCasesPlugin extends ru.dscraft.mediaeconomy.Module imple
             meta.setCustomModelData(m.getInt("custom-model-data", 10115));
             it.setItemMeta(meta);
             float s = (float) m.getDouble("scale", 1.0);
-            float rx = (float) Math.toRadians(m.getDouble("rotation-x", -90));
-            float ry = (float) Math.toRadians(m.getDouble("rotation-y", 0));
+            float rx = (float) Math.toRadians(m.getDouble("rotation-x", 0));
+            // лицом туда, куда смотрел игрок при /cases setpoint (+ rotation-y из конфига)
+            float ry = (float) (Math.PI - Math.toRadians(point.getYaw()) + Math.toRadians(m.getDouble("rotation-y", 0)));
             ItemDisplay.ItemDisplayTransform tf;
             try {
-                tf = ItemDisplay.ItemDisplayTransform.valueOf(m.getString("transform", "FIXED").toUpperCase(Locale.ROOT));
+                tf = ItemDisplay.ItemDisplayTransform.valueOf(m.getString("transform", "NONE").toUpperCase(Locale.ROOT));
             } catch (IllegalArgumentException ex) {
-                tf = ItemDisplay.ItemDisplayTransform.FIXED;
+                tf = ItemDisplay.ItemDisplayTransform.NONE;
             }
             ItemDisplay.ItemDisplayTransform transform = tf;
-            ItemDisplay d = w.spawn(c.clone().add(0, m.getDouble("y-offset", 0), 0), ItemDisplay.class, e -> {
+            ItemDisplay d = w.spawn(c.clone().add(0, m.getDouble("y-offset", 0.5), 0), ItemDisplay.class, e -> {
                 e.setItemStack(it);
                 e.setItemDisplayTransform(transform);
-                // как предмет в рамке на полу: модель из пака рассчитана на display "fixed"
+                // NONE - модель как есть: стоит ровно, 16 пикселей модели = 1 блок
                 e.setTransformation(new Transformation(new Vector3f(0, 0, 0), new AxisAngle4f(ry, 0, 1, 0),
                         new Vector3f(s, s, s), new AxisAngle4f(rx, 1, 0, 0)));
                 tag(e);
@@ -902,6 +919,8 @@ public final class MediaCasesPlugin extends ru.dscraft.mediaeconomy.Module imple
                 if (!(sender instanceof Player p)) return true;
                 removePointEntities();
                 point = p.getLocation().getBlock().getLocation();
+                // ровно по сторонам света - ближайшие 90 градусов к взгляду игрока
+                point.setYaw(Math.round(p.getLocation().getYaw() / 90f) * 90f);
                 pendingPoint = null;
                 saveData();
                 spawnPointEntities();
