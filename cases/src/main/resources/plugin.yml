@@ -1,0 +1,18 @@
+# модуль MediaEconomy: команды и права отсюда перенесены в mediaeconomy/src/main/resources/plugin.yml
+name: MediaCases
+version: '1.0'
+main: ru.dscraft.mediacases.MediaCasesPlugin
+api-version: '1.21'
+author: loserwrld
+commands:
+  cases:
+    description: Кейсы - точка открытия, меню НПС, выдача
+    usage: /cases <setpoint|removepoint|shop|give|reload>
+    permission: mediacases.admin
+  silver:
+    description: Серебро - баланс; выдача (сайт доната) - /silver give <ник> <кол-во>
+    usage: /silver [give|take|set] [ник] [кол-во]
+permissions:
+  mediacases.admin:
+    description: Точка кейсов, выдача серебра и кейсов
+    default: op

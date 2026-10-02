@@ -1,0 +1,181 @@
+# =====================================================================
+#  MediaCases - донат-кейсы за серебро
+#  Серебро выдаёт сайт доната командой из консоли:  silver give <ник> <кол-во>
+#    - игроку начисляется серебро, на всём сервере (кроме лобби) включается глобальный бустер
+#      генераторов, у всех босс-бар, в чат - "Событие сервера".
+#  НПС "Покупка кейсов" (MediaItems, menu: "command:cases shop {player}") - кейсы за серебро.
+#  Точка открытия: /cases setpoint (там, где стоишь). ПКМ по ней - меню выбора кейса.
+#  Все тексты - MiniMessage. После правки: /cases reload
+# =====================================================================
+
+# мир лобби: там нет бустера и босс-бара
+lobby-world: world
+
+point:
+  # голограмма над точкой (строки сверху вниз)
+  holograms:
+    - "<#42B4AE>Ультра кейс</#42B4AE>"
+    - "<#D2C63C>Точка открытия</#D2C63C>"
+  # высота голограммы над блоком точки
+  hologram-height: 2.4
+  # 3D-модель кейса из ресурс-пака (destroy:crate/donate = IRON_INGOT, custom_model_data 10115)
+  model:
+    enabled: true
+    material: IRON_INGOT
+    custom-model-data: 10115
+    scale: 1.0
+    y-offset: 0.0
+    # как показывать модель (FIXED - как в рамке) и повороты в градусах; если стоит криво - подправь
+    transform: FIXED
+    rotation-x: -90
+    rotation-y: 0
+  # название точки в чате ("выиграл ... из Ультра-Кейса")
+  chat-name: "<#AA00AA>Ультра-Кейса</#AA00AA>"
+
+animation:
+  # сколько секунд крутятся призы вокруг точки
+  seconds: 7
+  radius: 2.0
+  height: 1.4
+  # сколько секунд висит выпавший приз над точкой
+  result-seconds: 3
+
+messages:
+  # всем в чат, когда игрок начинает открывать. <case> - open-name кейса
+  open: "<italic><#55FFFF>>></#55FFFF> <#FFFF55><player></#FFFF55> <white>открывает</white> <case> <white>на</white> <click:run_command:'/warp case'><#55FF55>/warp case</#55FF55></click></italic>"
+  busy: "<#E53232>◆</#E53232> <white>Кейс уже открывается, подождите немного.</white>"
+  no-keys: "<#E53232>◆</#E53232> <white>У вас нет этого кейса. Купите его у </white><#FF5555>НПС справа</#FF5555><white>!</white>"
+  no-point: "<#E53232>◆</#E53232> <white>Точка открытия не поставлена.</white>"
+  bought: "<#E53232>◆</#E53232> <white>Поздравляю! Вы получили</white> <#FF5555><pack></#FF5555>"
+  not-enough: "<#E53232>◆</#E53232> <white>Недостаточно серебра! У вас</white> <#FF5555><silver></#FF5555> <white>серебра.</white>"
+  balance: "<#E53232>◆</#E53232> <white>У вас</white> <#FF5555><silver></#FF5555> <white>серебра.</white>"
+
+# главное меню у точки
+menu:
+  title: "Меню выбора"
+  history:
+    name: "<#FFFF55>История открытий</#FFFF55>"
+    lore:
+      - "<gray>Ниже отображена история</gray>"
+      - "<gray>выбитых игроками призов.</gray>"
+    # один приз в нижнем ряду: <n> - номер (1 - самый новый), <reward>, <player>, <case>, <ago>
+    entry-name: "<white>#<n></white> <reward>"
+    entry-lore:
+      - ""
+      - "<white>Игрок:</white> <#FFFF55><player></#FFFF55>"
+      - "<white>Коробка:</white> <#FFAA00>[<case>]</#FFAA00>"
+      - "<white>Было выбито:</white> <#FFFF55><ago></#FFFF55> <white>назад</white>"
+
+# меню НПС "Покупка кейсов": <silver> - сколько серебра у игрока
+shop:
+  title: "<#E53232>◆</#E53232> <#404040>У вас </#404040><#E53232><silver></#E53232><#404040> серебра</#404040>"
+  # строка цены: <price>, <word> - серебро/серебра
+  price: "<white>Цена</white> <#FF5555><price></#FF5555> <white><word></white>"
+
+# глобальный бустер генераторов после выдачи серебра (кроме лобби)
+booster:
+  enabled: true
+  multiplier: 4
+  # сколько минут добавляет каждая выдача серебра (если бустер уже идёт - время продлевается)
+  minutes: 3
+  # <mult>, <time> ("2м, 11с.")
+  bossbar: "<#E6C3DF>Глобальный</#E6C3DF> <#D28CD2>бустер покупок x<mult> - <time></#D28CD2>"
+  # WHITE PINK BLUE RED GREEN YELLOW PURPLE; стиль: PROGRESS NOTCHED_6 NOTCHED_10 NOTCHED_12 NOTCHED_20
+  bossbar-color: WHITE
+  bossbar-style: NOTCHED_20
+  # всем в чат (кроме лобби). <player> - кому выдали серебро
+  announce:
+    - "<#5FA55A>                Событие сервера</#5FA55A>"
+    - "<#FFFFB4>Игрок</#FFFFB4> <#3A8A64><player></#3A8A64> <#FFFFB4>сделал(а) покупку на сайте</#FFFFB4>"
+    - "<#FFFFB4>и активировал</#FFFFB4> <#FFFFB4><u>глобальный бустер</u></#FFFFB4>"
+
+cases:
+  privileges:
+    # название в меню (в [скобках]), в истории и в покупке
+    name: "Кейс с привилегиями"
+    # как пишется в "открывает ... на /warp case"
+    open-name: "<#FF5555>Кейс</#FF5555> <white>с привилегиями</white>"
+    menu-slot: 21
+    menu-icon: CHEST
+    # иконка в меню НПС: материал или голова (ссылка textures.minecraft.net / хеш в shop-head)
+    shop-icon: LIME_SHULKER_BOX
+    shop-head: ""
+    # столбец в меню НПС (0-8)
+    shop-column: 2
+    # над экраном у выигравшего: <reward> - приз, <reward-text> - приз без цветов
+    win-title: "<#FFAA00>Вам выпала привилегия</#FFAA00>"
+    win-chat: "<white><player></white> <#FFAA00>выиграл донат</#FFAA00> <reward> <#FFAA00>из</#FFAA00> <point>"
+    # строки описания в меню; <rewards> - список призов (reward-line или lore приза), <keys> - сколько кейсов
+    lore:
+      - ""
+      - "<#FFAA00>Выпадает:</#FFAA00>"
+      - ""
+      - "<rewards>"
+      - ""
+      - "<#FFAA00>Кейс можно купить у</#FFAA00> <white>НПС</white> <#FFAA00>справа</#FFAA00>"
+      - ""
+      - "<#FFAA00>У вас</#FFAA00> <gray>[</gray><#FFFF55><keys></#FFFF55><gray>]</gray> <#FFAA00>кейсов</#FFAA00>"
+    reward-line: "<reward> <white>-</white> <#55FFFF><u><chance>%</u></#55FFFF>"
+    # наборы у НПС: сколько кейсов, цена в серебре, название
+    packs:
+      - {amount: 1, price: 1, name: "Кейс с привилегиями"}
+      - {amount: 3, price: 2, name: "3 кейса с привилегиями"}
+      - {amount: 6, price: 3, name: "6 кейсов с привилегиями"}
+    # призы: chance - шанс (вес), color - цвет следа в анимации, icon - предмет в анимации и истории,
+    # commands - команды из консоли ({player} - ник), coins - коины MediaCoins
+    rewards:
+      vip:
+        display: "<white>⌜</white><#FFFF55>VIP</#FFFF55><white>⌟</white>"
+        chance: 40
+        color: "#FFFF55"
+        icon: EMERALD
+        commands: ["lp user {player} parent add vip"]
+      luxe:
+        display: "<white>⌜</white><#55FF55>Luxe</#55FF55><white>⌟</white>"
+        chance: 30
+        color: "#55FF55"
+        icon: IRON_INGOT
+        commands: ["lp user {player} parent add luxe"]
+      deluxe:
+        display: "<white>⌜</white><#FFAA00>Deluxe</#FFAA00><white>⌟</white>"
+        chance: 20
+        color: "#FFAA00"
+        icon: GOLD_INGOT
+        commands: ["lp user {player} parent add deluxe"]
+      ultra:
+        display: "<white>⌜</white><#FF55FF>Ultra</#FF55FF><white>⌟</white>"
+        chance: 10
+        color: "#FF55FF"
+        icon: DIAMOND
+        commands: ["lp user {player} parent add ultra"]
+
+  coins:
+    name: "Кейс с Коинами"
+    open-name: "<#FF5555>Кейс</#FF5555> <white>с Коинами</white>"
+    menu-slot: 23
+    menu-icon: NETHER_STAR
+    shop-icon: YELLOW_SHULKER_BOX
+    shop-head: ""
+    shop-column: 6
+    win-title: "<#FFAA00>Вам выпало <reward-text></#FFAA00>"
+    win-chat: "<white><player></white> <#FFAA00>выиграл</#FFAA00> <reward> <#FFAA00>из</#FFAA00> <point>"
+    lore:
+      - ""
+      - "<#FFAA00>Выпадает:</#FFAA00>"
+      - "<rewards>"
+      - ""
+      - "<#FFAA00>Кейс можно купить у</#FFAA00> <white>НПС</white> <#FFAA00>справа</#FFAA00>"
+      - ""
+      - "<#FFAA00>У вас</#FFAA00> <gray>[</gray><#FFFF55><keys></#FFFF55><gray>]</gray> <#FFAA00>кейсов</#FFAA00>"
+    reward-line: "<white>⛃ <amount></white> <white>-</white> <#55FFFF><u><chance>%</u></#55FFFF>"
+    packs:
+      - {amount: 1, price: 2, name: "Кейс с коинами"}
+      - {amount: 3, price: 5, name: "3 кейса с коинами"}
+      - {amount: 6, price: 9, name: "6 кейсов с коинами"}
+    rewards:
+      c80:   {display: "<white>80 коинов</white>",   amount: "80",   chance: 50, coins: 80,   color: "#FFFFFF", icon: NETHER_STAR}
+      c160:  {display: "<white>160 коинов</white>",  amount: "160",  chance: 40, coins: 160,  color: "#FFFFFF", icon: NETHER_STAR}
+      c320:  {display: "<white>320 коина</white>",   amount: "320",  chance: 30, coins: 320,  color: "#FFFFFF", icon: NETHER_STAR}
+      c640:  {display: "<white>640 коина</white>",   amount: "640",  chance: 15, coins: 640,  color: "#FFFFFF", icon: NETHER_STAR}
+      c1000: {display: "<white>1000 коинов</white>", amount: "1000", chance: 6,  coins: 1000, color: "#FFFFFF", icon: NETHER_STAR}
+      c1600: {display: "<white>1600 коинов</white>", amount: "1600", chance: 2,  coins: 1600, color: "#FFFFFF", icon: NETHER_STAR}

@@ -279,7 +279,7 @@ public final class MediaGensPlugin extends ru.dscraft.destroyskypvp.Module imple
                     if (reset) pc.put(p.getUniqueId(), 0);
                     continue;
                 }
-                pc.put(p.getUniqueId(), Math.min(max, c + amount * multiplier(p)));
+                pc.put(p.getUniqueId(), Math.min(max, c + amount * multiplier(p) * globalMultiplier()));
             }
         }
     }
@@ -498,6 +498,20 @@ public final class MediaGensPlugin extends ru.dscraft.destroyskypvp.Module imple
     }
 
     // ---------- бустеры ----------
+
+    /** глобальный бустер (MediaCases: покупка серебра на сайте) - для всех, вместе со своим бустером */
+    private static volatile int globalMult = 1;
+    private static volatile long globalUntil;
+
+    /** Вызывается через рефлексию из MediaCases (MediaEconomy). */
+    public static void globalBoost(int multiplier, long untilMillis) {
+        globalMult = Math.max(1, multiplier);
+        globalUntil = untilMillis;
+    }
+
+    private static int globalMultiplier() {
+        return System.currentTimeMillis() < globalUntil ? globalMult : 1;
+    }
 
     private int multiplier(Player p) {
         Boost b = boosts.get(p.getUniqueId());

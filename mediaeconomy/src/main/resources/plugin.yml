@@ -6,6 +6,7 @@ author: loserwrld
 softdepend:
 - LuckPerms
 - Essentials
+- MediaDestroySkyPvP
 loadbefore:
 - MediaDestroyLobby
 commands:
@@ -43,9 +44,19 @@ commands:
     description: Перезагрузка конфига меню
     usage: /dsmenu reload
     permission: dsmenu.admin
+  cases:
+    description: Кейсы - точка открытия, меню НПС, выдача
+    usage: /cases <setpoint|removepoint|shop|give|reload>
+    permission: mediacases.admin
+  silver:
+    description: Серебро - баланс; выдача (сайт доната) - /silver give <ник> <кол-во>
+    usage: /silver [give|take|set] [ник] [кол-во]
 permissions:
   mediacoins.admin:
     description: /coinsgive и /coins give|take|set
     default: op
   dsmenu.admin:
+    default: op
+  mediacases.admin:
+    description: Точка кейсов, выдача серебра и кейсов
     default: op

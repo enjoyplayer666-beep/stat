@@ -62,6 +62,13 @@
           <exclude>plugin.yml</exclude>
         </excludes>
       </resource>
+      <resource>
+        <directory>../cases/src/main/resources</directory>
+        <targetPath>MediaCases</targetPath>
+        <excludes>
+          <exclude>plugin.yml</exclude>
+        </excludes>
+      </resource>
     </resources>
     <plugins>
       <plugin>
@@ -80,6 +87,7 @@
                 <source>../coins/src/main/java</source>
                 <source>../vaults/src/main/java</source>
                 <source>../dsmenu/src/main/java</source>
+                <source>../cases/src/main/java</source>
               </sources>
             </configuration>
           </execution>

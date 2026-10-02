@@ -712,3 +712,14 @@ shops:
       - {item: "item:comet_chestplate", with: "item:planet_energy:4", result: "item:planet_chestplate"}
       - {item: "item:comet_leggings", with: "item:planet_energy:4", result: "item:planet_leggings"}
       - {item: "item:comet_boots", with: "item:planet_energy:4", result: "item:planet_boots"}
+
+  # НПС "Покупка кейсов": по клику - меню кейсов за серебро (MediaCases в MediaEconomy)
+  cases:
+    title: "Покупка кейсов"
+    name: "<gradient:#8460A8:#A8EAF6>Покупка кейсов"
+    npc:
+      type: "PLAYER"
+      skin: ""
+      fallback-type: "VILLAGER"
+      menu: "command:cases shop {player}"
+    trades: []

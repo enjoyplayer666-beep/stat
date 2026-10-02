@@ -364,6 +364,12 @@ final class Npcs implements Listener {
     // ---------- магазин ----------
 
     void open(Player p, Shops.Shop shop) {
+        // НПС, который выполняет команду из консоли (menu: "command:cases shop {player}" в shops.yml)
+        String menu = shop.npc() == null ? null : shop.npc().getString("menu");
+        if (menu != null && menu.regionMatches(true, 0, "command:", 0, 8)) {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), menu.substring(8).trim().replace("{player}", p.getName()));
+            return;
+        }
         // НПС с меню вместо торговли (menu: titles в shops.yml)
         if (shop.npc() != null && "titles".equalsIgnoreCase(shop.npc().getString("menu"))) {
             plugin.titles().openMain(p);
