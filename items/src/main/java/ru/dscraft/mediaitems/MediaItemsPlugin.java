@@ -28,6 +28,7 @@ public final class MediaItemsPlugin extends ru.dscraft.destroyskypvp.Module impl
     private Titles titles;
     private Textures textures;
     private Auction auction;
+    private CoinShop coinShop;
     private int hdbRetries;
 
     @Override
@@ -57,6 +58,9 @@ public final class MediaItemsPlugin extends ru.dscraft.destroyskypvp.Module impl
         getServer().getPluginManager().registerEvents(titles, this);
         textures = new Textures(this);
         getServer().getPluginManager().registerEvents(textures, this);
+        coinShop = new CoinShop(this);
+        coinShop.load();
+        getServer().getPluginManager().registerEvents(coinShop, this);
         auction = new Auction(this);
         getServer().getPluginManager().registerEvents(auction, this);
         health = new Health(this);
@@ -87,6 +91,7 @@ public final class MediaItemsPlugin extends ru.dscraft.destroyskypvp.Module impl
         YamlConfiguration itemsYml = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "items.yml"));
         YamlConfiguration shopsYml = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "shops.yml"));
         addNewShops(shopsYml);
+        addNewItems(itemsYml);
         items.load(itemsYml.getConfigurationSection("items"), getConfig().getConfigurationSection("tooltip"));
         shops.load(shopsYml.getConfigurationSection("shops"), items);
         // головы из HeadDatabase: её база грузится после старта - перечитываем, пока все не найдутся
@@ -98,7 +103,7 @@ public final class MediaItemsPlugin extends ru.dscraft.destroyskypvp.Module impl
     }
 
     /** Новые магазины из плагина дописываются в старый shops.yml один раз (удалённые вручную не возвращаются). */
-    private static final String[] NEW_SHOPS = {"cases"};
+    private static final String[] NEW_SHOPS = {"cases", "coin_items", "coin_sets"};
 
     private void addNewShops(YamlConfiguration yml) {
         java.util.List<String> added = new java.util.ArrayList<>(yml.getStringList("auto-added"));
@@ -126,6 +131,56 @@ public final class MediaItemsPlugin extends ru.dscraft.destroyskypvp.Module impl
             yml.save(new File(getDataFolder(), "shops.yml"));
         } catch (IOException e) {
             getLogger().warning("Не удалось сохранить shops.yml: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Новые (и переделанные) предметы из плагина дописываются в старый items.yml один раз по группам:
+     * группа уже в auto-added - больше не трогается (правки владельца сохраняются).
+     */
+    private static final java.util.Map<String, String[]> NEW_ITEMS = java.util.Map.of(
+            // сеты магазина "Предметы"/"Сеты"; метеоритный сет и меч заменяются характеристиками с видео
+            "coin-sets-1", new String[]{
+                    "meteor_helmet", "meteor_chestplate", "meteor_leggings", "meteor_boots", "meteor_sword",
+                    "dragon_helmet", "dragon_chestplate", "dragon_leggings", "dragon_boots", "dragon_sword",
+                    "poseidon_helmet", "poseidon_chestplate", "poseidon_leggings", "poseidon_boots", "poseidon_sword",
+                    "lava_helmet", "lava_chestplate", "lava_leggings", "lava_boots", "lava_sword",
+                    "cerber_helmet", "cerber_chestplate", "cerber_leggings", "cerber_boots", "cerber_sword",
+                    "lucifer_helmet", "lucifer_chestplate", "lucifer_leggings", "lucifer_boots", "lucifer_sword",
+                    "iceknight_helmet", "iceknight_chestplate", "iceknight_leggings", "iceknight_boots", "iceknight_sword",
+                    "angel_helmet", "angel_chestplate", "angel_leggings", "angel_boots", "angel_sword", "angel_elytra",
+                    "warrior_helmet", "warrior_chestplate", "warrior_leggings", "warrior_boots", "warrior_sword",
+                    "talisman_improved"});
+
+    private void addNewItems(YamlConfiguration yml) {
+        java.util.List<String> added = new java.util.ArrayList<>(yml.getStringList("auto-added"));
+        boolean changed = false;
+        try (var in = getResource("items.yml")) {
+            if (in == null) return;
+            YamlConfiguration def = YamlConfiguration.loadConfiguration(new java.io.InputStreamReader(in, java.nio.charset.StandardCharsets.UTF_8));
+            for (var group : NEW_ITEMS.entrySet()) {
+                if (added.contains(group.getKey())) continue;
+                added.add(group.getKey());
+                changed = true;
+                for (String id : group.getValue()) {
+                    var sec = def.getConfigurationSection("items." + id);
+                    if (sec == null) continue;
+                    yml.set("items." + id, null);
+                    for (String k : sec.getKeys(true)) {
+                        if (!sec.isConfigurationSection(k)) yml.set("items." + id + "." + k, sec.get(k));
+                    }
+                }
+                getLogger().info("В items.yml добавлены предметы: " + group.getKey());
+            }
+        } catch (IOException e) {
+            return;
+        }
+        if (!changed) return;
+        yml.set("auto-added", added);
+        try {
+            yml.save(new File(getDataFolder(), "items.yml"));
+        } catch (IOException e) {
+            getLogger().warning("Не удалось сохранить items.yml: " + e.getMessage());
         }
     }
 
@@ -157,6 +212,10 @@ public final class MediaItemsPlugin extends ru.dscraft.destroyskypvp.Module impl
 
     Items items() {
         return items;
+    }
+
+    CoinShop coinShop() {
+        return coinShop;
     }
 
     Auction auction() {
@@ -283,6 +342,7 @@ public final class MediaItemsPlugin extends ru.dscraft.destroyskypvp.Module impl
             case "reload" -> {
                 loadAll();
                 titles.load();
+                coinShop.load();
                 npcs.respawnAll();
                 sender.sendMessage(Text.mm("<green>Перезагружено: предметов " + items.all().size()
                         + ", магазинов " + shops.all().size() + ". НПС пересозданы."));

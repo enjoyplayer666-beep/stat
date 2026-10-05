@@ -9,7 +9,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-/** Шлемы-блоки (метеоритный шлем - тонированное стекло): ПКМ надевает на голову, как обычный шлем. */
+/** Шлемы-блоки и шлемы-модели (метеоритный шлем - стекло, крылья ангела - перо): ПКМ надевает на голову. */
 final class HeadWear implements Listener {
 
     private final MediaItemsPlugin plugin;
@@ -23,7 +23,8 @@ final class HeadWear implements Listener {
         if (e.getHand() != EquipmentSlot.HAND) return;
         if (e.getAction() != Action.RIGHT_CLICK_AIR && e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         ItemStack it = e.getItem();
-        if (it == null || !it.getType().isBlock() || it.getType() == Material.PLAYER_HEAD) return;
+        // обычные шлемы и головы надеваются сами; блоки и предметы-модели (крылья ангела - перо) - здесь
+        if (it == null || it.getType().getEquipmentSlot() == EquipmentSlot.HEAD || it.getType() == Material.PLAYER_HEAD) return;
         String id = plugin.items().idOf(it);
         if (id == null || !id.endsWith("_helmet")) return;
         e.setCancelled(true);

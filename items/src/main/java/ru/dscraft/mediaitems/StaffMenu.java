@@ -30,7 +30,9 @@ final class StaffMenu implements Listener, CommandExecutor, org.bukkit.command.T
 
     /** порядок сетов - как идут улучшения */
     private static final String[] SETS = {"leather", "chain", "iron", "diamond", "netherite", "amethyst", "obsidian",
-            "majestic", "jungle", "cloud", "magma", "ice", "void", "doge", "space", "moon", "comet", "planet", "meteor"};
+            "majestic", "jungle", "cloud", "magma", "ice", "void", "doge", "space", "moon", "comet", "planet", "meteor",
+            // сеты магазинов за коины
+            "dragon", "poseidon", "lava", "cerber", "lucifer", "iceknight", "angel", "warrior"};
     private static final String[] PARTS = {"helmet", "chestplate", "leggings", "boots", "sword", "elytra"};
     /** ванильные ресурсы генераторов и обменников */
     private static final Material[] VANILLA = {Material.DIRT, Material.STONE, Material.COAL, Material.IRON_INGOT,

@@ -723,3 +723,26 @@ shops:
       fallback-type: "VILLAGER"
       menu: "command:cases shop {player}"
     trades: []
+
+  # Магазины за коины (coinshop.yml): категории вещей и наборы. Скин: впиши в skin ник или ссылку на png
+  coin_items:
+    title: "Категории товаров"
+    name: "<#E84C4C><b>Предметы"
+    npc:
+      type: "PLAYER"
+      skin: ""
+      fallback-type: "VILLAGER"
+      menu: "coin-items"
+    trades: []
+
+  coin_sets:
+    title: "Магазин Сетов"
+    name: "<#35B8B0><b>Сеты"
+    npc:
+      type: "PLAYER"
+      skin: ""
+      fallback-type: "VILLAGER"
+      menu: "coin-sets"
+      equipment:
+        chest: "item:angel_elytra"
+    trades: []

@@ -379,6 +379,15 @@ final class Npcs implements Listener {
             plugin.textures().open(p);
             return;
         }
+        // магазины за коины (coinshop.yml): НПС "Предметы" и "Сеты"
+        if (shop.npc() != null && "coin-items".equalsIgnoreCase(shop.npc().getString("menu"))) {
+            plugin.coinShop().openCategories(p);
+            return;
+        }
+        if (shop.npc() != null && "coin-sets".equalsIgnoreCase(shop.npc().getString("menu"))) {
+            plugin.coinShop().openSets(p);
+            return;
+        }
         if (shop.npc() != null && "auction".equalsIgnoreCase(shop.npc().getString("menu"))) {
             plugin.auction().open(p);
             return;

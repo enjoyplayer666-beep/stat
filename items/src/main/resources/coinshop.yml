@@ -1,0 +1,178 @@
+# ============================================
+#  Магазины за коины (MediaCoins): НПС "Предметы" и "Сеты"
+#  Поставить НПС: /itemnpc create coin_items   и   /itemnpc create coin_sets
+#  Предметы - id из items.yml. После правки: /itemnpc reload
+# ============================================
+
+# строка цены под описанием вещи и в наборах ({price})
+price-line: "<white>Цена: <yellow>{price}</yellow> коинов"
+# рамка окон
+border: "PURPLE_STAINED_GLASS_PANE"
+# первый клик по товару - вместо него эта кнопка, второй клик - оплата
+confirm:
+  icon: "LIME_STAINED_GLASS_PANE"
+  name: "<green>Подтвердить покупку"
+  lore: ["<white>Нажмите еще раз для оплаты"]
+# кнопка "Назад" в категориях
+back:
+  slot: 49
+  icon: "GRAY_SHULKER_BOX"
+  name: "<#FF5555>Назад"
+
+messages:
+  no-coins: "<red>• <white>Недостаточно коинов: нужно <yellow>{price}</yellow>, у тебя <yellow>{coins}</yellow>."
+  bought: "<green>• <white>Покупка совершена за <yellow>{price}</yellow> коинов!"
+
+# ---------- НПС "Предметы" ----------
+items:
+  title: "Категории товаров"
+  categories:
+    helmets:
+      slot: 10
+      icon: "NETHERITE_HELMET"
+      name: "<#FF5555><b>Шлемы"
+      title: "| Шлемы |"
+      items:
+        - {item: meteor_helmet, price: 160}
+        - {item: dragon_helmet, price: 210}
+        - {item: poseidon_helmet, price: 280}
+        - {item: lava_helmet, price: 350}
+        - {item: cerber_helmet, price: 450}
+        - {item: lucifer_helmet, price: 660}
+        - {item: iceknight_helmet, price: 850}
+        - {item: angel_helmet, price: 1050}
+        - {item: warrior_helmet, price: 1350}
+    chestplates:
+      slot: 11
+      icon: "NETHERITE_CHESTPLATE"
+      name: "<#FF5555><b>Нагрудники"
+      title: "| Нагрудники |"
+      items:
+        - {item: meteor_chestplate, price: 160}
+        - {item: dragon_chestplate, price: 210}
+        - {item: poseidon_chestplate, price: 280}
+        - {item: lava_chestplate, price: 350}
+        - {item: cerber_chestplate, price: 450}
+        - {item: lucifer_chestplate, price: 660}
+        - {item: iceknight_chestplate, price: 850}
+        - {item: angel_chestplate, price: 1050}
+        - {item: warrior_chestplate, price: 1350}
+    leggings:
+      slot: 12
+      icon: "NETHERITE_LEGGINGS"
+      name: "<#FF5555><b>Поножи"
+      title: "| Поножи |"
+      items:
+        - {item: meteor_leggings, price: 160}
+        - {item: dragon_leggings, price: 210}
+        - {item: poseidon_leggings, price: 280}
+        - {item: lava_leggings, price: 350}
+        - {item: cerber_leggings, price: 450}
+        - {item: lucifer_leggings, price: 660}
+        - {item: iceknight_leggings, price: 850}
+        - {item: angel_leggings, price: 1050}
+        - {item: warrior_leggings, price: 1350}
+    boots:
+      slot: 13
+      icon: "NETHERITE_BOOTS"
+      name: "<#FF5555><b>Ботинки"
+      title: "| Ботинки |"
+      items:
+        - {item: meteor_boots, price: 160}
+        - {item: dragon_boots, price: 210}
+        - {item: poseidon_boots, price: 280}
+        - {item: lava_boots, price: 350}
+        - {item: cerber_boots, price: 450}
+        - {item: lucifer_boots, price: 660}
+        - {item: iceknight_boots, price: 850}
+        - {item: angel_boots, price: 1050}
+        - {item: warrior_boots, price: 1350}
+    weapons:
+      slot: 15
+      icon: "NETHERITE_SWORD"
+      name: "<#FF5555><b>Оружие"
+      title: "| Оружие |"
+      items:
+        - {item: meteor_sword, price: 200}
+        - {item: dragon_sword, price: 250}
+        - {item: poseidon_sword, price: 350}
+        - {item: lava_sword, price: 500}
+        - {item: cerber_sword, price: 650}
+        - {item: lucifer_sword, price: 900}
+        - {item: iceknight_sword, price: 1100}
+        - {item: angel_sword, price: 1500}
+        - {item: warrior_sword, price: 2000}
+    other:
+      slot: 16
+      icon: "ELYTRA"
+      name: "<#FF5555><b>Прочее"
+      title: "| Прочее |"
+      items:
+        - {item: angel_elytra, price: 1100}
+        - {item: talisman_improved, price: 300}
+
+# ---------- НПС "Сеты" ----------
+# ЛКМ - купить весь набор, ПКМ - посмотреть, что в нём.
+# Цены метеоритного, лавового, цербера и последнего воина - с видео, остальные подобраны между ними (поправь, если знаешь точные).
+sets:
+  title: "Магазин Сетов"
+  hint: ["<green>ЛКМ</green> <dark_gray>-</dark_gray> <white>Купить набор", "<yellow>ПКМ</yellow> <dark_gray>-</dark_gray> <white>Предпросмотр"]
+  preview-back:
+    slot: 45
+    icon: "RED_CONCRETE"
+    name: "<#FF8080>• Обратно"
+  list:
+    meteor:
+      name: "<#AAAAAA><b>Метеоритный сет"
+      icon: meteor_helmet
+      price: 700
+      preview-title: "• Кит Метеоритный"
+      items: [meteor_helmet, meteor_chestplate, meteor_leggings, meteor_boots, meteor_sword]
+    dragon:
+      name: "<#FF5555><b>Сет дракона"
+      icon: dragon_helmet
+      price: 950
+      preview-title: "• Кит Дракона"
+      items: [dragon_helmet, dragon_chestplate, dragon_leggings, dragon_boots, dragon_sword]
+    poseidon:
+      name: "<#55FFFF><b>Сет посейдона"
+      icon: poseidon_helmet
+      price: 1250
+      preview-title: "• Кит Посейдон"
+      items: [poseidon_helmet, poseidon_chestplate, poseidon_leggings, poseidon_boots, poseidon_sword]
+    lava:
+      name: "<#AA0000><b>Лавовый сет"
+      icon: lava_helmet
+      price: 1650
+      preview-title: "• Кит Лавовый"
+      items: [lava_helmet, lava_chestplate, lava_leggings, lava_boots, lava_sword]
+    cerber:
+      name: "<white><b>Сет цербера"
+      icon: cerber_helmet
+      price: 2290
+      preview-title: "• Кит Цербер"
+      items: [cerber_helmet, cerber_chestplate, cerber_leggings, cerber_boots, cerber_sword]
+    lucifer:
+      name: "<gradient:#FF2A4D:#FF7AAE><b>Сет Люцифера"
+      icon: lucifer_helmet
+      price: 3100
+      preview-title: "• Кит Люцифер"
+      items: [lucifer_helmet, lucifer_chestplate, lucifer_leggings, lucifer_boots, lucifer_sword]
+    iceknight:
+      name: "<white>Сет ледяного</white> <#5555FF>рыцаря"
+      icon: iceknight_helmet
+      price: 4100
+      preview-title: "• Кит Ледяной рыцарь"
+      items: [iceknight_helmet, iceknight_chestplate, iceknight_leggings, iceknight_boots, iceknight_sword]
+    angel:
+      name: "<#FFFFAA>Сет ангела"
+      icon: angel_helmet
+      price: 5300
+      preview-title: "• Кит Ангел"
+      items: [angel_helmet, angel_chestplate, angel_leggings, angel_boots, angel_sword]
+    warrior:
+      name: "<gradient:#3CFF5A:#FF5A6E><i>Сет последнего воина"
+      icon: warrior_helmet
+      price: 7700
+      preview-title: "• Кит Последний воин"
+      items: [warrior_helmet, warrior_chestplate, warrior_leggings, warrior_boots, warrior_sword]
