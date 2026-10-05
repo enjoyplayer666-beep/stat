@@ -46,6 +46,8 @@ public final class MediaItemsPlugin extends ru.dscraft.destroyskypvp.Module impl
         npcs = new Npcs(this);
         loadAll();
         npcs.load();
+        // FancyNpcs грузит своих НПС после старта - поворот к игроку выставляем чуть позже
+        Bukkit.getScheduler().runTaskLater(this, () -> npcs.syncFancy(false), 100L);
         getServer().getPluginManager().registerEvents(npcs, this);
         getServer().getPluginManager().registerEvents(new Anvils(this), this);
         getServer().getPluginManager().registerEvents(new HeadWear(this), this);
@@ -111,6 +113,14 @@ public final class MediaItemsPlugin extends ru.dscraft.destroyskypvp.Module impl
         try (var in = getResource("shops.yml")) {
             if (in == null) return;
             YamlConfiguration def = YamlConfiguration.loadConfiguration(new java.io.InputStreamReader(in, java.nio.charset.StandardCharsets.UTF_8));
+            // NPC магазинов за коины - неподвижные (один раз, если они уже были добавлены раньше)
+            if (!added.contains("coin-npc-static")) {
+                added.add("coin-npc-static");
+                changed = true;
+                for (String id : new String[]{"coin_items", "coin_sets"}) {
+                    if (yml.isConfigurationSection("shops." + id + ".npc")) yml.set("shops." + id + ".npc.turn", false);
+                }
+            }
             for (String id : NEW_SHOPS) {
                 if (added.contains(id)) continue;
                 added.add(id);

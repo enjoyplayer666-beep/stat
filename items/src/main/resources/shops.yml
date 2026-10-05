@@ -732,6 +732,7 @@ shops:
       type: "PLAYER"
       skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/coin_items.png"
       fallback-type: "VILLAGER"
+      turn: false
       menu: "coin-items"
     trades: []
 
@@ -742,6 +743,7 @@ shops:
       type: "PLAYER"
       skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/coin_sets.png"
       fallback-type: "VILLAGER"
+      turn: false
       menu: "coin-sets"
       equipment:
         chest: "item:angel_elytra"

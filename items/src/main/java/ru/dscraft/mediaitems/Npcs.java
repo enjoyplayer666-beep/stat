@@ -190,7 +190,23 @@ final class Npcs implements Listener {
     }
 
     /** Пересоздать всех (после /itemnpc reload - новый внешний вид и названия). */
+    /**
+     * НПС-игроки FancyNpcs: поворот к игроку и скин из shops.yml (скин - только при /itemnpc reload,
+     * чтобы новый скин подтянулся без пересоздания НПС).
+     */
+    void syncFancy(boolean skins) {
+        for (Npc n : npcs.values()) {
+            Shops.Shop shop = plugin.shops().get(n.shop);
+            if (shop == null || n.fancy == null || shop.npc() == null) continue;
+            boolean turn = shop.npc().getBoolean("turn", true);
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "npc turn_to_player " + n.fancy + " " + turn);
+            String skin = shop.npc().getString("skin", "");
+            if (skins && !skin.isBlank()) Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "npc skin " + n.fancy + " " + skin);
+        }
+    }
+
     void respawnAll() {
+        syncFancy(true);
         for (Npc n : npcs.values()) {
             Shops.Shop shop = plugin.shops().get(n.shop);
             // НПС-игроков FancyNpcs не трогаем: их пересоздаёт только /itemnpc remove + create
