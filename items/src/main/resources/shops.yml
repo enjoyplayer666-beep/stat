@@ -724,13 +724,13 @@ shops:
       menu: "command:cases shop {player}"
     trades: []
 
-  # Магазины за коины (coinshop.yml): категории вещей и наборы. Скин: впиши в skin ник или ссылку на png
+  # Магазины за коины (coinshop.yml): категории вещей и наборы
   coin_items:
     title: "Категории товаров"
     name: "<#E84C4C><b>Предметы"
     npc:
       type: "PLAYER"
-      skin: ""
+      skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/coin_items.png"
       fallback-type: "VILLAGER"
       menu: "coin-items"
     trades: []
@@ -740,7 +740,7 @@ shops:
     name: "<#35B8B0><b>Сеты"
     npc:
       type: "PLAYER"
-      skin: ""
+      skin: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/skins/coin_sets.png"
       fallback-type: "VILLAGER"
       menu: "coin-sets"
       equipment:
