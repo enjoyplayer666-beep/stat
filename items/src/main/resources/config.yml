@@ -75,8 +75,8 @@ textures:
   # ссылка для ручной установки
   link: "https://goo.su/07BDasw"
   # прямая ссылка на zip для автоматической установки; пусто - берётся resource-pack из server.properties
-  auto-url: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/pack/SP-DS.zip"
-  auto-sha1: "72311cb9bed0f1fb9e59c57374d6e5280d11e96e"
+  auto-url: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/pack/Amaterasu.zip"
+  auto-sha1: "4004fbb9619a202fb7da87a2fac062250e3ebfb5"
   auto:
     slot: 11
     icon: "head:ce1f3cc63c73a6a1dde72fe09c6ac5569376d7b61231bb740764368788cbf1fa"

@@ -38,8 +38,15 @@ public final class MediaItemsPlugin extends ru.dscraft.destroyskypvp.Module impl
         saveDefaultConfig();
         migrateHealth();
         // ресурспак обновлён (логотип Amaterasu) - старая сумма sha1 заменяется на новую
-        if ("95a2f99c98b02a4a793384df24182d41dfac6504".equals(getConfig().getString("textures.auto-sha1"))) {
+        // пак переименован в Amaterasu.zip (новый логотип и иконка) - старые ссылка и sha1 заменяются на новые
+        String sha = getConfig().getString("textures.auto-sha1", "");
+        if (sha.equals("95a2f99c98b02a4a793384df24182d41dfac6504") || sha.equals("72311cb9bed0f1fb9e59c57374d6e5280d11e96e")) {
             getConfig().set("textures.auto-sha1", getConfig().getDefaults().getString("textures.auto-sha1"));
+            saveConfig();
+        }
+        String url = getConfig().getString("textures.auto-url", "");
+        if (url.endsWith("/items/pack/SP-DS.zip")) {
+            getConfig().set("textures.auto-url", url.replace("/items/pack/SP-DS.zip", "/items/pack/Amaterasu.zip"));
             saveConfig();
         }
         for (String f : new String[]{"items.yml", "shops.yml"}) {
