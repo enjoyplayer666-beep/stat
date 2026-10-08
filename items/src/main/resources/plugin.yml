@@ -2,7 +2,7 @@ name: MediaItems
 version: '1.0'
 main: ru.dscraft.mediaitems.MediaItemsPlugin
 api-version: '1.21'
-author: DestroyCraft
+author: loserwrld
 description: НПС-торговцы сетами и мечами с бафами (обмен ресурсов), /itemnpc create <магазин>
 softdepend: [FancyNpcs, HeadDatabase, Multiverse-Core]
 commands:

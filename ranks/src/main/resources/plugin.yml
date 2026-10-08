@@ -2,7 +2,7 @@ name: DsRanks
 version: '1.0'
 main: ru.dscraft.ranks.DsRanksPlugin
 api-version: '1.21'
-author: DestroyCraft
+author: loserwrld
 description: Ранги по убийствам, бустеры и умения. Работает в паре со StatPlugin и DestroyChat.
 # грузится раньше: StatPlugin берёт отсюда ранг для /stat, DestroyChat - для чата
 loadbefore: [StatPlugin, DestroyChat]

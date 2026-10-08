@@ -2,7 +2,7 @@ name: MediaGens
 version: '1.0'
 main: ru.dscraft.mediagens.MediaGensPlugin
 api-version: '1.21'
-author: DestroyCraft
+author: loserwrld
 description: Генераторы ресурсов (земля) и бустеры из MediaItems
 softdepend: [MediaItems, Multiverse-Core]
 commands:

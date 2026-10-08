@@ -2,7 +2,7 @@ name: DsMenu
 version: '${project.version}'
 main: ru.dscraft.dsmenu.DsMenuPlugin
 api-version: '1.21'
-author: DestroyCraft
+author: loserwrld
 description: Главное меню /menu и меню привилегий /donate
 
 commands:

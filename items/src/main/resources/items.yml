@@ -17,7 +17,7 @@ items:
   candy:
     material: IRON_INGOT
     model: 188
-    name: "<gradient:#D1C564:#FDA653>Конфета DestroyCraft"
+    name: "<gradient:#D1C564:#FDA653>Конфета Amaterasu"
   accel_component:
     material: IRON_INGOT
     model: 189

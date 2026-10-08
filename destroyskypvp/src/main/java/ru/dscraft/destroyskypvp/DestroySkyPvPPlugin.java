@@ -8,6 +8,11 @@ public final class DestroySkyPvPPlugin extends JavaPlugin {
     private Modules modules;
 
     @Override
+    public void onLoad() {
+        Rebrand.apply(this);
+    }
+
+    @Override
     public void onEnable() {
         modules = new Modules(this);
         modules.enable(ru.dscraft.mediaitems.MediaItemsPlugin::new, "MediaItems", "itemnpc", "upgrade");
