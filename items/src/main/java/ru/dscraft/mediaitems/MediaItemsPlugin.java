@@ -37,6 +37,11 @@ public final class MediaItemsPlugin extends ru.dscraft.destroyskypvp.Module impl
         npcKey = new NamespacedKey(this, "npc");
         saveDefaultConfig();
         migrateHealth();
+        // ресурспак обновлён (логотип Amaterasu) - старая сумма sha1 заменяется на новую
+        if ("95a2f99c98b02a4a793384df24182d41dfac6504".equals(getConfig().getString("textures.auto-sha1"))) {
+            getConfig().set("textures.auto-sha1", getConfig().getDefaults().getString("textures.auto-sha1"));
+            saveConfig();
+        }
         for (String f : new String[]{"items.yml", "shops.yml"}) {
             if (!new File(getDataFolder(), f).exists()) saveResource(f, false);
         }
