@@ -44,6 +44,11 @@ public final class MediaItemsPlugin extends ru.dscraft.destroyskypvp.Module impl
             getConfig().set("textures.auto-sha1", getConfig().getDefaults().getString("textures.auto-sha1"));
             saveConfig();
         }
+        // ссылка ручной установки вела на старый пак DestroyCraft
+        if ("https://goo.su/07BDasw".equals(getConfig().getString("textures.link"))) {
+            getConfig().set("textures.link", getConfig().getDefaults().getString("textures.link"));
+            saveConfig();
+        }
         String url = getConfig().getString("textures.auto-url", "");
         if (url.endsWith("/items/pack/SP-DS.zip")) {
             getConfig().set("textures.auto-url", url.replace("/items/pack/SP-DS.zip", "/items/pack/Amaterasu.zip"));

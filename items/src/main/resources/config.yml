@@ -73,7 +73,7 @@ health:
 textures:
   title: "<#8A6DC1>Текстуры"
   # ссылка для ручной установки
-  link: "https://goo.su/07BDasw"
+  link: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/pack/Amaterasu.zip"
   # прямая ссылка на zip для автоматической установки; пусто - берётся resource-pack из server.properties
   auto-url: "https://raw.githubusercontent.com/enjoyplayer666-beep/stat/claude/sharp-brahmagupta-ptif54/items/pack/Amaterasu.zip"
   auto-sha1: "4004fbb9619a202fb7da87a2fac062250e3ebfb5"
